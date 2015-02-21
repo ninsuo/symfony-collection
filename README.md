@@ -1,2 +1,88 @@
 # symfony2-collection
 A jQuery plugin that manages adding, deleting and moving elements from a Symfony2 collection
+
+This is not really difficult to manage your collections using the `data-prototype` Symfony2 provides. But
+after using several times collections, it appeared useful to me to create a jQuery plugin to do this job.
+This is even more true when you need your elements to be moved up and down: as the form will be proceeded
+using field names, we should swap field contents instead of moving fields themselves to get the job done, that's
+not really friendly in javascript, so this plugin aims to deal with that.
+
+# Basic usage
+
+Your collection type should contain `prototype`, `allow_add`, `allow_delete` options and the `collection` class.
+
+```php
+->add('values', 'collection',
+   array (
+        'type' => 'text',
+        'allow_add' => true,
+        'allow_delete' => true,
+        'prototype' => true,
+        'attr' => array (
+                'class' => 'collection',
+        ),
+))
+```
+
+Then, simply put the following javascript code at the bottom of your page.
+
+```html
+    <script src="{{ asset('js/jquery.js') }}"></script>
+    <script src="{{ asset('bundles/fuzapp/js/jquery.collection.js') }}"></script>
+    <script type="text/javascript">
+        $('.collection').collection();
+    </script>
+```
+
+# Options
+
+**Customize rendered links**
+
+You can customize displayed links by setting `up`, `down`, `add` and `remove` options.
+
+Default values are:
+
+```js
+     $('.collection').collection({
+         up: '<a href="#" class="collection-up">[ &#x25B2; ]</a>',
+         down: '<a href="#" class="collection-down">[ &#x25BC; ]</a>',
+         add: '<a href="#" class="collection-add">[ + ]</a>',
+         remove: '<a href="#" class="collection-remove">[ - ]</a>'
+     });
+```
+
+**Disable links**
+
+You can disable some buttons by using `enable_up`, `enable_down`, `enable_add` and `enable_remove` options.
+
+For example, if you do not want your elements to be moved up and down, use:
+
+```js
+     $('.collection').collection({
+         enable_up: false,
+         enable_down: false
+     });
+```
+
+**Set maximum of elements in the collection**
+
+You can set the maximum of elements allowed in the collection by using the `max` option. By default, it is set to 100.
+
+```js
+     $('.collection').collection({
+         max: 100
+     });
+```
+
+**Events**
+
+There are `before_*` and `after_*` options that let you put callbacks before and after adding, deleting or moving
+elements in the collection.
+
+- `before_up`, `before_down`, `before_add` and `before_remove` are called before modifying the collection.
+The modification will be cancelled if the callback you given returned `false`, and will proceed if it returned true.
+
+- `after_up`, `after_down`, `after_add` and `after_remove` are called after modifying the collection.
+The modification will be reverted if the callback you given returned `false`.
+
+
