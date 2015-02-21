@@ -14,7 +14,7 @@ Your collection type should contain `prototype`, `allow_add`, `allow_delete` opt
 ```php
 ->add('values', 'collection',
    array (
-        'type' => 'text',
+        // ...
         'allow_add' => true,
         'allow_delete' => true,
         'prototype' => true,
@@ -85,4 +85,16 @@ The modification will be cancelled if the callback you given returned `false`, a
 - `after_up`, `after_down`, `after_add` and `after_remove` are called after modifying the collection.
 The modification will be reverted if the callback you given returned `false`.
 
+Callback functions receive 2 arguments:
 
+- `collection` references the div that contains your whole collection (the symfony2 field)
+
+- `element` is the element in the collection that have been added (or moved/deleted)
+
+```js
+     $('.collection').collection({
+         after_add: function(collection, element) {
+            // automatic backup or whatever
+         }
+     });
+```
