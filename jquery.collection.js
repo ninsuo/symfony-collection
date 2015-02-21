@@ -39,6 +39,7 @@
          remove: '<a href="#" class="collection-remove">[ - ]</a>',
          before_remove: function(collection, element) { return true; },
          after_remove: function(collection, element) { return true; },
+         min: 0,
          max: 100
       };
 
@@ -107,7 +108,7 @@
 
             var buttons = {
                enable_up: {'html': settings.up, 'condition': elements.index(element) !== 0},
-               enable_remove: {'html': settings.remove, 'condition': true},
+               enable_remove: {'html': settings.remove, 'condition': elements.length > settings.min},
                enable_down: {'html': settings.down, 'condition': elements.index(element) !== elements.length - 1}
             };
 
@@ -121,6 +122,13 @@
                }
             });
          });
+
+         if (elements.length === settings.max) {
+             collection.find('.collection-add').css('display', 'none');
+         } else {
+             collection.find('.collection-add').css('display', 'initial');
+         }
+
       };
 
       var swapFields = function(collection, elements, oldIndex, newIndex) {
@@ -170,7 +178,12 @@
          });
          collection.data('collection-skeletons', skeletons);
 
-         dumpCollectionActions(collection, settings);
+         if (settings.enable_add) {
+            collection.append('<div class="collection-tmp"></div>');
+            collection.append($(settings.add).addClass('collection-action').data('collection', collection.attr('id')));
+         }
+
+          dumpCollectionActions(collection, settings);
 
          var container = $(settings.container);
 
@@ -180,8 +193,10 @@
                var that = $(this);
                var collection = $('#' + that.data('collection'));
                var settings = collection.data('collection-settings');
+               var elements = collection.find('> div').not('.collection-tmp');
 
-               if (that.hasClass('collection-add') && settings.enable_add && settings.before_add(collection, element)) {
+               if (that.hasClass('collection-add') && settings.enable_add &&
+                       elements.length < settings.max && settings.before_add(collection, element)) {
                   var prototype = collection.data('prototype');
                   for (var index = 0; (index < settings.max); index++) {
                      var code = $(prototype.replace(/__name__/g, index));
@@ -198,11 +213,11 @@
                   }
                }
 
-               var elements = collection.find('> div').not('.collection-tmp');
                var element = $('#' + that.data('element'));
                var index = elements.index(element);
 
-               if (that.hasClass('collection-remove') && settings.enable_remove && settings.before_remove(collection, element)) {
+               if (that.hasClass('collection-remove') && settings.enable_remove &&
+                       elements.length > settings.min && settings.before_remove(collection, element)) {
                     var backup = element.clone({withDataAndEvents: true});
                     element.remove();
                     if (!settings.after_remove(collection, backup)) {
@@ -237,11 +252,6 @@
                e.preventDefault();
             })
          ;
-
-         if (settings.enable_add) {
-            collection.append('<div class="collection-tmp"></div>');
-            collection.append($(settings.add).addClass('collection-action').data('collection', collection.attr('id')));
-         }
 
       });
 

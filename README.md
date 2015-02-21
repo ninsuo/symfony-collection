@@ -64,7 +64,15 @@ For example, if you do not want your elements to be moved up and down, use:
      });
 ```
 
-**Set maximum of elements in the collection**
+**Set minimum and maximum of elements in the collection**
+
+You can set the minimum of elements allowed in the collection by using the `min` option. By default, it is disabled (set to 0).
+
+```js
+     $('.collection').collection({
+         min: 0
+     });
+```
 
 You can set the maximum of elements allowed in the collection by using the `max` option. By default, it is set to 100.
 
