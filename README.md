@@ -95,6 +95,7 @@ Callback functions receive 2 arguments:
      $('.collection').collection({
          after_add: function(collection, element) {
             // automatic backup or whatever
+            return true;
          }
      });
 ```
