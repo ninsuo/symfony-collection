@@ -1,5 +1,5 @@
 /*
- * jquery.collection.js v0.0.1
+ * jquery.collection.js v0.0.2
  *
  * Copyright (c) 2015 alain tiemblo <alain at fuz dot org>
  *
@@ -23,23 +23,23 @@
       var defaults = {
          container: 'body',
          enable_up: true,
-         up: '<a href="#" class="collection-up">[ &#x25B2; ]</a>',
+         up: '<a href="#">[ &#x25B2; ]</a>',
          before_up: function(collection, element) { return true; },
          after_up: function(collection, element) { return true; },
          enable_down: true,
-         down: '<a href="#" class="collection-down">[ &#x25BC; ]</a>',
+         down: '<a href="#">[ &#x25BC; ]</a>',
          before_down: function(collection, element) { return true; },
          after_down: function(collection, element) { return true; },
          enable_add: true,
-         add: '<a href="#" class="collection-add">[ + ]</a>',
+         add: '<a href="#">[ + ]</a>',
          before_add: function(collection, element) { return true; },
          after_add: function(collection, element) { return true; },
          enable_remove: true,
-         remove: '<a href="#" class="collection-remove">[ - ]</a>',
+         remove: '<a href="#">[ - ]</a>',
          before_remove: function(collection, element) { return true; },
          after_remove: function(collection, element) { return true; },
          min: 0,
-         max: 100
+         max: 5
       };
 
       var randomNumber = function() {
@@ -97,36 +97,69 @@
       };
 
       var dumpCollectionActions = function(collection, settings) {
-         var elements = collection.find('> div').not('.collection-tmp');;
+
+         var init = collection.find('.collection-tmp').length === 0;
+         var elements = collection.find('> div').not('.collection-tmp');
+
+         if (settings.enable_add) {
+            if (init) {
+                collection.append('<div class="collection-tmp"></div>');
+                if (settings.add) {
+                    collection.append(
+                            $(settings.add)
+                                .addClass('collection-action collection-main-add')
+                                .data('collection', collection.attr('id'))
+                    );
+                }
+            }
+            var mainAdd = collection.find('.collection-main-add').css('display', 'initial');
+            var adds = collection.find('.collection-add');
+            if (adds.length > 0) {
+                mainAdd.css('display', 'none');
+                collection.find('> div').not('.collection-tmp').each(function() {
+                    var element = $(this);
+                    element.find('.collection-add').data('element', getOrCreateId(element));
+                });
+            }
+            if (init) {
+                adds.addClass('collection-action').data('collection', collection.attr('id'));
+            }
+            if (elements.length >= settings.max) {
+                collection.find('.collection-add, .collection-main-add').css('display', 'none');
+            } else {
+                collection.find('.collection-add').css('display', 'initial');
+            }
+         }
+
          elements.each(function() {
             var element = $(this);
-            element.find('> .collection-actions').remove();
 
-            var actions = $('<div class="collection-actions"></div>');
-            element.append(actions);
+            if (element.find('> .collection-actions').length === 0) {
+                var actions = $('<div class="collection-actions"></div>');
+                element.append(actions);
+            }
 
-            var buttons = {
-               enable_up: {'html': settings.up, 'condition': elements.index(element) !== 0},
-               enable_remove: {'html': settings.remove, 'condition': elements.length > settings.min},
-               enable_down: {'html': settings.down, 'condition': elements.index(element) !== elements.length - 1}
-            };
+            var buttons = [
+               {'enabled': 'enable_up', 'class': 'collection-up', 'html': settings.up, 'condition': elements.index(element) !== 0},
+               {'enabled': 'enable_remove', 'class': 'collection-remove', 'html': settings.remove, 'condition': elements.length > settings.min},
+               {'enabled': 'enable_down', 'class': 'collection-down', 'html': settings.down, 'condition': elements.index(element) !== elements.length - 1}
+            ];
 
-            $.each(buttons, function(enabled, button) {
-               if (settings[enabled] && button.condition) {
-                  $(button.html)
-                     .appendTo(actions)
+            $.each(buttons, function(index, button) {
+               if (settings[button.enabled] && button.condition) {
+                   var action = element.find('.' + button.class);
+                   if (action.length === 0 && button.html) {
+                       action = $(button.html)
+                           .appendTo(actions)
+                           .addClass(button.class);
+                   }
+                   action
                      .addClass('collection-action')
                      .data('collection', collection.attr('id'))
                      .data('element', getOrCreateId(element));
                }
             });
          });
-
-         if (elements.length === settings.max) {
-             collection.find('.collection-add').css('display', 'none');
-         } else {
-             collection.find('.collection-add').css('display', 'initial');
-         }
 
       };
 
@@ -177,12 +210,7 @@
          });
          collection.data('collection-skeletons', skeletons);
 
-         if (settings.enable_add) {
-            collection.append('<div class="collection-tmp"></div>');
-            collection.append($(settings.add).addClass('collection-action').data('collection', collection.attr('id')));
-         }
-
-          dumpCollectionActions(collection, settings);
+         dumpCollectionActions(collection, settings);
 
          var container = $(settings.container);
 
@@ -194,7 +222,7 @@
                var settings = collection.data('collection-settings');
                var elements = collection.find('> div').not('.collection-tmp');
 
-               if (that.hasClass('collection-add') && settings.enable_add &&
+               if ((that.is('.collection-add') || that.is('.collection-main-add')) && settings.enable_add &&
                        elements.length < settings.max && settings.before_add(collection, element)) {
                   var prototype = collection.data('prototype');
                   for (var index = 0; (index < settings.max); index++) {
@@ -203,7 +231,15 @@
                      var id = tmp.html(code).find(':input').first().attr('id');
                      tmp.empty();
                      if (container.find('#' + id).length === 0) {
-                        tmp.before(code);
+                        if (that.data('element') === undefined) {
+                           tmp.before(code);
+                        } else {
+                           $('#' + that.data('element')).after(code);
+                        }
+                        var action = code.find('.collection-add');
+                        if (action.length > 0) {
+                           action.addClass('collection-action').data('collection', collection.attr('id'));
+                        }
                         if (!settings.after_add(collection, element)) {
                             code.remove();
                         }
@@ -215,7 +251,7 @@
                var element = $('#' + that.data('element'));
                var index = elements.index(element);
 
-               if (that.hasClass('collection-remove') && settings.enable_remove &&
+               if (that.is('.collection-remove') && settings.enable_remove &&
                        elements.length > settings.min && settings.before_remove(collection, element)) {
                     var backup = element.clone({withDataAndEvents: true});
                     element.remove();
@@ -229,7 +265,7 @@
                     }
                }
 
-               if (that.hasClass('collection-up') && settings.enable_up) {
+               if (that.is('.collection-up') && settings.enable_up) {
                   if (index !== 0 && settings.before_up(collection, element)) {
                      swapFields(collection, elements, index, index - 1);
                      if (!settings.after_up(collection, element)) {
@@ -238,7 +274,7 @@
                   }
                }
 
-               if (that.hasClass('collection-down') && settings.enable_down) {
+               if (that.is('.collection-down') && settings.enable_down) {
                   if (index !== (elements.length - 1) && settings.before_down(collection, element)) {
                      swapFields(collection, elements, index, index + 1);
                      if (!settings.after_down(collection, elements)) {

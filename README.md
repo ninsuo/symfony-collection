@@ -45,10 +45,10 @@ Default values are:
 
 ```js
      $('.collection').collection({
-         up: '<a href="#" class="collection-up">[ &#x25B2; ]</a>',
-         down: '<a href="#" class="collection-down">[ &#x25BC; ]</a>',
-         add: '<a href="#" class="collection-add">[ + ]</a>',
-         remove: '<a href="#" class="collection-remove">[ - ]</a>'
+         up: '<a href="#">[ &#x25B2; ]</a>',
+         down: '<a href="#">[ &#x25BC; ]</a>',
+         add: '<a href="#">[ + ]</a>',
+         remove: '<a href="#">[ - ]</a>'
      });
 ```
 
@@ -111,9 +111,59 @@ Callback functions receive 2 arguments:
 
 # Advanced usage
 
+**MVC compliance**
+
 If you do not want to put the collection selector in your form type but want to place it in your view instead, you can do:
 
 ```jinja
 <div class="collection" data-collection="{{ form.myCollection.vars.id }}">
 ```
+
+**Changing action's positions**
+
+By default :
+- `add` button is located at the bottom of the collection
+- `move up`, `remove` and `move down` are located in this order below each element of the collection
+
+You can change those button's positions by creating them manually anywhere in your form theme.
+
+You can use any custom clickable element as soon has it has one action's class:
+- `collection-add` for an `add` button
+- `collection-remove` for a `remove` button
+- `collection-up` for a `move up` button
+- `collection-down` for a `move down` button
+
+Example:
+
+If we have a collection of text fields and want to display actions at the right side of each value instead of below,
+we will use something like this:
+
+```jinja
+{% block MyType_label %}{% endblock %}
+{% block MyType_errors %}{% endblock %}
+
+{% block MyType_widget %}
+
+    <div class="row">
+        <div class="col-md-8">
+            {{ form_widget(form.value) }}
+        </div>
+        <div class="col-md-2">
+            <a href="#" class="collection-up btn btn-default">Move up</a>
+            <a href="#" class="collection-down btn btn-default">Move Down</a>
+        </div>
+        <div class="col-md-2">
+            <a href="#" class="collection-remove btn btn-default">Remove</a>
+            <a href="#" class="collection-add btn btn-default">Add</a>
+        </div>
+    </div>
+
+{% endblock %}
+```
+
+Note: do not forget to set the `add` option when enabling the plugin, because if your collection is emptied,
+the plugin will generate an `add` button based on the plugin configuraiton.
+
+*Tip*: when `add` buttons are put inside collection's elements, new element is created next to the clicked
+element instead of at the end of the collection.
 
