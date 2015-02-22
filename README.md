@@ -113,7 +113,7 @@ Callback functions receive 2 arguments:
 
 **MVC compliance**
 
-If you do not want to put the collection selector in your form type but want to place it in your view instead, you can do:
+If you do not want to put the collection selector in your form type but want to place it in your view instead, you can use:
 
 ```jinja
 <div class="collection" data-collection="{{ form.myCollection.vars.id }}">
@@ -127,7 +127,7 @@ By default :
 
 You can change those button's positions by creating them manually anywhere in your form theme.
 
-You can use any custom clickable element as soon has it has one action's class:
+You can use any custom clickable element as soon has it has one action class:
 - `collection-add` for an `add` button
 - `collection-remove` for a `remove` button
 - `collection-up` for a `move up` button

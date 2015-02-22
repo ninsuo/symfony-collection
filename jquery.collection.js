@@ -39,7 +39,7 @@
          before_remove: function(collection, element) { return true; },
          after_remove: function(collection, element) { return true; },
          min: 0,
-         max: 5
+         max: 100
       };
 
       var randomNumber = function() {
