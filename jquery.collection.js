@@ -1,6 +1,5 @@
 /*
  * jquery.collection.js v0.0.1
- * http://www.domajax.com
  *
  * Copyright (c) 2015 alain tiemblo <alain at fuz dot org>
  *

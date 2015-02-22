@@ -9,10 +9,11 @@ not really friendly in javascript, so this plugin aims to deal with that.
 
 # Basic usage
 
-Your collection type should contain `prototype`, `allow_add`, `allow_delete` options and the `collection` class.
+Your collection type should contain `prototype`, `allow_add`, `allow_delete` options and a collection selector (here
+the css `collection` class).
 
 ```php
-->add('values', 'collection',
+->add('myCollection', 'collection',
    array (
         // ...
         'allow_add' => true,
@@ -107,3 +108,12 @@ Callback functions receive 2 arguments:
          }
      });
 ```
+
+# Advanced usage
+
+If you do not want to put the collection selector in your form type but want to place it in your view instead, you can do:
+
+```jinja
+<div class="collection" data-collection="{{ form.myCollection.vars.id }}">
+```
+
