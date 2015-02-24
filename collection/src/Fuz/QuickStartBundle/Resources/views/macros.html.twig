@@ -1,0 +1,112 @@
+{# FuzQuickStartBundle::macros.html.twig #}
+
+{% macro modal(id, title, body, options) %}
+
+    {%
+        set defaults = {
+            'modal-class': null,
+        }
+    %}
+    {% set options = defaults|merge(options|default({})) %}
+
+    <div class="modal fade" id="{{ id }}" tabindex="-1" role="dialog" aria-labelledby="{{ id }}" aria-hidden="true">
+        <div class="modal-dialog {{ options['modal-class'] }}">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><div class="text-left">{{ title }}</div></h4>
+                </div>
+                <div class="modal-body">
+                    {{ body }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" title="Close the window">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro form_general_errors(form) %}
+    {%- if form.vars.errors|length > 0 -%}
+        {%- for error in form.vars.errors -%}
+            <p class="error-message error">{{- error.message -}}</p>
+        {%- endfor -%}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro form_specific_errors(field) %}
+    {% if field.vars.errors|length > 0 %}
+        {%- for error in field.vars.errors -%}
+        <div class="control-label text-danger">{{ error.message }}</div>
+        {%- endfor -%}
+    {% endif %}
+{% endmacro %}
+
+{% macro box(color, title, message) %}
+
+    {%
+        set colors = {
+            'black': {
+                'img': asset('bundles/fuzquickstart/img/flags/black.gif'),
+                'background': '#DDDDDD',
+                'color': '#000000',
+            },
+            'red': {
+                'img': asset('bundles/fuzquickstart/img/flags/red.gif'),
+                'background': '#FFDDDD',
+                'color': '#FF0000',
+            },
+            'yellow': {
+                'img': asset('bundles/fuzquickstart/img/flags/yellow.gif'),
+                'background': '#FFFFDD',
+                'color': '#A76726',
+            },
+            'green': {
+                'img': asset('bundles/fuzquickstart/img/flags/green.gif'),
+                'background': '#DDFFDD',
+                'color': '#006600',
+            },
+            'blue': {
+                'img': asset('bundles/fuzquickstart/img/flags/blue.gif'),
+                'background': '#DDDDFF',
+                'color': '#000066',
+            },
+        }
+    %}
+
+    {% set config = colors[color]|default(colors['black']) %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box-style" style="background-color:{{ config.background }};color:{{ config.color }};border:1px solid {{ config.color }};">
+                <div class="text-center">
+                    <img src="{{ config.img }}" alt="{{ color|title }} Flag" class="flag" />
+                    <p><strong>{{ title }}</strong></p>
+                    <p>{{ message }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endmacro %}
+
+{% macro me() %}
+    {% spaceless %}
+        {% if is_granted('ROLE_USER') %}
+            {{ _self.user('', app.user) }}
+        {% else %}
+            Guest
+        {% endif %}
+    {% endspaceless %}
+{% endmacro %}
+
+{% macro user(prefix, user) %}
+    {%- spaceless %}
+        {% if user != null %}
+            {{ prefix }}
+           <img class="oauth-image" src="{{ asset('bundles/fuzquickstart/img/oauth/' ~ user.resourceOwner ~ '-small.png') }}" alt=""/>
+           {{ user.username }}
+        {% endif %}
+    {% endspaceless -%}
+{% endmacro %}

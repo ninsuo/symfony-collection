@@ -1,0 +1,8 @@
+
+
+                {%- for action in record_actions %}
+
+                <a href="{{ "{{ path('" ~ route_name_prefix ~ "_" ~ action ~ "', { 'id': entity."~ identifier ~" }) }}" }}" class="btn btn-default">{{ "{{ 'quickstart.crud.action." ~ action ~ "' | trans }}" }}</a>
+
+                {%- endfor %}
+

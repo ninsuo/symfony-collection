@@ -1,0 +1,45 @@
+{# FuzQuickStartBundle:Login:login.html.twig #}
+
+{% macro displayProvider(name) %}
+
+    <a
+        title="{{ 'quickstart.login.label' | trans({'%provider%': name|title}) }}"
+        aria-label="{{ 'quickstart.login.label' | trans({'%provider%': name|title}) }}"
+        href="{{ hwi_oauth_login_url(name|lower) }}"
+        class="black">
+        <div class="oauth col-md-4">
+            <img src="{{ asset('bundles/fuzquickstart/img/oauth/' ~ name|lower ~ '.png') }}" alt="{{ name|title }}"/>
+            <p>{{ 'quickstart.login.using' | trans({'%provider%': name|title}) }}</p>
+        </div>
+    </a>
+
+{% endmacro %}
+
+<div class="row" id="login">
+
+    <div class="col-md-12 text-center">
+        <h4>{{ 'quickstart.login.subtitle' | trans }}</h4>
+    </div>
+
+    <div class="clear">&nbsp;</div>
+
+    <div class="col-md-1">
+        &nbsp;
+    </div>
+
+    <div class="col-md-10">
+        <div class="row" id="login">
+
+            {{ _self.displayProvider('Google') }}
+            {{ _self.displayProvider('Facebook') }}
+            {{ _self.displayProvider('Twitter') }}
+
+        </div>
+    </div>
+
+    <div class="col-md-1">
+        &nbsp;
+    </div>
+
+    <div class="clear">&nbsp;</div>
+</div>

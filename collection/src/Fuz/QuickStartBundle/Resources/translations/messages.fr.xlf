@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="zz" datatype="plaintext" original="file.ext">
+    <body>
+      <trans-unit id="1">
+        <source>quickstart.login.title</source>
+        <target><![CDATA[Connexion]]></target>
+      </trans-unit>
+      <trans-unit id="2">
+        <source>quickstart.logout.title</source>
+        <target><![CDATA[Déconnexion]]></target>
+      </trans-unit>
+      <trans-unit id="3">
+        <source>quickstart.login.as</source>
+        <target><![CDATA[Connecté en tant que]]></target>
+      </trans-unit>
+      <trans-unit id="4">
+        <source>quickstart.login.subtitle</source>
+        <target><![CDATA[Connectez-vous en utilisant l'un des services suivants]]></target>
+      </trans-unit>
+      <trans-unit id="5">
+        <source>quickstart.login.using</source>
+        <target><![CDATA[Se connecter en utilisant %provider%]]></target>
+      </trans-unit>
+      <trans-unit id="6">
+        <source>quickstart.unsuscribe.title</source>
+        <target><![CDATA[Vous supprimez votre compte.]]></target>
+      </trans-unit>
+      <trans-unit id="7">
+        <source>quickstart.unsuscribe.explain</source>
+        <target><![CDATA[Toutes les données associées à votre compte vont être]]></target>
+      </trans-unit>
+      <trans-unit id="8">
+        <source>quickstart.unsuscribe.removed</source>
+        <target><![CDATA[supprimées]]></target>
+      </trans-unit>
+      <trans-unit id="9">
+        <source>quickstart.unsuscribe.confirm</source>
+        <target><![CDATA[Confirmer]]></target>
+      </trans-unit>
+      <trans-unit id="10">
+        <source>quickstart.locale.title</source>
+        <target><![CDATA[Langue]]></target>
+      </trans-unit>
+      <trans-unit id="11">
+        <source>quickstart.title</source>
+        <target><![CDATA[Mon Projet Vide]]></target>
+      </trans-unit>
+      <trans-unit id="12">
+        <source>quickstart.description</source>
+        <target><![CDATA[Un projet Symfony2 contenant des outils indispensables pour un développement rapide et efficace.]]></target>
+      </trans-unit>
+      <trans-unit id="13">
+        <source>quickstart.nav</source>
+        <target><![CDATA[Afficher/Masquer le menu]]></target>
+      </trans-unit>
+      <trans-unit id="14">
+        <source>quickstart.menu.home</source>
+        <target><![CDATA[Accueil]]></target>
+      </trans-unit>
+      <trans-unit id="15">
+        <source>quickstart.error.back_sentence</source>
+        <target><![CDATA[Utilisez le bouton Page précédente, le menu de navigation ou cliquez sur le bouton Accueil pour continuer.]]></target>
+      </trans-unit>
+      <trans-unit id="16">
+        <source>quickstart.error.back</source>
+        <target><![CDATA[Retour à l'accueil]]></target>
+      </trans-unit>
+      <trans-unit id="17">
+        <source>quickstart.error.403.title</source>
+        <target><![CDATA[Permission non accordée]]></target>
+      </trans-unit>
+      <trans-unit id="18">
+        <source>quickstart.error.403.explain</source>
+        <target><![CDATA[Vous devez être connecté(e) ou/et n'avez pas les privilèges requis pour accéder à cette ressource.]]></target>
+      </trans-unit>
+      <trans-unit id="19">
+        <source>quickstart.error.500.title</source>
+        <target><![CDATA[Une erreur s'est produite.]]></target>
+      </trans-unit>
+      <trans-unit id="20">
+        <source>quickstart.error.500.explain</source>
+        <target><![CDATA[Si vous êtes arrivé(e) sur cette page, c'est que quelque chose a planté chez nous.]]></target>
+      </trans-unit>
+      <trans-unit id="21">
+        <source>quickstart.error.404.title</source>
+        <target><![CDATA[Page introuvable]]></target>
+      </trans-unit>
+      <trans-unit id="22">
+        <source>quickstart.error.404.explain</source>
+        <target><![CDATA[La page que vous recherchez a peut-être été supprimée, déplacée, ou est temporairement indisponible.]]></target>
+      </trans-unit>
+      <trans-unit id="23">
+        <source>quickstart.crud.create.success</source>
+        <target><![CDATA[L'entrée a correctement été ajoutée.]]></target>
+      </trans-unit>
+      <trans-unit id="24">
+        <source>quickstart.crud.delete.success</source>
+        <target><![CDATA[L'entrée a correctement été supprimée.]]></target>
+      </trans-unit>
+      <trans-unit id="25">
+        <source>quickstart.crud.update.success</source>
+        <target><![CDATA[Entrée modifiée avec succès.]]></target>
+      </trans-unit>
+      <trans-unit id="26">
+        <source>quickstart.crud.new.title</source>
+        <target><![CDATA[Nouvelle entrée %entity%]]></target>
+      </trans-unit>
+      <trans-unit id="27">
+        <source>quickstart.crud.index.actions</source>
+        <target><![CDATA[Actions]]></target>
+      </trans-unit>
+      <trans-unit id="28">
+        <source>quickstart.crud.index.title</source>
+        <target><![CDATA[Liste des %entity%]]></target>
+      </trans-unit>
+      <trans-unit id="29">
+        <source>quickstart.crud.new.button</source>
+        <target><![CDATA[Créer une nouvelle entrée]]></target>
+      </trans-unit>
+      <trans-unit id="30">
+        <source>quickstart.crud.back</source>
+        <target><![CDATA[Retourner à la liste]]></target>
+      </trans-unit>
+      <trans-unit id="31">
+        <source>quickstart.crud.edit.button</source>
+        <target><![CDATA[Editer]]></target>
+      </trans-unit>
+      <trans-unit id="32">
+        <source>quickstart.crud.edit.title</source>
+        <target><![CDATA[Modifier une entrée %entity%]]></target>
+      </trans-unit>
+      <trans-unit id="33">
+        <source>quickstart.crud.action.show</source>
+        <target><![CDATA[Afficher]]></target>
+      </trans-unit>
+      <trans-unit id="34">
+        <source>quickstart.crud.action.edit</source>
+        <target><![CDATA[Editer]]></target>
+      </trans-unit>
+      <trans-unit id="35">
+        <source>quickstart.crud.button.create</source>
+        <target><![CDATA[Créer]]></target>
+      </trans-unit>
+      <trans-unit id="36">
+        <source>quickstart.crud.button.update</source>
+        <target><![CDATA[Modifier]]></target>
+      </trans-unit>
+      <trans-unit id="37">
+        <source>quickstart.crud.button.delete</source>
+        <target><![CDATA[Supprimer]]></target>
+      </trans-unit>
+      <trans-unit id="38">
+        <source>quickstart.wait</source>
+        <target><![CDATA[Veuillez patienter...]]></target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

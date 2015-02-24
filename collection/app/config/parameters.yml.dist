@@ -1,0 +1,34 @@
+# This file is a "template" of what your parameters.yml file should look like
+parameters:
+    site_url: http://localhost/quickstart/web/
+
+    database_driver:   pdo_mysql
+    database_host:     127.0.0.1
+    database_port:     ~
+    database_name:     symfony
+    database_user:     root
+    database_password: ~
+    # You should uncomment this if you want use pdo_sqlite
+    # database_path: "%kernel.root_dir%/data.db3"
+
+    mailer_transport:  smtp
+    mailer_host:       127.0.0.1
+    mailer_user:       ~
+    mailer_password:   ~
+
+    locale:            en
+
+    # A secret key that's used to generate certain security-related tokens
+    secret:            ThisTokenIsNotSoSecretChangeIt
+
+    # Google Login: https://console.developers.google.com/project
+    google_client_id: <your client id>
+    google_secret: <your secret>
+
+    # Facebook Login: https://developers.facebook.com/apps/
+    facebook_client_id: <your client id>
+    facebook_secret: <your secret>
+
+    # Twitter Login: https://apps.twitter.com/
+    twitter_client_id: <your client id>
+    twitter_secret: <your secret>

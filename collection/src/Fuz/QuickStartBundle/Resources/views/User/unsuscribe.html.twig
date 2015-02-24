@@ -1,0 +1,21 @@
+{# FuzQuickStartBundle:User:unsuscribe.html.twig #}
+
+{% extends 'FuzQuickStartBundle::layout.html.twig' %}
+
+{% block body %}
+
+    <div class="jumbotron">
+
+        <h1>{{ 'quickstart.unsuscribe.title' | trans }}</h1>
+
+        <p>{{ 'quickstart.unsuscribe.explain' | trans }} <span class="text-danger">{{ 'quickstart.unsuscribe.removed' | trans }}</span>.</p>
+
+        <div>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+
+    </div>
+
+{% endblock %}

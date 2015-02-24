@@ -1,0 +1,16 @@
+
+{% extends 'HWIOAuthBundle::layout.html.twig' %}
+
+{% block hwi_oauth_content %}
+
+    {% if error is defined and error %}
+        <div class="row" id="login">
+            <div class="col-md-12 alert alert-danger text-center">
+                <span class="error">{{ error }}</span>
+            </div>
+        </div>
+    {% endif %}
+
+    {{ include('FuzQuickStartBundle:User:login.html.twig') }}
+
+{% endblock hwi_oauth_content %}

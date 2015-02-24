@@ -1,0 +1,14 @@
+{% block extends %}
+{{ "{% extends 'FuzQuickStartBundle::layout.html.twig' %}" }}
+{% endblock extends %}
+
+{% block body %}
+{{ "{% block body -%}" }}
+    <h1>{{ "{{ 'quickstart.crud.edit.title' | trans({'%entity%': '" ~ entity ~ "'}) }}" }}</h1>
+
+    {{ '{{ form(edit_form) }}' }}
+
+    {% set hide_edit, hide_delete = true, false %}
+    {% include 'crud/views/others/record_actions.html.twig.twig' %}
+{{ "{% endblock %}" }}
+{% endblock body %}

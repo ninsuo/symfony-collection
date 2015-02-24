@@ -1,0 +1,8 @@
+
+fuz_quickstart:
+    resource: "@FuzQuickStartBundle/Resources/config/routing.yml"
+
+fuz_app:
+    resource: "@FuzAppBundle/Controller/"
+    type:     annotation
+    prefix:   /

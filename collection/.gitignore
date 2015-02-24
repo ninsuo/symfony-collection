@@ -1,0 +1,17 @@
+nbproject
+web/bundles/
+web/js
+web/css
+web/fonts
+app/bootstrap.php.cache
+app/cache/*
+app/config/parameters.yml
+app/logs/*
+!app/cache/.gitkeep
+!app/logs/.gitkeep
+build/
+vendor/
+bin/
+composer.phar
+composer.lock
+translate

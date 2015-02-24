@@ -1,0 +1,23 @@
+{% extends 'FuzAppBundle::layout.html.twig' %}
+
+{% block extra_js %}
+    <script src="{{ asset('bundles/fuzapp/js/collection/jquery.collection.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+
+    {{ form(form) }}
+
+    {% for value in data.values %}
+        <p>Value : {{ value }}</p>
+    {% endfor %}
+
+{% endblock %}
+
+{% block script %}
+
+    <script type="text/javascript">
+        $('.collection').collection();
+    </script>
+
+{% endblock %}

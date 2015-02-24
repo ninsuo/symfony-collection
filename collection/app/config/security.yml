@@ -1,0 +1,60 @@
+security:
+    providers:
+        oauth_provider:
+             id: quickstart.oauth_user_provider
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt|error)|css|images|js)/
+            security: false
+
+        oauth:
+            pattern: ^/
+            anonymous: true
+            oauth:
+                resource_owners:
+                    google: "/login/check-google"
+                    facebook: "/login/check-facebook"
+                    twitter: "/login/check-twitter"
+                login_path: /login
+                failure_path: /login
+                default_target_path: /welcome
+                oauth_user_provider:
+                    service: quickstart.oauth_user_provider
+
+        default:
+            anonymous: ~
+
+    access_control:
+        - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/connect, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user, role: ROLE_USER }
+        - { path: ^/logout, role: ROLE_USER }
+
+hwi_oauth:
+    firewall_name: oauth
+    connect:
+        confirmation: false
+    resource_owners:
+        google:
+            type: google
+            client_id: %google_client_id%
+            client_secret: %google_secret%
+            scope: "profile"
+            options:
+                display: page
+                access_type: online
+                approval_prompt: force
+                login_hint: email address
+        facebook:
+            type: facebook
+            client_id: %facebook_client_id%
+            client_secret: %facebook_secret%
+            scope: "public_profile"
+            options:
+                display: page
+        twitter:
+            type: twitter
+            client_id: %twitter_client_id%
+            client_secret: %twitter_secret%
+            scope: ""

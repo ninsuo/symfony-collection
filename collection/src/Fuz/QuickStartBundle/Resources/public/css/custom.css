@@ -1,0 +1,56 @@
+@charset "utf-8";
+
+.navbar-logo {
+   float: left;
+   margin-right: 5px;
+}
+
+.navbar-logo img {
+   max-height: 30px;
+   max-width: 100px;
+   margin-top: -7px;
+}
+
+.box-style {
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.box-style:empty {
+    display:none;
+}
+
+.flag {
+    width: 20px;
+    height: 16px;
+    position: relative;
+    top:-2px;
+    margin-right: 5px;
+    margin-left: -4px;
+}
+
+#login div.oauth {
+    text-align:center;
+    padding: 10px;
+}
+
+#login div.oauth img {
+    width: 80px;
+    height: 80px;
+}
+
+#login div.oauth.sensio img {
+    width: auto;
+    height: auto;
+}
+
+#login div.oauth:hover {
+    border: 1px solid #333366;
+}
+
+.oauth-image, .lang-image {
+    margin-left:3px;
+    margin-right:3px;
+    padding-bottom:3px;
+    height:18px;
+}

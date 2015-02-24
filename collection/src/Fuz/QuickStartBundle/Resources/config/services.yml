@@ -1,0 +1,26 @@
+parameters:
+    quickstart.oauth_user_provider.class: Fuz\QuickStartBundle\Provider\OAuthUserProvider
+    hwi_oauth.account.connector.class: Fuz\QuickStartBundle\Connect\AccountConnect
+    quickstart.locale.listener.class: Fuz\QuickStartBundle\EventListener\LocaleListener
+    quickstart.last_route.listener.class: Fuz\QuickStartBundle\EventListener\LastRouteListener
+
+services:
+
+    quickstart.oauth_user_provider:
+        class: %quickstart.oauth_user_provider.class%
+        arguments: [@session, @doctrine.orm.entity_manager]
+
+    hwi_oauth.account.connector:
+        class: %hwi_oauth.account.connector.class%
+
+    quickstart.locale.listener:
+        class: %quickstart.locale.listener.class%
+        arguments: ["%kernel.default_locale%"]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    quickstart.last_route.listener:
+        class: %quickstart.last_route.listener.class%
+        arguments: [@router]
+        tags:
+            - { name: kernel.event_subscriber }

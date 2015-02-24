@@ -1,0 +1,90 @@
+{# FuzQuickStartBundle::base.html.twig #}
+
+{% import "FuzQuickStartBundle::macros.html.twig" as macros %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="{% block description %}{{ 'quickstart.description' | trans }}{% endblock %}">
+        <meta name="author" content="{% block author %}{% endblock %}">
+        <title>{% block title %}{{ 'quickstart.title' | trans }}{% endblock %}</title>
+        <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+        {{ include('BraincraftedBootstrapBundle::ie8-support.html.twig') }}
+
+         {# CSS #}
+        {% block css %}
+            <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
+            <link href="{{ asset('bundles/fuzquickstart/bootstrap-submenu/css/bootstrap-submenu.min.css') }}" rel="stylesheet" media="screen">
+            <link href="{{ asset('bundles/fuzquickstart/jquery-ui-1.11.2/jquery-ui.min.css') }}" rel="stylesheet" media="screen">
+            {% block extra_css %}{% endblock %}
+            <link rel="stylesheet" href="{{ asset('bundles/fuzquickstart/css/custom.css') }}">
+        {% endblock %}
+
+    </head>
+
+    <body>
+
+         <div class="container">
+            {% block head %}
+                <nav class="navbar navbar-default">
+                 <div class="container-fluid">
+                   <div class="navbar-header">
+                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                       <span class="sr-only">{{ 'quickstart.nav' | trans }}</span>
+                       <span class="icon-bar"></span>
+                       <span class="icon-bar"></span>
+                       <span class="icon-bar"></span>
+                     </button>
+                     <a class="navbar-brand" href="{{ path('home') }}">
+                        <div class="navbar-logo">
+                            {% block logo %} <img src="{{ asset('apple-touch-icon.png') }}">{% endblock %}
+                        </div>
+                        <div class="pull-left">
+                            {% block brand %}QuickStart{% endblock %}
+                        </div>
+                     </a>
+                   </div>
+                   <div id="navbar" class="navbar-collapse collapse">
+                       {% block menu %}{% endblock %}
+                       {% block translations %}{% endblock %}
+                       {% block login %}{% endblock %}
+                   </div>
+                 </div>
+               </nav>
+            {% endblock %}
+
+           <div id="body">
+              {% block flash %}{{ include('BraincraftedBootstrapBundle::flash.html.twig', {'close': true}) }}{% endblock %}
+              {% block body %}{% endblock %}
+           </div>
+
+       </div>
+
+         {# Ajax-loader gif #}
+        <div id="wait" class="hide" aria-hidden="true">
+            <div class="text-center">
+                <img src="{{ asset('bundles/fuzquickstart/img/wait.gif') }}" alt="{{ 'quickstart.wait' | trans }}"/>
+            </div>
+        </div>
+
+         {# JS #}
+        {% block js %}
+            <script src="{{ asset('js/jquery.js') }}"></script>
+            <script src="{{ asset('js/bootstrap.js') }}"></script>
+            <script src="{{ asset('bundles/fuzquickstart/bootstrap-submenu/js/bootstrap-submenu.min.js') }}"></script>
+            <script src="{{ asset('bundles/fuzquickstart/jquery-ui-1.11.2/jquery-ui.min.js') }}"></script>
+            <script src="{{ asset('bundles/fuzquickstart/js/jquery.domajax.js') }}"></script>
+            <script src="{{ asset('bundles/fuzquickstart/js/jquery.symfony2.js') }}"></script>
+            {% block extra_js %}{% endblock %}
+        {% endblock %}
+
+        <script type="text/javascript">
+           $('.dropdown-submenu > a').submenupicker();
+        </script>
+        {% block script %}{% endblock %}
+
+    </body>
+</html>

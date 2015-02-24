@@ -1,0 +1,23 @@
+{# FuzQuickStartBundle::knp-menu.html.twig #}
+
+{% extends 'knp_menu.html.twig' %}
+
+{% block item %}
+   {{ parent() }}
+   {% if item.attributes.divider|default(false) %}
+      {{ block('dividerElement') }}
+   {% endif %}
+{% endblock %}
+
+{% block label %}
+   {{
+      item.label|trans(
+         item.getExtra('translation_params', {}),
+         item.getExtra('translation_domain', 'messages')
+      )
+   }}
+{% endblock %}
+
+{% block linkElement %}{% import 'knp_menu.html.twig' as knp_menu %}<a href="{{ item.uri }}"{{ knp_menu.attributes(item.linkAttributes) }}>{{ block('label') }}{% if item.hasChildren and item.getExtra('submenu', false) == false %} <span class="caret">{% endif %}</span></a>{% endblock %}
+
+{% block dividerElement %}<li class="divider"></li>{% endblock %}
