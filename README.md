@@ -3,9 +3,10 @@ A jQuery plugin that manages adding, deleting and moving elements from a Symfony
 
 This is not really difficult to manage your collections using the `data-prototype` Symfony2 provides. But
 after using several times collections, it appeared useful to me to create a jQuery plugin to do this job.
-This is even more true when you need your elements to be moved up and down: as the form will be proceeded
-using field names, we should swap field contents instead of moving fields themselves to get the job done, that's
-not really friendly in javascript, so this plugin aims to deal with that.
+
+This is even more true when you need your elements to be moved up and down or added at a specific position: as the
+form will be proceeded using field names, we should swap field contents instead of moving fields themselves to get the job done, that's
+not really friendly in javascript, so this plugin also aims to deal with that.
 
 # Basic usage
 
