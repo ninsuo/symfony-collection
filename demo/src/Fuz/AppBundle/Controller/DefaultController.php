@@ -16,7 +16,7 @@ class DefaultController extends BaseController
      * @Route("/", name="home")
      * @Template()
      */
-    public function indexAction(Request $request)
+    public function defaultAction(Request $request)
     {
         $data = array ('values' => array ("a", "b", "c"));
 

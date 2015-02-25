@@ -5,7 +5,7 @@ This is not really difficult to manage your collections using the `data-prototyp
 after using several times collections, it appeared useful to me to create a jQuery plugin to do this job.
 
 This is even more true when you need your elements to be moved up and down or added at a specific position: as the
-form will be proceeded using field names, we should swap field contents instead of moving fields themselves to get the job done, that's
+form will be proceeded using field names, we should swap field contents instead of moving fields themselves to get the job done. That's
 not really friendly in javascript, so this plugin also aims to deal with that.
 
 # Basic usage
