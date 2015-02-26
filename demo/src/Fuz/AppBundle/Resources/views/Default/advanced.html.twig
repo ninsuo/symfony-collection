@@ -6,7 +6,7 @@
 
 {% block body %}
 
-    {% form_theme form 'FuzAppBundle:Default:custom-theme.html.twig' %}
+    {% form_theme form 'FuzAppBundle:Default:advanced-theme.html.twig' %}
 
     {{ form(form) }}
 
@@ -19,7 +19,9 @@
 {% block script %}
 
     <script type="text/javascript">
-        $('.collection').collection();
+        $('.collection').collection({
+            'add': '<a href="#" class="btn btn-default">Add</a>,'
+        });
     </script>
 
 {% endblock %}

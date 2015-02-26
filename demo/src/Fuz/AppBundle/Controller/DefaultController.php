@@ -13,6 +13,8 @@ class DefaultController extends BaseController
 {
 
     /**
+     * Basic usage
+     *
      * @Route("/", name="home")
      * @Template()
      */
@@ -54,10 +56,55 @@ class DefaultController extends BaseController
     }
 
     /**
-     * @Route("/custom", name="custom")
+     * JavaScript options
+     *
+     * @Route("/options", name="options")
      * @Template()
      */
-    public function customAction(Request $request)
+    public function optionsAction(Request $request)
+    {
+        // up, down, add, remove
+
+        // enable_up, enable_down
+
+        // enable_add, enable_remove
+
+        // min, max
+
+        // events (use confirms)
+    }
+
+    protected function optionsActionCreateForm(array $options = array())
+    {
+        $form = $this
+           ->createFormBuilder($data)
+           ->add('values', 'collection',
+              array_merge(array (
+                   'type' => 'text',
+                   'label' => 'Add, move, remove values and press Submit.',
+                   'options' => array (
+                           'label' => 'Value',
+                   ),
+                   'allow_add' => true,
+                   'allow_delete' => true,
+                   'prototype' => true,
+                   'required' => false,
+                   'attr' => array (
+                           'class' => 'collection',
+                   ),
+           ), $options))
+           ->add('submit', 'submit')
+           ->getForm()
+        ;
+    }
+
+    /**
+     * Advanced usage
+     *
+     * @Route("/advanced", name="advanced")
+     * @Template()
+     */
+    public function advancedAction(Request $request)
     {
         $a = new ValueData();
         $a->setValue('a');
@@ -96,6 +143,16 @@ class DefaultController extends BaseController
                 'form' => $form->createView(),
                 'data' => $data,
         );
+    }
+
+     /**
+     * Collection of collections
+     *
+     * @Route("/collection", name="collection")
+     * @Template()
+     */
+    public function collectionAction(Request $request)
+    {
     }
 
 }

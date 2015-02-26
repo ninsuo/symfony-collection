@@ -11,8 +11,6 @@ class Builder extends BaseMenu
     public function mainMenu(FactoryInterface $factory, array $options)
     {
         $menu = $this->createMenu($factory);
-        $this->addRoute($menu, 'Default', 'home');
-        $this->addRoute($menu, 'Custom', 'custom');
 
         /*
           $this->addSubMenu($menu, 'test');
