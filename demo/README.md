@@ -3,6 +3,8 @@ Symfony2 Collection demo website
 
 ## Installation
 
+This is a classic Symfony2 project based on [Symfony2 QuickStart](https://github.com/ninsuo/symfony2-quickstart).
+
 ```sh
 php -r "readfile('https://getcomposer.org/installer');" | php
 php composer.phar update
@@ -13,9 +15,14 @@ php app/console doctrine:schema:create
 
 ## Usage
 
-Menus refer to controllers with the same name (example: advanced is routed to advancedAction in DefaultController)
-
 Just browse website and look at the corresponding controllers/views to know how to implement them.
+
+Menus refer to controllers with the same name, for example:
+- Basic usage is associated with BasicController and Basic/basic.html.twig
+- Javascript options is located in OptionsController and Options/options.html.twig
+- ...
+
+This way, you can easily read the sample's code.
 
 ## License
 

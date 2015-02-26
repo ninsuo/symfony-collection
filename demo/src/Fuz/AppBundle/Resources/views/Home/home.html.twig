@@ -1,0 +1,79 @@
+{% extends 'FuzAppBundle::layout.html.twig' %}
+
+{% block extra_js %}
+    <script src="{{ asset('bundles/fuzapp/js/collection/jquery.collection.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+
+    <div class="jumbotron">
+      <h1>Welcome!</h1>
+      <p>
+          This website presents the <a href="https://github.com/ninsuo/symfony2-collection">Symfony2 Collection jQuery Plugin</a> developped by
+          <a href="http://stackoverflow.com/users/731138/alain-tiemblo">Alain Tiemblo</a>.
+      </p>
+    </div>
+
+    <h2>What exactly does this plugin?</h2>
+
+    <p>This plugin aims to manage Symfony2 Collections : adding, moving and deleting collection elements.</p>
+
+    <p>This website is available on GitHub too, so you can know how those samples were developped.</p>
+
+    <div class="row">
+
+        {# Without the collection plugin #}
+        <div class="col-md-6">
+
+            <h3>Without jquery.collection.js</h3>
+
+            <br/>
+            <p>No way to add, move and delete elements... In most case, that's weird on form collections!</p>
+            <br/>
+
+             {{ form(noPlugin) }}
+
+            {% for value in noPluginData.values %}
+                <p>Value : {{ value }}</p>
+            {% endfor %}
+
+        </div>
+
+        {# With the collection plugin #}
+        <div class="col-md-6">
+
+            <h3>With jquery.collection.js</h3>
+
+            <br/>
+            <p>The default functionnality is not really beautiful but don't worry, everything is easily customizable.</p>
+            <br/>
+
+            {{ form(withPlugin) }}
+
+            {% for value in withPluginData.values %}
+                <p>Value : {{ value }}</p>
+            {% endfor %}
+
+{% set code %}
+<script type="text/javascript">
+    $('.collection').collection();
+</script>
+{% endset %}
+
+            <br/>
+            <p>Code used:</p>
+            <pre><code>{{ code|e }}</code></pre>
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block script %}
+
+    <script type="text/javascript">
+        $('.collection').collection();
+    </script>
+
+{% endblock %}

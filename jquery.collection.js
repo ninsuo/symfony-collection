@@ -23,11 +23,11 @@
       var defaults = {
          container: 'body',
          enable_up: true,
-         up: '<a href="#">[ &#x25B2; ]</a>',
+         up: '<a href="#">&#x25B2;</a>',
          before_up: function(collection, element) { return true; },
          after_up: function(collection, element) { return true; },
          enable_down: true,
-         down: '<a href="#">[ &#x25BC; ]</a>',
+         down: '<a href="#">&#x25BC;</a>',
          before_down: function(collection, element) { return true; },
          after_down: function(collection, element) { return true; },
          enable_add: true,
