@@ -46,8 +46,8 @@ Default values are:
 
 ```js
      $('.collection').collection({
-         up: '<a href="#">[ &#x25B2; ]</a>',
-         down: '<a href="#">[ &#x25BC; ]</a>',
+         up: '<a href="#">&#x25B2;</a>',
+         down: '<a href="#">&#x25BC;</a>',
          add: '<a href="#">[ + ]</a>',
          remove: '<a href="#">[ - ]</a>'
      });
