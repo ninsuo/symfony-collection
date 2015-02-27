@@ -6,85 +6,165 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Fuz\AppBundle\Base\BaseController;
+use Fuz\AppBundle\Entity\ValueData;
+use Fuz\AppBundle\Form\ValueType;
 
+/**
+ * @Route("/options")
+ */
 class OptionsController extends BaseController
 {
 
-    /**
-     * JavaScript options
-     *
-     * @Route("/options", name="options")
-     * @Template()
-     */
-    public function optionsAction(Request $request)
-    {
-        $context = array();
+   /**
+    * JavaScript options
+    *
+    * Customized buttons
+    *
+    * @Route("/customButtons", name="customButtons")
+    * @Template()
+    */
+   public function customButtonsAction(Request $request)
+   {
+      return $this->createContextSample($request);
+   }
 
-        // we need 6 forms for our 6 samples
-        for ($i = 1; ($i <= 6); $i++)
-        {
-            $data = array ('values' => array ("a", "b", "c"));
+   /**
+    * JavaScript options
+    *
+    * Disable buttons you don't want
+    *
+    * @Route("/enableButtons", name="enableButtons")
+    * @Template()
+    */
+   public function enableButtonsAction(Request $request)
+   {
+      return array_merge(
+              $this->createContextSample($request),
+              $this->createAdvancedContextSample($request)
+      );
+   }
 
-            $form = $this->createCollectionSample("sample_{$i}", $data);
-            $form->handleRequest($request);
-            if ($form->isValid())
-            {
-                $data = $form->getData();
-            }
+   /**
+    * JavaScript options
+    *
+    * Only allow to add and delete elements
+    *
+    * @Route("/addRemoveElements", name="addRemoveElements")
+    * @Template()
+    */
+   public function addRemoveElementsAction(Request $request)
+   {
+      return $this->createContextSample($request);
+   }
 
-            $context["sample_form_{$i}"] = $form->createView();
-            $context["sample_data_{$i}"] = $data;
-        }
+   /**
+    * JavaScript options
+    *
+    * Control the minimum and maximum of allowed number of elements
+    *
+    * @Route("/numberCollectionElements", name="numberCollectionElements")
+    * @Template()
+    */
+   public function numberCollectionElementsAction(Request $request)
+   {
+      return $this->createContextSample($request);
+   }
 
-        return $context;
+   /**
+    * JavaScript options
+    *
+    * Run a callback before or after adding, deleting and moving elements
+    *
+    * @Route("/eventCallbacks", name="eventCallbacks")
+    * @Template()
+    */
+   public function eventCallbacksAction(Request $request)
+   {
+      return $this->createContextSample($request);
+   }
 
-        // custom up, down, add, remove
-        // enable_up, enable_down
-        // enable_add, enable_remove
-        // min, max
-        // events (use confirms)
-    }
+   /**
+    * All JavaScript option pages are using the same collection sample.
+    *
+    * @param $name the form name (useful when there are several forms in the same page)
+    */
+   protected function createContextSample(Request $request, $name = 'form')
+   {
+      $data = array ('values' => array ("a", "b", "c"));
 
+      $form = $this
+         ->get('form.factory')
+         ->createNamedBuilder($name, 'form', $data)
+         ->add('values', 'collection',
+            array (
+                 'type' => 'text',
+                 'label' => 'Add, move, remove values and press Submit.',
+                 'options' => array (
+                         'label' => 'Value',
+                 ),
+                 'allow_add' => true,
+                 'allow_delete' => true,
+                 'prototype' => true,
+                 'attr' => array (
+                         'class' => "{$name}-collection",
+                 ),
+         ))
+         ->add('submit', 'submit')
+         ->getForm()
+      ;
 
-    /**
-     * Returns a simple collection
-     */
-    protected function createCollectionSample($name, $data, array $options = array())
-    {
-        return $this
-           ->get('form.factory')
-           ->createNamedBuilder($name, 'form', $data)
-           ->add('values', 'collection',
-              array_merge(array (
+      $form->handleRequest($request);
+      if ($form->isValid())
+      {
+         $data = $form->getData();
+      }
 
-                   // collection of text fields
-                   'type' => 'text',
+      return array (
+              $name => $form->createView(),
+              "{$name}Data" => $data,
+      );
+   }
 
-                   // labels
-                   'label' => 'Add, move, remove values and press Submit.',
-                   'options' => array (
-                           'label' => 'Value',
-                   ),
+   protected function createAdvancedContextSample(Request $request, $name = 'advancedForm')
+   {
+      $a = new ValueData();
+      $a->setValue('a');
+      $b = new ValueData();
+      $b->setValue('b');
+      $c = new ValueData();
+      $c->setValue('c');
 
-                   // we allow user to add and delete elements in the collection
-                   'allow_add' => true,
-                   'allow_delete' => true,
+      $data = array ('values' => array ($a, $b, $c));
 
-                   // indicates that we require symfony2 to write a template of a collection's element in a data-prototype attribute
-                   'prototype' => true,
+      $form = $this
+         ->get('form.factory')
+         ->createNamedBuilder($name, 'form', $data)
+         ->add('values', 'collection',
+            array (
+                 'type' => new ValueType(),
+                 'label' => 'Add, move, remove values and press Submit.',
+                 'allow_add' => true,
+                 'allow_delete' => true,
+                 'prototype' => true,
+                 'required' => false,
+                 'attr' => array (
+                         'class' => "{$name}-collection",
+                 ),
+         ))
+         ->add('submit', 'submit')
+         ->getForm()
+      ;
 
-                   // indicates that the form collection might be empty
-                   'required' => false,
+      $form->handleRequest($request);
+      if ($form->isValid())
+      {
+         $data = $form->getData();
+      }
 
-                   // put a selector (here, a collection class) that will be used by jquery to run the plugin
-                   'attr' => array (
-                           'class' => $name /* we will use .sample_1 as jQuery selector */,
-                   ),
-
-               ), $options))
-           ->add('submit', 'submit')
-           ->getForm()
-        ;
-    }
+      return array (
+              $name => $form->createView(),
+              "{$name}Data" => $data,
+      );
+   }
 
 }

@@ -1,0 +1,21 @@
+
+{% block ValueType_label %}{% endblock %}
+{% block ValueType_errors %}{% endblock %}
+
+{% block ValueType_widget %}
+
+    <div class="row">
+        <div class="col-md-8">
+            {{ form_widget(form.value) }}
+        </div>
+        <div class="col-md-2">
+            <a href="#" class="collection-up btn btn-default">Up</a>
+            <a href="#" class="collection-down btn btn-default">Down</a>
+        </div>
+        <div class="col-md-2">
+            <a href="#" class="collection-remove btn btn-default">Remove</a>
+            <a href="#" class="collection-add btn btn-default">Add</a>
+        </div>
+    </div>
+
+{% endblock %}
