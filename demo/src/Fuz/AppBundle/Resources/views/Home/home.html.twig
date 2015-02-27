@@ -4,6 +4,8 @@
     <script src="{{ asset('bundles/fuzapp/js/collection/jquery.collection.js') }}"></script>
 {% endblock %}
 
+{% block title %}A jQuery plugin to manage your Symfony2 form collections{% endblock %}
+
 {% block body %}
 
     <div class="jumbotron">
@@ -19,6 +21,8 @@
     <p>This plugin aims to manage Symfony2 Collections : adding, moving and deleting collection elements.</p>
 
     <p>This website is available on GitHub too, so you can know how those samples were developped.</p>
+
+    <hr/>
 
     <div class="row">
 
@@ -45,7 +49,7 @@
             <h3>With jquery.collection.js</h3>
 
             <br/>
-            <p>The default functionnality is not really beautiful but don't worry, everything is easily customizable.</p>
+            <p>The default functionnality is not really beautiful but let you add, move and delete elements in your collection. Don't worry, everything is easily customizable.</p>
             <br/>
 
             {{ form(withPlugin) }}
@@ -54,19 +58,11 @@
                 <p>Value : {{ value }}</p>
             {% endfor %}
 
-{% set code %}
-<script type="text/javascript">
-    $('.collection').collection();
-</script>
-{% endset %}
-
-            <br/>
-            <p>Code used:</p>
-            <pre><code>{{ code|e }}</code></pre>
-
         </div>
 
     </div>
+
+            <div class="clear">&nbsp;</div>
 
 {% endblock %}
 

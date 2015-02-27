@@ -34,7 +34,7 @@ class BasicController extends BaseController
                    'prototype' => true,
                    'required' => false,
                    'attr' => array (
-                           'class' => 'collection',
+                           'class' => 'my-selector',
                    ),
            ))
            ->add('submit', 'submit')
