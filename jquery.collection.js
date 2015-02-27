@@ -96,6 +96,12 @@
          }
       };
 
+      var resetCollectionActions = function(collection) {
+         collection.find('.collection-tmp').remove();
+         collection.find('.collection-main-add').remove();
+         collection.find('.collection-actions').remove();
+      };
+
       var dumpCollectionActions = function(collection, settings) {
 
          var init = collection.find('.collection-tmp').length === 0;
@@ -165,7 +171,6 @@
                }
             });
          });
-
       };
 
       var swapElements = function(collection, elements, oldIndex, newIndex) {
@@ -200,6 +205,12 @@
       }
 
       var elems = $(this);
+
+      if (elems.length === 0) {
+         console.log("jquery.collection.js: the given collection does not exist.");
+         return false;
+      }
+
       elems.each(function() {
 
          var elem = $(this);
@@ -226,6 +237,8 @@
             skeletons.push(that.attr('name'));
          });
          collection.data('collection-skeletons', skeletons);
+
+         resetCollectionActions(collection);
 
          dumpCollectionActions(collection, settings);
 
