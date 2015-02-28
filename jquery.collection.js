@@ -39,7 +39,8 @@
          before_remove: function(collection, element) { return true; },
          after_remove: function(collection, element) { return true; },
          min: 0,
-         max: 100
+         max: 100,
+         add_at_the_end: false
       };
 
       var randomNumber = function() {
@@ -98,8 +99,19 @@
 
       var resetCollectionActions = function(collection) {
          collection.find('.collection-tmp').remove();
-         collection.find('.collection-main-add').remove();
+         collection.find('.collection-rescue-add').remove();
          collection.find('.collection-actions').remove();
+      };
+
+      var findCollectionAction = function(collection, actionSelector) {
+        collection.find(actionSelector).filter(function(element) {
+            var closest = $(element).closest(".collection");
+            if (closest.data('collection') !== undefined) {
+                $(element).closest(".collection").data('collection') === collection.attr('id')
+            } else {
+                $(element).closest(".collection").eq(0) === collection.eq(0);
+            }
+        });
       };
 
       var dumpCollectionActions = function(collection, settings) {
@@ -113,27 +125,10 @@
                 if (settings.add) {
                     collection.append(
                             $(settings.add)
-                                .addClass('collection-action collection-main-add')
+                                .addClass('collection-action collection-rescue-add')
                                 .data('collection', collection.attr('id'))
                     );
                 }
-            }
-            var mainAdd = collection.find('.collection-main-add').css('display', 'initial');
-            var adds = collection.find('.collection-add');
-            if (adds.length > 0) {
-                mainAdd.css('display', 'none');
-                collection.find('> div').each(function() {
-                    var element = $(this);
-                    element.find('.collection-add').data('collection-element', getOrCreateId(element));
-                });
-            }
-            if (init) {
-                adds.addClass('collection-action').data('collection', collection.attr('id'));
-            }
-            if (elements.length >= settings.max) {
-                collection.find('.collection-add, .collection-main-add').css('display', 'none');
-            } else {
-                collection.find('.collection-add').css('display', 'initial');
             }
          }
 
@@ -146,9 +141,10 @@
             }
 
             var buttons = [
-               {'enabled': 'enable_up', 'class': 'collection-up', 'html': settings.up, 'condition': elements.index(element) !== 0},
                {'enabled': 'enable_remove', 'class': 'collection-remove', 'html': settings.remove, 'condition': elements.length > settings.min},
-               {'enabled': 'enable_down', 'class': 'collection-down', 'html': settings.down, 'condition': elements.index(element) !== elements.length - 1}
+               {'enabled': 'enable_up', 'class': 'collection-up', 'html': settings.up, 'condition': elements.index(element) !== 0},
+               {'enabled': 'enable_down', 'class': 'collection-down', 'html': settings.down, 'condition': elements.index(element) !== elements.length - 1},
+               {'enabled': 'enable_add', 'class': 'collection-add', 'html': settings.add, 'condition': !settings.add_at_the_end && elements.length < settings.max},
             ];
 
             $.each(buttons, function(index, button) {
@@ -168,9 +164,23 @@
                      .addClass('collection-action')
                      .data('collection', collection.attr('id'))
                      .data('collection-element', getOrCreateId(element));
+               } else {
+                  element.find('.' + button.class).css('display', 'none');
                }
             });
          });
+
+         if (settings.enable_add) {
+            var rescueAdd = collection.find('.collection-rescue-add').css('display', 'initial');
+            var adds = collection.find('.collection-add:visible');
+            if (adds.length > 0) {
+                rescueAdd.css('display', 'none');
+            }
+            if (elements.length >= settings.max) {
+                collection.find('.collection-add, .collection-rescue-add').css('display', 'none');
+            }
+        }
+
       };
 
       var swapElements = function(collection, elements, oldIndex, newIndex) {
@@ -252,7 +262,7 @@
                var settings = collection.data('collection-settings');
                var elements = collection.find('> div');
 
-               if ((that.is('.collection-add') || that.is('.collection-main-add')) && settings.enable_add &&
+               if ((that.is('.collection-add') || that.is('.collection-rescue-add')) && settings.enable_add &&
                        elements.length < settings.max && settings.before_add(collection, element)) {
                   var prototype = collection.data('prototype');
                   for (var index = 0; (index < settings.max); index++) {

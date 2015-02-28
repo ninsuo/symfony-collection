@@ -84,6 +84,16 @@ You can set the maximum of elements allowed in the collection by using the `max`
      });
 ```
 
+**Only one add button at the bottom**
+
+If you prefer having only one `add` button at the bottom of the collection instead of one add button per collection element, use the `add_at_the_end` option:
+
+```js
+     $('.collection').collection({
+         add_at_the_end: false
+     });
+```
+
 **Events**
 
 There are `before_*` and `after_*` options that let you put callbacks before and after adding, deleting or moving

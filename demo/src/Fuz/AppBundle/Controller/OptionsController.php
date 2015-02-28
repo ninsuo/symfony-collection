@@ -44,18 +44,6 @@ class OptionsController extends BaseController
       );
    }
 
-   /**
-    * JavaScript options
-    *
-    * Only allow to add and delete elements
-    *
-    * @Route("/addRemoveElements", name="addRemoveElements")
-    * @Template()
-    */
-   public function addRemoveElementsAction(Request $request)
-   {
-      return $this->createContextSample($request);
-   }
 
    /**
     * JavaScript options
@@ -67,7 +55,10 @@ class OptionsController extends BaseController
     */
    public function numberCollectionElementsAction(Request $request)
    {
-      return $this->createContextSample($request);
+      return array_merge(
+              $this->createContextSample($request),
+              $this->createAdvancedContextSample($request)
+      );
    }
 
    /**
