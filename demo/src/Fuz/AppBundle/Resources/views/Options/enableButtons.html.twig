@@ -4,7 +4,7 @@
     <script src="{{ asset('bundles/fuzapp/js/collection/jquery.collection.js') }}"></script>
 {% endblock %}
 
-{% block title %}JavaScript options : only allow to move elements{% endblock %}
+{% block title %}JavaScript options: choose the features to enable{% endblock %}
 
 {% block body %}
 
@@ -67,11 +67,12 @@
 
        </div>
        <div class="col-md-6">
-          <h3>A themed collection</h3>
+          <h3>A collection of themed types</h3>
 
           <p>
-             On a themed collection with custom buttons, disabling an action will just disable the functionnality, but will not
-             make the button disappear. That's up to you to avoid adding buttons in the theme if you don't want to render them.
+             On a themed type with custom buttons, disabling an action will just disable the functionnality, but will not
+             make the button disappear. As you are developing buttons yourself in the theme, that's up to you to add them
+             or not. 
           </p>
 
             {% form_theme advancedForm 'FuzAppBundle:Options:enableButtons-theme.html.twig' %}
