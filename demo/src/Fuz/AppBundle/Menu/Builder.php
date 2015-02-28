@@ -18,6 +18,7 @@ class Builder extends BaseMenu
       $this->addRoute($menu['JavaScript Options'], 'Custom Buttons', 'customButtons');
       $this->addRoute($menu['JavaScript Options'], 'Enable / Disable buttons', 'enableButtons');
       $this->addRoute($menu['JavaScript Options'], 'Number of elements control', 'numberCollectionElements');
+      $this->addRoute($menu['JavaScript Options'], '"Add" button\'s location', 'addButtonAtTheBottom');
       $this->addRoute($menu['JavaScript Options'], 'Event callbacks', 'eventCallbacks');
 
       $this->addRoute($menu, 'Advanced usage', 'advanced');

@@ -64,6 +64,22 @@ class OptionsController extends BaseController
    /**
     * JavaScript options
     *
+    * Add the button close to each collection elements or only at the bottom
+    *
+    * @Route("/addButtonAtTheBottom", name="addButtonAtTheBottom")
+    * @Template()
+    */
+   public function addButtonAtTheBottomAction(Request $request)
+   {
+      return array_merge(
+              $this->createContextSample($request, 'formEnabled'),
+              $this->createContextSample($request, 'formDisabled')
+       );
+   }
+
+   /**
+    * JavaScript options
+    *
     * Run a callback before or after adding, deleting and moving elements
     *
     * @Route("/eventCallbacks", name="eventCallbacks")
