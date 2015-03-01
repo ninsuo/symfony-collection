@@ -188,7 +188,7 @@ you should:
 - define children's selector in the `selector` attribute of `children` option (must select the root node of your children's collection)
 
 ```js
-     $('.parent).collection({
+     $('.parent').collection({
          prefix: 'parent',
          children: [{
              selector: '.child-collection',
