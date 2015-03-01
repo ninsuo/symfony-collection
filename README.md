@@ -221,11 +221,11 @@ In your form type:
 
 In the plugin options:
 
-- use a distinct collection's prefix, so clicking `add` button on a collection will add an item to the right collection
+- use a distinct collection prefix, so clicking `add` button on a collection will add an item to the right collection
 
 - define children's collection parameters in the `children` option
 
-- define children's selector in the `selector` attribute of `children` option (must select the root node of your children's collection)
+- define children's selector in the `selector` attribute of `children` option (must select the root node of your children collections)
 
 ```js
      $('.parent').collection({
