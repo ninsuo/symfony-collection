@@ -97,6 +97,10 @@
          }
       };
 
+      var trueOrUndefined = function(value) {
+          return undefined === value || value;
+      };
+
       var resetCollectionActions = function(collection) {
          collection.find('.collection-tmp').remove();
          collection.find('.collection-rescue-add').remove();
@@ -249,7 +253,6 @@
          collection.data('collection-skeletons', skeletons);
 
          resetCollectionActions(collection);
-
          dumpCollectionActions(collection, settings);
 
          var container = $(settings.container);
@@ -262,8 +265,10 @@
                var settings = collection.data('collection-settings');
                var elements = collection.find('> div');
 
+               var element = that.data('collection-element') ? $('#' + that.data('collection-element')) : undefined;
+
                if ((that.is('.collection-add') || that.is('.collection-rescue-add')) && settings.enable_add &&
-                       elements.length < settings.max && settings.before_add(collection, element)) {
+                       elements.length < settings.max && trueOrUndefined(settings.before_add(collection, element))) {
                   var prototype = collection.data('prototype');
                   for (var index = 0; (index < settings.max); index++) {
                      var code = $(prototype.replace(/__name__/g, index));
@@ -283,7 +288,10 @@
                               shiftElementsDown(collection, elements, index);
                            }
                         }
-                        if (!settings.after_add(collection, element)) {
+                        if (!trueOrUndefined(settings.after_add(collection, code))) {
+                            if (index !== -1) {
+                                shiftElementsUp(collection, elements, index + 1);
+                            }
                             code.remove();
                         }
                         break;
@@ -295,12 +303,12 @@
                var index = elements.index(element);
 
                if (that.is('.collection-remove') && settings.enable_remove &&
-                       elements.length > settings.min && settings.before_remove(collection, element)) {
+                       elements.length > settings.min && trueOrUndefined(settings.before_remove(collection, element))) {
                     shiftElementsUp(collection, elements, index);
                     var toRemove = elements.last();
                     var backup = toRemove.clone({withDataAndEvents: true});
                     toRemove.remove();
-                    if (!settings.after_remove(collection, backup)) {
+                    if (!trueOrUndefined(settings.after_remove(collection, backup))) {
                        collection.find('> .collection-tmp').before(backup);
                        elements = collection.find('> div');
                        shiftElementsDown(collection, elements, index - 1);
@@ -308,18 +316,18 @@
                }
 
                if (that.is('.collection-up') && settings.enable_up) {
-                  if (index !== 0 && settings.before_up(collection, element)) {
+                  if (index !== 0 && trueOrUndefined(settings.before_up(collection, element))) {
                      swapElements(collection, elements, index, index - 1);
-                     if (!settings.after_up(collection, element)) {
+                     if (!trueOrUndefined(settings.after_up(collection, element))) {
                          swapElements(collection, elements, index - 1, index);
                      }
                   }
                }
 
                if (that.is('.collection-down') && settings.enable_down) {
-                  if (index !== (elements.length - 1) && settings.before_down(collection, element)) {
+                  if (index !== (elements.length - 1) && trueOrUndefined(settings.before_down(collection, element))) {
                      swapElements(collection, elements, index, index + 1);
-                     if (!settings.after_down(collection, elements)) {
+                     if (!trueOrUndefined(settings.after_down(collection, elements))) {
                          swapElements(collection, elements, index + 1, index);
                      }
                   }

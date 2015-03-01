@@ -32,6 +32,11 @@
         <p>Value : {{ value }}</p>
     {% endfor %}
 
+    <hr/>
+
+    <p>Code used:</p>
+    <pre>{{ block('script') | e }}</pre>
+
 {% endblock %}
 
 {% block script %}
