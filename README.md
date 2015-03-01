@@ -184,8 +184,7 @@ element instead of at the end of the collection.
 
 **Collection of collections**
 
-This plugin has the ability to manage collection of form collections, but to avoid collisions between selectors,
-you should:
+This plugin has the ability to manage collection of form collections, but to avoid collisions, you should:
 
 In your form type:
 
