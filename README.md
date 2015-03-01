@@ -188,6 +188,7 @@ This plugin has the ability to manage collection of form collections, but to avo
 you should:
 
 In your form type:
+
 - set a distinct prototype_name for each of your collections
 
 ```php
@@ -220,8 +221,11 @@ In your form type:
 ```
 
 In the plugin options:
+
 - use a distinct collection's prefix, so clicking `add` button on a collection will add an item to the right collection
+
 - define children's collection parameters in the `children` option
+
 - define children's selector in the `selector` attribute of `children` option (must select the root node of your children's collection)
 
 ```js
