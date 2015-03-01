@@ -16,13 +16,13 @@
     </p>
 
     <p>
-        To manage deeper collections properly (for example, to apply a <code>max</code> option only on parent collection but not
-        on children ones), you should put a common selector for all your collections (in our sample, <code>i-am-a-collection</code>).
-        Always initialize your forms from the deepest collection to the highest, or write the common class manually.
+        Use the <code>children</code> option to set options for your children collections. The only mandatory field is <code>selector</code>,
+        which must select all your children collection's root node.
     </p>
 
     <p>
-        This is also a good way to test if this plugin's options work only for the right collection, and not deeper collections.
+        To manage deeper collections properly (for example, to apply a <code>max</code> option only on parent collection but not
+        on children ones), you should set a distinct prefix to each of your collections.
     </p>
 
     <p>
@@ -62,17 +62,17 @@
     <script type="text/javascript">
 
         $('.parent-collection').collection({
-            min: 2,
+            min: 0,
             max: 5,
             up: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-arrow-up"></span> Move collection up</a>',
             down: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-arrow-down"></span> Move collection down</a>',
             add: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Add collection</a>',
             remove: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> Remove collection</a>',
-            prefix: 'parent'
-        });
-
-        $('.child-collection').collection({
-            add: '<a href="#" class="btn btn-default">Add</span></a>',
+            prefix: 'parent',
+            children: [{
+                selector: '.child-collection',
+                add: '<a href="#" class="btn btn-default">Add</span></a>'
+            }]
         });
 
     </script>

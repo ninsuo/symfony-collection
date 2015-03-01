@@ -41,7 +41,8 @@
          min: 0,
          max: 100,
          add_at_the_end: false,
-         prefix: 'collection'
+         prefix: 'collection',
+         children: null
       };
 
       var randomNumber = function() {
@@ -113,13 +114,13 @@
          var init = collection.find('.' + settings.prefix + '-tmp').length === 0;
          var elements = collection.find('> div');
 
-         if (settings.enable_add) {
+          if (settings.enable_add) {
             if (init) {
                 collection.append('<span class="' + settings.prefix + '-tmp"></span>');
                 if (settings.add) {
                     collection.append(
                             $(settings.add)
-                                .addClass('' + settings.prefix + '-action ' + settings.prefix + '-rescue-add')
+                                .addClass(settings.prefix + '-action ' + settings.prefix + '-rescue-add')
                                 .data('collection', collection.attr('id'))
                     );
                 }
@@ -180,7 +181,7 @@
       var swapElements = function(collection, elements, oldIndex, newIndex) {
          var oldField= elements.eq(oldIndex);
          var newField = elements.eq(newIndex);
-         $.each(collection.data('' + settings.prefix + '-skeletons'), function(index, name) {
+         $.each(collection.data(settings.prefix + '-skeletons'), function(index, name) {
             var oldName = name.replace(/__name__/g, oldIndex);
             var newName = name.replace(/__name__/g, newIndex);
             var swap = getFieldValue(oldField.find("[name='" + oldName + "']"));
@@ -190,15 +191,39 @@
       };
 
       var shiftElementsUp = function(collection, elements, index) {
-         for (var i = index + 1; i < elements.length; i++) {
-            swapElements(collection, elements, i - 1, i);
+         if (!collection.data('collection-settings').children) {
+            for (var i = index + 1; i < elements.length; i++) {
+               swapElements(collection, elements, i - 1, i);
+            }
+         } else {
+             // todo
          }
       };
 
       var shiftElementsDown = function(collection, elements, index) {
-          for (var i = elements.length - 2; i > index; i--) {
-            swapElements(collection, elements, i + 1, i);
+         if (!collection.data('collection-settings').children) {
+            for (var i = elements.length - 2; i > index; i--) {
+              swapElements(collection, elements, i + 1, i);
+            }
+          } else {
+              // todo
           }
+      };
+
+      var enableChildrenCollections = function(collection, elements, settings) {
+         if (settings.children) {
+            $.each(settings.children, function(index, childrenSettings) {
+               if (!childrenSettings.selector) {
+                 console.log("jquery.collection.js: given collection " + collection.attr('id') + " has children collections, but children's root selector is undefined.");
+                 return true;
+               }
+               if (elements !== null) {
+                  elements.find(childrenSettings.selector).collection(childrenSettings);
+               } else {
+                  collection.find(childrenSettings.selector).collection(childrenSettings);
+               }
+            });
+         }
       };
 
       var settings = $.extend(true, {}, defaults, options);
@@ -211,7 +236,7 @@
       var elems = $(this);
 
       if (elems.length === 0) {
-         console.log("jquery.collection.js: the given collection does not exist.");
+         console.log("jquery.collection.js: given collection does not exist.");
          return false;
       }
 
@@ -221,7 +246,7 @@
          if (elem.data('collection') !== undefined) {
             var collection = $('#' + elem.data('collection'));
             if (collection.length === 0) {
-               console.log("jquery.collection.js: the given collection field does not exist.");
+               console.log("jquery.collection.js: given collection field does not exist.");
                return true;
             }
          } else {
@@ -229,11 +254,11 @@
          }
 
          if (collection.data('prototype') === null) {
-            console.log("jquery.collection.js: the given collection field has no prototype, check that your field has the prototype option set to true.");
+            console.log("jquery.collection.js: given collection field has no prototype, check that your field has the prototype option set to true.");
             return true;
          }
 
-          collection.data('collection-settings', settings);
+         collection.data('collection-settings', settings);
 
          var skeletons = [];
          $(collection.data('prototype')).find('[name]').each(function() {
@@ -244,12 +269,14 @@
 
          resetCollectionActions(collection, settings);
          dumpCollectionActions(collection, settings);
+         enableChildrenCollections(collection, null, settings);
 
          var container = $(settings.container);
 
          container
             .undelegate('.' + settings.prefix + '-action', 'click')
             .delegate('.' + settings.prefix + '-action', 'click', function(e) {
+
                var that = $(this);
                var collection = $('#' + that.data('collection'));
                var settings = collection.data('collection-settings');
@@ -272,12 +299,16 @@
                         if (action.length > 0) {
                            action.addClass(settings.prefix + '-action').data('collection', collection.attr('id'));
                         }
+
+                        enableChildrenCollections(collection, code, settings);
+
                         if (that.data(settings.prefix + '-element') !== undefined) {
                            var index = elements.index($('#' + that.data(settings.prefix + '-element')));
                            if (index !== -1) {
                               shiftElementsDown(collection, elements, index);
                            }
                         }
+
                         if (!trueOrUndefined(settings.after_add(collection, code))) {
                             if (index !== -1) {
                                 shiftElementsUp(collection, elements, index + 1);

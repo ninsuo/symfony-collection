@@ -139,14 +139,14 @@ class AdvancedController extends BaseController
                            'allow_delete' => true,
                            'prototype' => true,
                            'attr' => array (
-                                   'class' => "i-am-a-collection child-collection",
+                                   'class' => "child-collection",
                            ),
                    ),
                    'allow_add' => true,
                    'allow_delete' => true,
                    'prototype' => true,
                    'attr' => array (
-                           'class' => "i-am-a-collection parent-collection",
+                           'class' => "parent-collection",
                    ),
            ))
            ->add('submit', 'submit')
