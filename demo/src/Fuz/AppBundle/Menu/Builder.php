@@ -15,14 +15,17 @@ class Builder extends BaseMenu
       $this->addRoute($menu, 'Basic usage', 'basic');
 
       $this->addSubMenu($menu, 'JavaScript Options');
-      $this->addRoute($menu['JavaScript Options'], 'Custom Buttons', 'customButtons');
-      $this->addRoute($menu['JavaScript Options'], 'Enable / Disable buttons', 'enableButtons');
-      $this->addRoute($menu['JavaScript Options'], 'Number of elements control', 'numberCollectionElements');
-      $this->addRoute($menu['JavaScript Options'], '"Add" button\'s location', 'addButtonAtTheBottom');
-      $this->addRoute($menu['JavaScript Options'], 'Event callbacks', 'eventCallbacks');
+      $this->addRoute($menu['JavaScript Options'], "Custom button's layout", 'customButtons');
+      $this->addRoute($menu['JavaScript Options'], "Enable / Disable buttons", 'enableButtons');
+      $this->addRoute($menu['JavaScript Options'], "Control number of collection's elements", 'numberCollectionElements');
+      $this->addRoute($menu['JavaScript Options'], "Change Add button's location", 'addButtonAtTheBottom');
+      $this->addRoute($menu['JavaScript Options'], "Event callbacks", 'eventCallbacks');
 
-      $this->addRoute($menu, 'Advanced usage', 'advanced');
-      $this->addRoute($menu, 'Collection of collections', 'collection');
+      $this->addSubMenu($menu, 'Advanced usage');
+      $this->addRoute($menu['Advanced usage'], "A better MVC Compliance", "mvcCompliance");
+      $this->addRoute($menu['Advanced usage'], "Custom form theme", "customFormTheme");
+      $this->addRoute($menu['Advanced usage'], "Collection of form collections", "collectionOfCollections");
+
       return $menu;
    }
 
