@@ -191,32 +191,32 @@ In your form type:
 - set a distinct prototype_name for each of your collections
 
 ```php
-->add('collections', 'collection',
-   array (
-        'type' => 'collection',
-        'label' => 'Add, move, remove collections',
-        'options' => array (
-                'type' => 'text',
-                'label' => 'Add, move, remove values',
-                'options' => array (
-                        'label' => 'Value',
-                ),
-                'allow_add' => true,
-                'allow_delete' => true,
-                'prototype' => true,
-                'prototype_name' => '__children_name__',
-                'attr' => array (
-                        'class' => "child-collection",
-                ),
-        ),
-        'allow_add' => true,
-        'allow_delete' => true,
-        'prototype' => true,
-        'prototype_name' => '__parent_name__',
-        'attr' => array (
-                'class' => "parent-collection",
-        ),
-))
+    ->add('collections', 'collection',
+       array (
+            'type' => 'collection',
+            'label' => 'Add, move, remove collections',
+            'options' => array (
+                    'type' => 'text',
+                    'label' => 'Add, move, remove values',
+                    'options' => array (
+                            'label' => 'Value',
+                    ),
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'prototype' => true,
+                    'prototype_name' => '__children_name__',
+                    'attr' => array (
+                            'class' => "child-collection",
+                    ),
+            ),
+            'allow_add' => true,
+            'allow_delete' => true,
+            'prototype' => true,
+            'prototype_name' => '__parent_name__',
+            'attr' => array (
+                    'class' => "parent-collection",
+            ),
+    ))
 ```
 
 In the plugin options:
