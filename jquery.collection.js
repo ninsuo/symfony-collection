@@ -254,6 +254,7 @@
             return true;
          }
 
+         collection.addClass('collection-managed');
          collection.data('collection-settings', settings);
 
          var skeletons = [];
