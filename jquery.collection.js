@@ -274,8 +274,8 @@
          var container = $(settings.container);
 
          container
-            .undelegate('.' + settings.prefix + '-action', 'click')
-            .delegate('.' + settings.prefix + '-action', 'click', function(e) {
+            .off('click', '.' + settings.prefix + '-action')
+            .on('click', '.' + settings.prefix + '-action', function(e) {
 
                var that = $(this);
                var collection = $('#' + that.data('collection'));
