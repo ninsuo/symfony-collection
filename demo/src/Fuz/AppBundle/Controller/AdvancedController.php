@@ -138,6 +138,7 @@ class AdvancedController extends BaseController
                            'allow_add' => true,
                            'allow_delete' => true,
                            'prototype' => true,
+                           'prototype_name' => '__children_name__',
                            'attr' => array (
                                    'class' => "child-collection",
                            ),
@@ -145,6 +146,7 @@ class AdvancedController extends BaseController
                    'allow_add' => true,
                    'allow_delete' => true,
                    'prototype' => true,
+                   'prototype_name' => '__parent_name__',
                    'attr' => array (
                            'class' => "parent-collection",
                    ),

@@ -42,6 +42,7 @@
          max: 100,
          add_at_the_end: false,
          prefix: 'collection',
+         prototype_name: '__name__',
          children: null
       };
 
@@ -179,11 +180,13 @@
       };
 
       var swapElements = function(collection, elements, oldIndex, newIndex) {
+         var settings = collection.data('collection-settings');
          var oldField= elements.eq(oldIndex);
          var newField = elements.eq(newIndex);
          $.each(collection.data(settings.prefix + '-skeletons'), function(index, name) {
-            var oldName = name.replace(/__name__/g, oldIndex);
-            var newName = name.replace(/__name__/g, newIndex);
+            var regexp = new RegExp(settings.prototype_name, 'g');
+            var oldName = name.replace(regexp, oldIndex);
+            var newName = name.replace(regexp, newIndex);
             var swap = getFieldValue(oldField.find("[name='" + oldName + "']"));
             putFieldValue(oldField.find("[name='" + oldName + "']"), getFieldValue(newField.find("[name='" + newName + "']")));
             putFieldValue(newField.find("[name='" + newName + "']"), swap);
@@ -283,14 +286,14 @@
                var elements = collection.find('> div');
 
                var element = that.data(settings.prefix + '-element') ? $('#' + that.data(settings.prefix + '-element')) : undefined;
-
                if ((that.is('.' + settings.prefix + '-add') || that.is('.' + settings.prefix + '-rescue-add')) && settings.enable_add &&
                        elements.length < settings.max && trueOrUndefined(settings.before_add(collection, element))) {
                   var prototype = collection.data('prototype');
                   for (var index = 0; (index < settings.max); index++) {
-                     var code = $(prototype.replace(/__name__/g, index));
+                     var regexp = new RegExp(settings.prototype_name, 'g');
+                     var code = $(prototype.replace(regexp, index));
                      var tmp = collection.find('> .' + settings.prefix + '-tmp');
-                     var id = tmp.html(code).find(':input').first().attr('id');
+                     var id = tmp.html(code).find('[id]').first().attr('id');
                      tmp.empty();
                      if (container.find('#' + id).length === 0) {
                         tmp.before(code);

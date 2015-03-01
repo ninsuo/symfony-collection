@@ -187,6 +187,39 @@ element instead of at the end of the collection.
 This plugin has the ability to manage collection of form collections, but to avoid collisions between selectors,
 you should:
 
+In your form type:
+- set a distinct prototype_name for each of your collections
+
+```php
+->add('collections', 'collection',
+   array (
+        'type' => 'collection',
+        'label' => 'Add, move, remove collections',
+        'options' => array (
+                'type' => 'text',
+                'label' => 'Add, move, remove values',
+                'options' => array (
+                        'label' => 'Value',
+                ),
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'prototype_name' => '__children_name__',
+                'attr' => array (
+                        'class' => "child-collection",
+                ),
+        ),
+        'allow_add' => true,
+        'allow_delete' => true,
+        'prototype' => true,
+        'prototype_name' => '__parent_name__',
+        'attr' => array (
+                'class' => "parent-collection",
+        ),
+))
+```
+
+In the plugin options:
 - use a distinct collection's prefix, so clicking `add` button on a collection will add an item to the right collection
 - define children's collection parameters in the `children` option
 - define children's selector in the `selector` attribute of `children` option (must select the root node of your children's collection)
@@ -194,9 +227,11 @@ you should:
 ```js
      $('.parent').collection({
          prefix: 'parent',
+         prototype_name: '__parent_name__',
          children: [{
              selector: '.child-collection',
              prefix: 'child',
+             prototype_name: '__children_name__',
              add: '<a href="#" class="btn btn-default">Add</span></a>',
              ...
          }]
