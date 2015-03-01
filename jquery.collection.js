@@ -1,5 +1,5 @@
 /*
-* jquery.collection.js v0.0.3
+* jquery.collection.js v0.0.42
 *
 * Copyright (c) 2015 alain tiemblo <alain at fuz dot org>
 *
@@ -180,6 +180,7 @@
       };
 
       var swapElements = function(collection, elements, oldIndex, newIndex) {
+         // todo: manage collection swapping
          var settings = collection.data('collection-settings');
          var oldField= elements.eq(oldIndex);
          var newField = elements.eq(newIndex);
@@ -194,23 +195,15 @@
       };
 
       var shiftElementsUp = function(collection, elements, index) {
-         if (!collection.data('collection-settings').children) {
-            for (var i = index + 1; i < elements.length; i++) {
-               swapElements(collection, elements, i - 1, i);
-            }
-         } else {
-             // todo
+         for (var i = index + 1; i < elements.length; i++) {
+            swapElements(collection, elements, i - 1, i);
          }
       };
 
       var shiftElementsDown = function(collection, elements, index) {
-         if (!collection.data('collection-settings').children) {
-            for (var i = elements.length - 2; i > index; i--) {
-              swapElements(collection, elements, i + 1, i);
-            }
-          } else {
-              // todo
-          }
+         for (var i = elements.length - 2; i > index; i--) {
+            swapElements(collection, elements, i + 1, i);
+         }
       };
 
       var enableChildrenCollections = function(collection, elements, settings) {

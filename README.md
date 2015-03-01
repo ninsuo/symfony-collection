@@ -148,6 +148,8 @@ You can use any custom clickable element as soon has it has one action class:
 - `collection-up` for a `move up` button
 - `collection-down` for a `move down` button
 
+**Important note**: `collection` is taken from the `prefix` option: if you change the plugin's prefix, you should change this class too.
+
 Example:
 
 If we have a collection of text fields and want to display actions at the right side of each value instead of below,
