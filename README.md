@@ -178,3 +178,14 @@ the plugin will generate an `add` button based on the plugin configuraiton.
 *Tip*: when `add` buttons are put inside collection's elements, new element is created next to the clicked
 element instead of at the end of the collection.
 
+**Collection of collections**
+
+This plugin has the ability to manage collection of form collections, but to avoid collisions between selectors,
+you should change the collection's prefix.
+
+```js
+     $('.my-parent').collection({
+         prefix: 'collection'
+     });
+```
+

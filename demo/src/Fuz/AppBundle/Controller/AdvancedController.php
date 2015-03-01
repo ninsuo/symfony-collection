@@ -71,14 +71,7 @@ class AdvancedController extends BaseController
      */
     public function customFormThemeAction(Request $request)
     {
-        $a = new ValueData();
-        $a->setValue('a');
-        $b = new ValueData();
-        $b->setValue('b');
-        $c = new ValueData();
-        $c->setValue('c');
-
-        $data = array('values' => array($a, $b, $c));
+        $data = array('values' => array(new ValueData("a"), new ValueData("b"), new ValueData("c")));
 
         $form = $this
            ->createFormBuilder($data)
@@ -121,6 +114,55 @@ class AdvancedController extends BaseController
      */
     public function collectionOfCollectionsAction(Request $request)
     {
+        $data = array (
+                'collections' => array (
+                        array(new ValueData("a"), new ValueData("b"), new ValueData("c")),
+                        array(new ValueData("d"), new ValueData("e"), new ValueData("f")),
+                        array(new ValueData("g"), new ValueData("h"), new ValueData("i")),
+                ),
+        );
+
+        $form = $this
+           ->get('form.factory')
+           ->createNamedBuilder('form', 'form', $data)
+           ->add('collections', 'collection',
+              array (
+                   'type' => 'collection',
+                   'label' => 'Add, move, remove collections',
+                   'options' => array (
+                           'type' => new ValueType(),
+                           'label' => 'Add, move, remove values',
+                           'options' => array (
+                                   'label' => 'Value',
+                           ),
+                           'allow_add' => true,
+                           'allow_delete' => true,
+                           'prototype' => true,
+                           'attr' => array (
+                                   'class' => "i-am-a-collection child-collection",
+                           ),
+                   ),
+                   'allow_add' => true,
+                   'allow_delete' => true,
+                   'prototype' => true,
+                   'attr' => array (
+                           'class' => "i-am-a-collection parent-collection",
+                   ),
+           ))
+           ->add('submit', 'submit')
+           ->getForm()
+        ;
+
+        $form->handleRequest($request);
+        if ($form->isValid())
+        {
+            $data = $form->getData();
+        }
+
+        return array (
+                'form' => $form->createView(),
+                "data" => $data,
+        );
     }
 
 }

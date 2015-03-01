@@ -40,7 +40,8 @@
          after_remove: function(collection, element) { return true; },
          min: 0,
          max: 100,
-         add_at_the_end: false
+         add_at_the_end: false,
+         prefix: 'collection'
       };
 
       var randomNumber = function() {
@@ -101,35 +102,24 @@
           return undefined === value || value;
       };
 
-      var resetCollectionActions = function(collection) {
-         collection.find('.collection-tmp').remove();
-         collection.find('.collection-rescue-add').remove();
-         collection.find('.collection-actions').remove();
-      };
-
-      var findCollectionAction = function(collection, actionSelector) {
-        collection.find(actionSelector).filter(function(element) {
-            var closest = $(element).closest(".collection");
-            if (closest.data('collection') !== undefined) {
-                $(element).closest(".collection").data('collection') === collection.attr('id')
-            } else {
-                $(element).closest(".collection").eq(0) === collection.eq(0);
-            }
-        });
+      var resetCollectionActions = function(collection, settings) {
+         collection.find('.' + settings.prefix + '-tmp').remove();
+         collection.find('.' + settings.prefix + '-rescue-add').remove();
+         collection.find('.' + settings.prefix + '-actions').remove();
       };
 
       var dumpCollectionActions = function(collection, settings) {
 
-         var init = collection.find('.collection-tmp').length === 0;
+         var init = collection.find('.' + settings.prefix + '-tmp').length === 0;
          var elements = collection.find('> div');
 
          if (settings.enable_add) {
             if (init) {
-                collection.append('<span class="collection-tmp"></span>');
+                collection.append('<span class="' + settings.prefix + '-tmp"></span>');
                 if (settings.add) {
                     collection.append(
                             $(settings.add)
-                                .addClass('collection-action collection-rescue-add')
+                                .addClass('' + settings.prefix + '-action ' + settings.prefix + '-rescue-add')
                                 .data('collection', collection.attr('id'))
                     );
                 }
@@ -139,16 +129,16 @@
          elements.each(function() {
             var element = $(this);
 
-            if (element.find('> .collection-actions').length === 0) {
-                var actions = $('<div class="collection-actions"></div>');
+            if (element.find('> .' + settings.prefix + '-actions').length === 0) {
+                var actions = $('<div class="' + settings.prefix + '-actions"></div>');
                 element.append(actions);
             }
 
             var buttons = [
-               {'enabled': 'enable_remove', 'class': 'collection-remove', 'html': settings.remove, 'condition': elements.length > settings.min},
-               {'enabled': 'enable_up', 'class': 'collection-up', 'html': settings.up, 'condition': elements.index(element) !== 0},
-               {'enabled': 'enable_down', 'class': 'collection-down', 'html': settings.down, 'condition': elements.index(element) !== elements.length - 1},
-               {'enabled': 'enable_add', 'class': 'collection-add', 'html': settings.add, 'condition': !settings.add_at_the_end && elements.length < settings.max},
+               {'enabled': 'enable_remove', 'class': settings.prefix + '-remove', 'html': settings.remove, 'condition': elements.length > settings.min},
+               {'enabled': 'enable_up', 'class': settings.prefix + '-up', 'html': settings.up, 'condition': elements.index(element) !== 0},
+               {'enabled': 'enable_down', 'class': settings.prefix + '-down', 'html': settings.down, 'condition': elements.index(element) !== elements.length - 1},
+               {'enabled': 'enable_add', 'class': settings.prefix + '-add', 'html': settings.add, 'condition': !settings.add_at_the_end && elements.length < settings.max},
             ];
 
             $.each(buttons, function(index, button) {
@@ -165,9 +155,9 @@
                       action.css('display', 'none');
                    }
                    action
-                     .addClass('collection-action')
+                     .addClass(settings.prefix + '-action')
                      .data('collection', collection.attr('id'))
-                     .data('collection-element', getOrCreateId(element));
+                     .data(settings.prefix + '-element', getOrCreateId(element));
                } else {
                   element.find('.' + button.class).css('display', 'none');
                }
@@ -175,22 +165,22 @@
          });
 
          if (settings.enable_add) {
-            var rescueAdd = collection.find('.collection-rescue-add').css('display', 'initial');
-            var adds = collection.find('.collection-add:visible');
+            var rescueAdd = collection.find('.' + settings.prefix + '-rescue-add').css('display', 'initial');
+            var adds = collection.find('.' + settings.prefix + '-add:visible');
             if (adds.length > 0) {
                 rescueAdd.css('display', 'none');
             }
             if (elements.length >= settings.max) {
-                collection.find('.collection-add, .collection-rescue-add').css('display', 'none');
+                collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add').css('display', 'none');
             }
-        }
+         }
 
       };
 
       var swapElements = function(collection, elements, oldIndex, newIndex) {
          var oldField= elements.eq(oldIndex);
          var newField = elements.eq(newIndex);
-         $.each(collection.data('collection-skeletons'), function(index, name) {
+         $.each(collection.data('' + settings.prefix + '-skeletons'), function(index, name) {
             var oldName = name.replace(/__name__/g, oldIndex);
             var newName = name.replace(/__name__/g, newIndex);
             var swap = getFieldValue(oldField.find("[name='" + oldName + "']"));
@@ -243,47 +233,47 @@
             return true;
          }
 
-         collection.data('collection-settings', settings);
+          collection.data('collection-settings', settings);
 
          var skeletons = [];
          $(collection.data('prototype')).find('[name]').each(function() {
             var that = $(this);
             skeletons.push(that.attr('name'));
          });
-         collection.data('collection-skeletons', skeletons);
+         collection.data(settings.prefix + '-skeletons', skeletons);
 
-         resetCollectionActions(collection);
+         resetCollectionActions(collection, settings);
          dumpCollectionActions(collection, settings);
 
          var container = $(settings.container);
 
          container
-            .undelegate('.collection-action', 'click')
-            .delegate('.collection-action', 'click', function(e) {
+            .undelegate('.' + settings.prefix + '-action', 'click')
+            .delegate('.' + settings.prefix + '-action', 'click', function(e) {
                var that = $(this);
                var collection = $('#' + that.data('collection'));
                var settings = collection.data('collection-settings');
                var elements = collection.find('> div');
 
-               var element = that.data('collection-element') ? $('#' + that.data('collection-element')) : undefined;
+               var element = that.data(settings.prefix + '-element') ? $('#' + that.data(settings.prefix + '-element')) : undefined;
 
-               if ((that.is('.collection-add') || that.is('.collection-rescue-add')) && settings.enable_add &&
+               if ((that.is('.' + settings.prefix + '-add') || that.is('.' + settings.prefix + '-rescue-add')) && settings.enable_add &&
                        elements.length < settings.max && trueOrUndefined(settings.before_add(collection, element))) {
                   var prototype = collection.data('prototype');
                   for (var index = 0; (index < settings.max); index++) {
                      var code = $(prototype.replace(/__name__/g, index));
-                     var tmp = collection.find('> .collection-tmp');
+                     var tmp = collection.find('> .' + settings.prefix + '-tmp');
                      var id = tmp.html(code).find(':input').first().attr('id');
                      tmp.empty();
                      if (container.find('#' + id).length === 0) {
                         tmp.before(code);
                         elements = collection.find('> div');
-                        var action = code.find('.collection-add');
+                        var action = code.find('.' + settings.prefix + '-add');
                         if (action.length > 0) {
-                           action.addClass('collection-action').data('collection', collection.attr('id'));
+                           action.addClass(settings.prefix + '-action').data('collection', collection.attr('id'));
                         }
-                        if (that.data('collection-element') !== undefined) {
-                           var index = elements.index($('#' + that.data('collection-element')));
+                        if (that.data(settings.prefix + '-element') !== undefined) {
+                           var index = elements.index($('#' + that.data(settings.prefix + '-element')));
                            if (index !== -1) {
                               shiftElementsDown(collection, elements, index);
                            }
@@ -299,23 +289,23 @@
                   }
                }
 
-               var element = $('#' + that.data('collection-element'));
+               var element = $('#' + that.data(settings.prefix + '-element'));
                var index = elements.index(element);
 
-               if (that.is('.collection-remove') && settings.enable_remove &&
+               if (that.is('.' + settings.prefix + '-remove') && settings.enable_remove &&
                        elements.length > settings.min && trueOrUndefined(settings.before_remove(collection, element))) {
                     shiftElementsUp(collection, elements, index);
                     var toRemove = elements.last();
                     var backup = toRemove.clone({withDataAndEvents: true});
                     toRemove.remove();
                     if (!trueOrUndefined(settings.after_remove(collection, backup))) {
-                       collection.find('> .collection-tmp').before(backup);
+                       collection.find('> .' + settings.prefix + '-tmp').before(backup);
                        elements = collection.find('> div');
                        shiftElementsDown(collection, elements, index - 1);
                     }
                }
 
-               if (that.is('.collection-up') && settings.enable_up) {
+               if (that.is('.' + settings.prefix + '-up') && settings.enable_up) {
                   if (index !== 0 && trueOrUndefined(settings.before_up(collection, element))) {
                      swapElements(collection, elements, index, index - 1);
                      if (!trueOrUndefined(settings.after_up(collection, element))) {
@@ -324,7 +314,7 @@
                   }
                }
 
-               if (that.is('.collection-down') && settings.enable_down) {
+               if (that.is('.' + settings.prefix + '-down') && settings.enable_down) {
                   if (index !== (elements.length - 1) && trueOrUndefined(settings.before_down(collection, element))) {
                      swapElements(collection, elements, index, index + 1);
                      if (!trueOrUndefined(settings.after_down(collection, elements))) {
