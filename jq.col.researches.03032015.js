@@ -108,6 +108,22 @@
          return (string + '').replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
       };
 
+      var replaceAttrData = function(element, toReplace, replaceWith) {
+         element.find('*').each(function() {
+             var node = $(this);
+             $.each(this.attributes, function(i, attrib) {
+                 if ($.type(attrib.value) === 'string') {
+                     node.attr(attrib.name.replace(toReplace, replaceWith), attrib.value.replace(toReplace, replaceWith));
+                 }
+             });
+             $.each(node.data(), function(name, value) {
+                 if ($.type(value) === 'string') {
+                     node.data(name.replace(toReplace, replaceWith), value.replace(toReplace, replaceWith));
+                 }
+             });
+         });
+      };
+
       var resetCollectionActions = function(collection, settings) {
          collection.find('.' + settings.prefix + '-tmp').remove();
          collection.find('.' + settings.prefix + '-rescue-add').remove();
@@ -119,9 +135,11 @@
          var init = collection.find('.' + settings.prefix + '-tmp').length === 0;
          var elements = collection.find('> div');
 
+         if (init) {
+            collection.append('<span class="' + settings.prefix + '-tmp"></span>');
+         }
           if (settings.enable_add) {
             if (init) {
-                collection.append('<span class="' + settings.prefix + '-tmp"></span>');
                 if (settings.add) {
                     collection.append(
                             $(settings.add)
@@ -184,29 +202,52 @@
       };
 
       var swapElements = function(collection, elements, oldIndex, newIndex) {
+
          var settings = collection.data('collection-settings');
-         var oldField= elements.eq(oldIndex);
-         var newField = elements.eq(newIndex);
-         $.each(collection.data(settings.prefix + '-skeletons'), function(index, name) {
-            var regexp = new RegExp(pregQuote(settings.prototype_name), 'g');
-            var oldName = name.replace(regexp, oldIndex);
-            var newName = name.replace(regexp, newIndex);
-            var swap = getFieldValue(oldField.find("[name='" + oldName + "']"));
-            putFieldValue(oldField.find("[name='" + oldName + "']"), getFieldValue(newField.find("[name='" + newName + "']")));
-            putFieldValue(newField.find("[name='" + newName + "']"), swap);
-         });
+
+         var doSwap = function(collection, elements, index, oldIndex, newIndex) {
+
+            $.each(collection.data(settings.prefix + '-children-names'), function(i, name) {
+               var regexp = new RegExp(pregQuote(settings.prototype_name), 'g');
+               var oldName = new RegExp(pregQuote(name.replace(regexp, oldIndex)), 'g');
+               var newName = name.replace(regexp, newIndex);
+               replaceAttrData(elements.eq(index), oldName, newName);
+            });
+
+            var toReplace = new RegExp(pregQuote(collection.attr('id') + '_' + oldIndex), 'g');
+            var replaceWith = collection.attr('id') + '_' + newIndex;
+
+            // name ??
+
+            replaceAttrData(elements.eq(index), toReplace, replaceWith);
+         };
+
+         doSwap(collection, elements, oldIndex, oldIndex, '__swap__');
+         doSwap(collection, elements, newIndex, newIndex, oldIndex);
+         doSwap(collection, elements, oldIndex, '__swap__', newIndex);
+
+         elements.eq(oldIndex).insertBefore(elements.eq(newIndex));
+         if (newIndex > oldIndex) {
+            elements.eq(newIndex).insertBefore(elements.eq(oldIndex));
+         } else {
+            elements.eq(newIndex).insertAfter(elements.eq(oldIndex));
+         }
+
+         return collection.find('> div');
       };
 
       var shiftElementsUp = function(collection, elements, index) {
          for (var i = index + 1; i < elements.length; i++) {
-            swapElements(collection, elements, i - 1, i);
+            elements = swapElements(collection, elements, i - 1, i);
          }
+         return collection.find('> div');
       };
 
       var shiftElementsDown = function(collection, elements, index) {
          for (var i = elements.length - 2; i > index; i--) {
-            swapElements(collection, elements, i + 1, i);
+            elements = swapElements(collection, elements, i + 1, i);
          }
+         return collection.find('> div');
       };
 
       var enableChildrenCollections = function(collection, elements, settings) {
@@ -276,6 +317,21 @@
          dumpCollectionActions(collection, settings);
          enableChildrenCollections(collection, null, settings);
 
+         var childrenNamePrefixes = [];
+         if (settings.children) {
+            var parentPrototype = $(collection).data('prototype');
+            var tmp = collection.find('> .' + settings.prefix + '-tmp');
+            $.each(settings.children, function(i, child) {
+               var childPrototype = tmp.html(parentPrototype).find(child.selector).data('prototype');
+               var childNames = tmp.html(childPrototype).find('[name]');
+               tmp.empty();
+               if (childNames.length > 0) {
+                  childrenNamePrefixes.push(childNames.eq(0).attr('name').substring(0, childNames.eq(0).attr('name').indexOf('[' + child.prototype_name + ']')));
+               }
+            });
+         }
+         collection.data(settings.prefix + '-children-names', childrenNamePrefixes);
+
          var container = $(settings.container);
 
          container
@@ -308,7 +364,7 @@
                         if (that.data(settings.prefix + '-element') !== undefined) {
                            var index = elements.index($('#' + that.data(settings.prefix + '-element')));
                            if (index !== -1) {
-                              shiftElementsDown(collection, elements, index);
+                              elements = shiftElementsDown(collection, elements, index);
                            }
                         }
 
@@ -316,7 +372,7 @@
 
                         if (!trueOrUndefined(settings.after_add(collection, code))) {
                             if (index !== -1) {
-                                shiftElementsUp(collection, elements, index + 1);
+                               elements =  shiftElementsUp(collection, elements, index + 1);
                             }
                             code.remove();
                         }
@@ -330,14 +386,13 @@
 
                if (that.is('.' + settings.prefix + '-remove') && settings.enable_remove &&
                        elements.length > settings.min && trueOrUndefined(settings.before_remove(collection, element))) {
-                    shiftElementsUp(collection, elements, index);
+                    elements = shiftElementsUp(collection, elements, index);
                     var toRemove = elements.last();
                     var backup = toRemove.clone({withDataAndEvents: true});
                     toRemove.remove();
                     if (!trueOrUndefined(settings.after_remove(collection, backup))) {
                        collection.find('> .' + settings.prefix + '-tmp').before(backup);
-                       elements = collection.find('> div');
-                       shiftElementsDown(collection, elements, index - 1);
+                       elements = shiftElementsDown(collection, collection.find('> div'), index - 1);
                     }
                }
 
