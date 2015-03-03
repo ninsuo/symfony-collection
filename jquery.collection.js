@@ -180,34 +180,6 @@
       };
 
       var swapElements = function(collection, elements, oldIndex, newIndex) {
-
-          var doSwap = function(collection, elements, index, oldIndex, newIndex) {
-              var toReplace = collection.attr('id') + '_' + oldIndex;
-              var replaceBy = collection.attr('id') + '_' + newIndex;
-              var regexp = new RegExp(toReplace, 'g');
-              $(elements).eq(index).find('*').each(function() {
-                  var node = $(this);
-                  $.each(this.attributes, function(i, attrib) {
-                      if ($.type(attrib.value) === 'string') {
-                          node.attr(attrib.name.replace(regexp, replaceBy), attrib.value.replace(regexp, replaceBy));
-                      }
-                  });
-                  $.each(node.data(), function(name, value) {
-                      if ($.type(value) === 'string') {
-                          node.data(name.replace(regexp, replaceBy), value.replace(regexp, replaceBy));
-                      }
-                  });
-              });
-          }
-
-          doSwap(collection, elements, oldIndex, oldIndex, '__swap__');
-          doSwap(collection, elements, newIndex, newIndex, oldIndex);
-          doSwap(collection, elements, oldIndex, '__swap__', newIndex);
-
-          // todo: reverse elements positions
-
-          /*
-         // todo: manage collection swapping
          var settings = collection.data('collection-settings');
          var oldField= elements.eq(oldIndex);
          var newField = elements.eq(newIndex);
@@ -218,7 +190,7 @@
             var swap = getFieldValue(oldField.find("[name='" + oldName + "']"));
             putFieldValue(oldField.find("[name='" + oldName + "']"), getFieldValue(newField.find("[name='" + newName + "']")));
             putFieldValue(newField.find("[name='" + newName + "']"), swap);
-         });*/
+         });
       };
 
       var shiftElementsUp = function(collection, elements, index) {
