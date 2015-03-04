@@ -33,7 +33,9 @@ the css `collection` class).
 Then, simply put the following code at the bottom of your page.
 
 ```jinja
-    <div class="collection" data-collection="{{ form.myCollection.vars.id }}" data-name="{{ form.myCollection.vars.full_name }}">
+    <div class="collection"
+        data-collection="{{ form.myCollection.vars.id }}"
+        data-name="{{ form.myCollection.vars.full_name }}">
 ```
 
 ```html
