@@ -37,7 +37,6 @@ Then, simply put the following code at the bottom of your page.
         data-collection="{{ form.myCollection.vars.id }}"
         data-name="{{ form.myCollection.vars.full_name }}"></div>
 ```
-
 ```html
     <script src="{{ asset('js/jquery.js') }}"></script>
     <script src="{{ asset('bundles/fuzapp/js/jquery.collection.js') }}"></script>
