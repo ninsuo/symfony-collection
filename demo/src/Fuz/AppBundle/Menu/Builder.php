@@ -20,6 +20,7 @@ class Builder extends BaseMenu
       $this->addRoute($menu['JavaScript Options'], "Control number of collection's elements", 'numberCollectionElements');
       $this->addRoute($menu['JavaScript Options'], "Change Add button's location", 'addButtonAtTheBottom');
       $this->addRoute($menu['JavaScript Options'], "Event callbacks", 'eventCallbacks');
+      $this->addRoute($menu['JavaScript Options'], "Without form theme", 'withoutFormTheme');
 
       $this->addSubMenu($menu, 'Advanced usage');
       $this->addRoute($menu['Advanced usage'], "A better MVC Compliance", "mvcCompliance");

@@ -1,0 +1,87 @@
+{% extends 'FuzAppBundle::layout.html.twig' %}
+
+{% block extra_js %}
+    <script src="{{ asset('bundles/fuzapp/js/collection/jquery.collection.js') }}"></script>
+{% endblock %}
+
+{% block title %}JavaScript options : without the given form theme{% endblock %}
+
+{% block body %}
+
+    <h2>{{ block('title') }}</h2>
+
+    <p>
+        To manage complex collections, we should store the collection's field name prefix somewhere in the view
+        in order to replace descendent prefixes properly. As this is not really natural to get this information from
+        a view, a form theme is delivered with this jquery plugin. It does the job even if your collection has lots of
+        descendent collections.
+    </p>
+
+    <p>
+        But this form theme does nothing more than setting plugin options so if you do not want to use it, that's
+        up to you:
+    </p>
+
+    <ul>
+        <li>
+            <code>name_prefix</code> is mandatory if you do not use the form theme. It should be the prefix of
+            all descendant field names. Set this information by using:
+            {% verbatim %}{{ form.values.vars.full_name }}{% endverbatim %}.
+        </li>
+        <li>
+            <code>prototype_name</code> should be the same as inside your form type customization. If you
+            never given this information, do not set this option (the Symfony2 default value will be used).
+        </li>
+        <li>
+            <code>enable_add</code> should have the same value as the option in your form type. It will enable
+            or disable the ability to add elements in the collection.
+        </li>
+        <li>
+            <code>enable_delete</code> should have the same value as the option in your form type. It will enable
+            or disable the ability to delete elements from the collection.
+        </li>
+    </ul>
+
+    <p>
+        Check out this page's
+        <a href="https://github.com/ninsuo/symfony2-collection/blob/master/demo/src/Fuz/AppBundle/Controller/OptionsController.php" target="_blank">controller</a>
+        and
+        <a href="https://github.com/ninsuo/symfony2-collection/blob/master/demo/src/Fuz/AppBundle/Resources/views/Options/withoutFormTheme.html.twig" target="_blank">view</a>
+        to know how to create such form and enable the plugin.
+    </p>
+
+    <hr/>
+
+    {{ form(form) }}
+
+    <hr/>
+
+    {% for value in formData.values %}
+        <p>Value : {{ value }}</p>
+    {% endfor %}
+
+    <hr/>
+
+    <p>Code used:</p>
+    <pre>{{ block('script') | e }}</pre>
+
+{% endblock %}
+
+{% block script %}
+
+    <script type="text/javascript">
+
+        /*
+         * Please look at the source code because what you see is not what is written in the code
+         * https://github.com/ninsuo/symfony2-collection/blob/master/demo/src/Fuz/AppBundle/Resources/views/Options/withoutFormTheme.html.twig
+         */
+        $('.form-collection').collection({
+            prototype_name: '{{ form.values.vars.prototype.vars.name }}',
+            enable_add: false,
+            enable_delete: false,
+            name_prefix:  '{{ form.values.vars.full_name }}'
+        });
+
+    </script>
+
+{% endblock %}

@@ -43,6 +43,7 @@
          add_at_the_end: false,
          prefix: 'collection',
          prototype_name: '__name__',
+         name_prefix: null,
          children: null
       };
 

@@ -33,6 +33,9 @@ class BasicController extends BaseController
                    'allow_delete' => true,
                    'prototype' => true,
                    'required' => false,
+                   'attr' => array(
+                           'class' => 'my-selector',
+                   ),
            ))
            ->add('submit', 'submit')
            ->getForm()

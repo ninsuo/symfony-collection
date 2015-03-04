@@ -15,7 +15,7 @@ This plugin works for simple collections but is **still in active development** 
 # Basic usage
 
 Your collection type should contain `prototype`, `allow_add`, `allow_delete` options (depending on which buttons
-you require of course).
+you require of course). And a class that will be used as a selector to run the collection plugin.
 
 ```php
 ->add('myCollection', 'collection',
@@ -24,24 +24,31 @@ you require of course).
         'allow_add' => true,
         'allow_delete' => true,
         'prototype' => true,
+        'attr' => array(
+                'class' => 'my-selector',
+        ),
 ))
 ```
 
-Then, simply put the following code at the bottom of your page.
+Then, render your form after applying the given custom theme:
 
 ```jinja
-    <div class="collection"
-        data-collection="{{ form.myCollection.vars.id }}"
-        data-name="{{ form.myCollection.vars.full_name }}"></div>
+     {% form_theme myForm 'AcmeDemoBundle::jquery.collection.html.twig' %}
+     {{ form(fmyForm) }}
 ```
+
+Finally, put the following code at the bottom of your page.
+
 ```html
     <script src="{{ asset('js/jquery.js') }}"></script>
     <script src="{{ asset('bundles/fuzapp/js/jquery.collection.js') }}"></script>
 
     <script type="text/javascript">
-        $('.collection').collection();
+        $('.my-selector').collection();
     </script>
 ```
+
+If you don't want to use the form theme, you should set the `name_prefix` option manually (see below).
 
 # Options
 
@@ -126,6 +133,23 @@ Callback functions receive 2 arguments:
          }
      });
 ```
+
+**Using the plugin without form theme**
+
+The form theme aims to reduce the number of options required when activating the plugin. This is really useful
+when you are dealing with collections of form collections. But you can still do it manually if you want, using the
+following equivalents:
+
+```js
+    $('.my-selector').collection({
+        prototype_name: '{{ myForm.myCollection.vars.prototype.vars.name }}',
+        enable_add: false,
+        enable_delete: false,
+        name_prefix:  '{{ myForm.myCollection.vars.full_name }}'
+    });
+```
+
+Note that only `name_prefix` option is mandatory, all other ones have default values.
 
 # Advanced usage
 
@@ -227,11 +251,9 @@ In the plugin options:
 ```js
      $('.parent').collection({
          prefix: 'parent',
-         prototype_name: '__parent_name__',
          children: [{
              selector: '.child-collection',
              prefix: 'child',
-             prototype_name: '__children_name__',
              add: '<a href="#" class="btn btn-default">Add</span></a>',
              ...
          }]
