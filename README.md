@@ -179,7 +179,7 @@ we will use something like this:
 ```
 
 Note: do not forget to set the `add` option when enabling the plugin, because if your collection is emptied,
-the plugin will generate an `add` button based on the plugin configuraiton.
+the plugin will generate an `add` button based on the plugin's configuraiton.
 
 *Tip*: when `add` buttons are put inside collection's elements, new element is created next to the clicked
 element instead of at the end of the collection.
