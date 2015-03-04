@@ -14,8 +14,8 @@ This plugin works for simple collections but is **still in active development** 
 
 # Basic usage
 
-Your collection type should contain `prototype`, `allow_add`, `allow_delete` options and a collection selector (here
-the css `collection` class).
+Your collection type should contain `prototype`, `allow_add`, `allow_delete` options (depending on which buttons
+you require of course).
 
 ```php
 ->add('myCollection', 'collection',
