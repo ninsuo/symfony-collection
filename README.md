@@ -30,7 +30,11 @@ the css `collection` class).
 ))
 ```
 
-Then, simply put the following javascript code at the bottom of your page.
+Then, simply put the following code at the bottom of your page.
+
+```jinja
+    <div class="collection" data-collection="{{ form.myCollection.vars.id }}" data-name="{{ form.myCollection.vars.full_name }}">
+```
 
 ```html
     <script src="{{ asset('js/jquery.js') }}"></script>
@@ -125,14 +129,6 @@ Callback functions receive 2 arguments:
 ```
 
 # Advanced usage
-
-**MVC compliance**
-
-If you do not want to put the collection selector in your form type but want to place it in your view instead, you can use:
-
-```jinja
-<div class="collection" data-collection="{{ form.myCollection.vars.id }}">
-```
 
 **Changing action's positions**
 
