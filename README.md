@@ -41,6 +41,7 @@ Then, simply put the following code at the bottom of your page.
 ```html
     <script src="{{ asset('js/jquery.js') }}"></script>
     <script src="{{ asset('bundles/fuzapp/js/jquery.collection.js') }}"></script>
+
     <script type="text/javascript">
         $('.collection').collection();
     </script>
