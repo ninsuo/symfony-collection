@@ -22,19 +22,19 @@
 
       var defaults = {
          container: 'body',
-         enable_up: true,
+         allow_up: true,
          up: '<a href="#">&#x25B2;</a>',
          before_up: function(collection, element) { return true; },
          after_up: function(collection, element) { return true; },
-         enable_down: true,
+         allow_down: true,
          down: '<a href="#">&#x25BC;</a>',
          before_down: function(collection, element) { return true; },
          after_down: function(collection, element) { return true; },
-         enable_add: true,
+         allow_add: true,
          add: '<a href="#">[ + ]</a>',
          before_add: function(collection, element) { return true; },
          after_add: function(collection, element) { return true; },
-         enable_delete: true,
+         allow_delete: true,
          delete: '<a href="#">[ - ]</a>',
          before_delete: function(collection, element) { return true; },
          after_delete: function(collection, element) { return true; },
@@ -121,7 +121,7 @@
          var init = collection.find('.' + settings.prefix + '-tmp').length === 0;
          var elements = collection.find(settings.elements_selector);
 
-          if (settings.enable_add) {
+          if (settings.allow_add) {
             if (init) {
                 collection.append('<span class="' + settings.prefix + '-tmp"></span>');
                 if (settings.add) {
@@ -143,10 +143,10 @@
             }
 
             var buttons = [
-               {'enabled': 'enable_delete', 'class': settings.prefix + '-delete', 'html': settings.delete, 'condition': elements.length > settings.min},
-               {'enabled': 'enable_up', 'class': settings.prefix + '-up', 'html': settings.up, 'condition': elements.index(element) !== 0},
-               {'enabled': 'enable_down', 'class': settings.prefix + '-down', 'html': settings.down, 'condition': elements.index(element) !== elements.length - 1},
-               {'enabled': 'enable_add', 'class': settings.prefix + '-add', 'html': settings.add, 'condition': !settings.add_at_the_end && elements.length < settings.max},
+               {'enabled': 'allow_delete', 'class': settings.prefix + '-delete', 'html': settings.delete, 'condition': elements.length > settings.min},
+               {'enabled': 'allow_up', 'class': settings.prefix + '-up', 'html': settings.up, 'condition': elements.index(element) !== 0},
+               {'enabled': 'allow_down', 'class': settings.prefix + '-down', 'html': settings.down, 'condition': elements.index(element) !== elements.length - 1},
+               {'enabled': 'allow_add', 'class': settings.prefix + '-add', 'html': settings.add, 'condition': !settings.add_at_the_end && elements.length < settings.max},
             ];
 
             $.each(buttons, function(index, button) {
@@ -172,7 +172,7 @@
             });
          });
 
-         if (settings.enable_add) {
+         if (settings.allow_add) {
             var rescueAdd = collection.find('.' + settings.prefix + '-rescue-add').css('display', 'initial');
             var adds = collection.find('.' + settings.prefix + '-add:visible');
             if (adds.length > 0) {
@@ -263,10 +263,10 @@
             settings.prototype_name = collection.data('prototype-name');
         }
         if (collection.data('allow-add') !== undefined) {
-            settings.enable_add = collection.data('allow-add');
+            settings.allow_add = collection.data('allow-add');
         }
         if (collection.data('allow-delete') !== undefined) {
-            settings.enable_delete = collection.data('allow-delete');
+            settings.allow_delete = collection.data('allow-delete');
         }
         if (collection.data('name-prefix') !== undefined) {
             settings.name_prefix = collection.data('name-prefix');
@@ -305,7 +305,7 @@
                var elements = collection.find(settings.elements_selector);
 
                var element = that.data(settings.prefix + '-element') ? $('#' + that.data(settings.prefix + '-element')) : undefined;
-               if ((that.is('.' + settings.prefix + '-add') || that.is('.' + settings.prefix + '-rescue-add')) && settings.enable_add &&
+               if ((that.is('.' + settings.prefix + '-add') || that.is('.' + settings.prefix + '-rescue-add')) && settings.allow_add &&
                        elements.length < settings.max && trueOrUndefined(settings.before_add(collection, element))) {
                   var prototype = collection.data('prototype');
                   for (var index = 0; (index < settings.max); index++) {
@@ -345,7 +345,7 @@
                var element = $('#' + that.data(settings.prefix + '-element'));
                var index = elements.index(element);
 
-               if (that.is('.' + settings.prefix + '-delete') && settings.enable_delete &&
+               if (that.is('.' + settings.prefix + '-delete') && settings.allow_delete &&
                        elements.length > settings.min && trueOrUndefined(settings.before_delete(collection, element))) {
                     shiftElementsUp(collection, elements, index);
                     var toDelete = elements.last();
@@ -358,7 +358,7 @@
                     }
                }
 
-               if (that.is('.' + settings.prefix + '-up') && settings.enable_up) {
+               if (that.is('.' + settings.prefix + '-up') && settings.allow_up) {
                   if (index !== 0 && trueOrUndefined(settings.before_up(collection, element))) {
                      swapElements(collection, elements, index, index - 1);
                      if (!trueOrUndefined(settings.after_up(collection, element))) {
@@ -367,7 +367,7 @@
                   }
                }
 
-               if (that.is('.' + settings.prefix + '-down') && settings.enable_down) {
+               if (that.is('.' + settings.prefix + '-down') && settings.allow_down) {
                   if (index !== (elements.length - 1) && trueOrUndefined(settings.before_down(collection, element))) {
                      swapElements(collection, elements, index, index + 1);
                      if (!trueOrUndefined(settings.after_down(collection, elements))) {

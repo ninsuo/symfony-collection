@@ -29,7 +29,11 @@
 
     <hr/>
 
-    {% form_theme form 'FuzAppBundle:Advanced:advanced-theme.html.twig' %}
+    {%
+        form_theme form
+            'FuzAppBundle::jquery.collection.html.twig'
+            'FuzAppBundle:Advanced:advanced-theme.html.twig'
+    %}
 
     {{ form(form) }}
 
@@ -61,7 +65,7 @@
             up: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-arrow-up"></span> Move collection up</a>',
             down: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-arrow-down"></span> Move collection down</a>',
             add: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Add collection</a>',
-            remove: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> Remove collection</a>',
+            delete: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> Remove collection</a>',
             prefix: 'parent',
             prototype_name: '__parent_name__',
             children: [{

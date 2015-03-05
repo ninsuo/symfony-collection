@@ -47,6 +47,7 @@
         <div class="col-md-6">
             <h3>Events before updating the collection</h3>
 
+             {% form_theme eventsBefore 'FuzAppBundle::jquery.collection.html.twig' %}
             {{ form(eventsBefore) }}
 
             {% for value in eventsBeforeData.values %}
@@ -57,6 +58,7 @@
         <div class="col-md-6">
             <h3>Events after updating the collection</h3>
 
+            {% form_theme eventsAfter 'FuzAppBundle::jquery.collection.html.twig' %}
             {{ form(eventsAfter) }}
 
             {% for value in eventsAfterData.values %}

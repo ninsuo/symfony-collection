@@ -33,8 +33,7 @@
                 This is the default behaviour, an <code>add</code> button is added for each element of the collection.
             </p>
 
-            {% form_theme disabled 'FuzAppBundle:Options:options-theme.html.twig' %}
-
+            {% form_theme disabled 'FuzAppBundle::jquery.collection.html.twig' %}
             {{ form(disabled) }}
 
             {% for value in disabledData.values %}
@@ -49,8 +48,7 @@
                 Only one <code>add</code> button is available, located at the bottom of the collection.
             </p>
 
-            {% form_theme enabled 'FuzAppBundle:Options:options-theme.html.twig' %}
-
+            {% form_theme enabled 'FuzAppBundle::jquery.collection.html.twig' %}
             {{ form(enabled) }}
 
             {% for value in enabledData.values %}

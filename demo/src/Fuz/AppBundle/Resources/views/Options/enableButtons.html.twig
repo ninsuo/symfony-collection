@@ -10,7 +10,9 @@
 
     <h2>{{ block('title') }}</h2>
 
-    <p>Use <code>enable_up</code>, <code>enable_down</code>, <code>enable_add</code> and <code>enable_delete</code> options to disable some buttons</p>
+    <p>Use <code>allowe_up</code>, <code>allow_down</code>, <code>allow_add</code> and <code>allow_delete</code> options to disable some buttons</p>
+
+    <p><b>Warning</b>: if you're using the plugin's form theme, <code>allow_add</code> and <code>allow_delete</code> are taken from your form type configuration.</p>
 
     <p>
         Check out this page's
@@ -65,7 +67,6 @@
           <h3>A collection of themed types</h3>
 
             {% form_theme advancedForm 'FuzAppBundle:Options:options-theme.html.twig' %}
-
             {{ form(advancedForm) }}
 
             {% for value in advancedFormData.values %}
@@ -85,14 +86,25 @@
 
 {% block script %}
 
+    <!-- The name_prefix option is generated, please read at -->
+
     <script type="text/javascript">
 
       function reloadCollectionButtons() {
-        $('.form-collection, .advancedForm-collection').collection({
-           enable_up: $('#up').is(':checked'),
-           enable_down: $('#down').is(':checked'),
-           enable_add: $('#add').is(':checked'),
-           enable_delete: $('#delete').is(':checked')
+        $('.form-collection').collection({
+           name_prefix:  '{{ form.values.vars.full_name }}',
+           allow_up: $('#up').is(':checked'),
+           allow_down: $('#down').is(':checked'),
+           allow_add: $('#add').is(':checked'),
+           allow_delete: $('#delete').is(':checked')
+        });
+
+        $('.advancedForm-collection').collection({
+           name_prefix:  '{{ advancedForm.values.vars.full_name }}',
+           allow_up: $('#up').is(':checked'),
+           allow_down: $('#down').is(':checked'),
+           allow_add: $('#add').is(':checked'),
+           allow_delete: $('#delete').is(':checked')
         });
       }
 

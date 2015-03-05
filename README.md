@@ -63,20 +63,20 @@ Default values are:
          up: '<a href="#">&#x25B2;</a>',
          down: '<a href="#">&#x25BC;</a>',
          add: '<a href="#">[ + ]</a>',
-         remove: '<a href="#">[ - ]</a>'
+         delete: '<a href="#">[ - ]</a>'
      });
 ```
 
 **Disable links**
 
-You can disable some buttons by using `enable_up`, `enable_down`, `enable_add` and `enable_remove` options.
+You can disable some buttons by using `allow_up`, `allow_down`, `allow_add` and `allow_delete` options.
 
 For example, if you do not want your elements to be moved up and down, use:
 
 ```js
      $('.collection').collection({
-         enable_up: false,
-         enable_down: false
+         allow_up: false,
+         allow_down: false
      });
 ```
 
@@ -113,10 +113,10 @@ If you prefer having only one `add` button at the bottom of the collection inste
 There are `before_*` and `after_*` options that let you put callbacks before and after adding, deleting or moving
 elements in the collection.
 
-- `before_up`, `before_down`, `before_add` and `before_remove` are called before modifying the collection.
+- `before_up`, `before_down`, `before_add` and `before_delete` are called before modifying the collection.
 The modification will be cancelled if the callback you given returned `false`, and will proceed if it returned true.
 
-- `after_up`, `after_down`, `after_add` and `after_remove` are called after modifying the collection.
+- `after_up`, `after_down`, `after_add` and `after_delete` are called after modifying the collection.
 The modification will be reverted if the callback you given returned `false`.
 
 Callback functions receive 2 arguments:
@@ -156,14 +156,14 @@ Note that only `name_prefix` option is mandatory, all other ones have default va
 **Changing action's positions**
 
 By default :
-- `add` button is located at the bottom of the collection
-- `move up`, `remove` and `move down` are located in this order below each element of the collection
+- `add`, `move up`, `delete` and `move down` are located in this order below each element of the collection
+- `add` button can be located at the bottom of the collection using `add_at_the_bottom` option
 
 You can change those button's positions by creating them manually anywhere in your form theme.
 
 You can use any custom clickable element as soon has it has one action class:
 - `collection-add` for an `add` button
-- `collection-remove` for a `remove` button
+- `collection-delete` for a `delete` button
 - `collection-up` for a `move up` button
 - `collection-down` for a `move down` button
 
@@ -189,7 +189,7 @@ we will use something like this:
             <a href="#" class="collection-down btn btn-default">Move Down</a>
         </div>
         <div class="col-md-2">
-            <a href="#" class="collection-remove btn btn-default">Remove</a>
+            <a href="#" class="collection-delete btn btn-default">Remove</a>
             <a href="#" class="collection-add btn btn-default">Add</a>
         </div>
     </div>

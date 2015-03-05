@@ -35,7 +35,11 @@
 
     <hr/>
 
-    {% form_theme form 'FuzAppBundle:Advanced:advanced-theme.html.twig' %}
+    {%
+        form_theme form
+            'FuzAppBundle::jquery.collection.html.twig'
+            'FuzAppBundle:Advanced:advanced-theme.html.twig'
+    %}
 
     {{ form(form) }}
 
