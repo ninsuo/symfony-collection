@@ -10,7 +10,7 @@
 
     <h2>{{ block('title') }}</h2>
 
-    <p>Use <code>enable_up</code>, <code>enable_down</code>, <code>enable_add</code> and <code>enable_remove</code> options to disable some buttons</p>
+    <p>Use <code>enable_up</code>, <code>enable_down</code>, <code>enable_add</code> and <code>enable_delete</code> options to disable some buttons</p>
 
     <p>
         Check out this page's
@@ -27,22 +27,22 @@
       <strong>Enable or disable collection's actions : </strong>
       <div class="checkbox">
          <label>
-           <input id="up" class="reload-collection" type="checkbox" checked> Enable Move up
+           <input id="up" class="reload-collection" type="checkbox" checked/> Enable Move up
          </label>
        </div>
       <div class="checkbox">
          <label>
-           <input id="down"  class="reload-collection" type="checkbox" checked> Enable Move down
+           <input id="down"  class="reload-collection" type="checkbox" checked/> Enable Move down
          </label>
        </div>
       <div class="checkbox">
          <label>
-           <input id="add"  class="reload-collection" type="checkbox" checked> Enable Add
+           <input id="add"  class="reload-collection" type="checkbox" checked/> Enable Add
          </label>
        </div>
       <div class="checkbox">
          <label>
-           <input id="remove"  class="reload-collection" type="checkbox" checked> Enable Remove
+           <input id="delete"  class="reload-collection" type="checkbox" checked/> Enable Delete
          </label>
        </div>
     </form>
@@ -92,7 +92,7 @@
            enable_up: $('#up').is(':checked'),
            enable_down: $('#down').is(':checked'),
            enable_add: $('#add').is(':checked'),
-           enable_remove: $('#remove').is(':checked')
+           enable_delete: $('#delete').is(':checked')
         });
       }
 

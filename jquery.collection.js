@@ -34,16 +34,17 @@
          add: '<a href="#">[ + ]</a>',
          before_add: function(collection, element) { return true; },
          after_add: function(collection, element) { return true; },
-         enable_remove: true,
-         remove: '<a href="#">[ - ]</a>',
-         before_remove: function(collection, element) { return true; },
-         after_remove: function(collection, element) { return true; },
+         enable_delete: true,
+         delete: '<a href="#">[ - ]</a>',
+         before_delete: function(collection, element) { return true; },
+         after_delete: function(collection, element) { return true; },
          min: 0,
          max: 100,
          add_at_the_end: false,
          prefix: 'collection',
          prototype_name: '__name__',
          name_prefix: null,
+         elements_selector: '> div',
          children: null
       };
 
@@ -118,7 +119,7 @@
       var dumpCollectionActions = function(collection, settings) {
 
          var init = collection.find('.' + settings.prefix + '-tmp').length === 0;
-         var elements = collection.find('> div');
+         var elements = collection.find(settings.elements_selector);
 
           if (settings.enable_add) {
             if (init) {
@@ -142,7 +143,7 @@
             }
 
             var buttons = [
-               {'enabled': 'enable_remove', 'class': settings.prefix + '-remove', 'html': settings.remove, 'condition': elements.length > settings.min},
+               {'enabled': 'enable_delete', 'class': settings.prefix + '-delete', 'html': settings.delete, 'condition': elements.length > settings.min},
                {'enabled': 'enable_up', 'class': settings.prefix + '-up', 'html': settings.up, 'condition': elements.index(element) !== 0},
                {'enabled': 'enable_down', 'class': settings.prefix + '-down', 'html': settings.down, 'condition': elements.index(element) !== elements.length - 1},
                {'enabled': 'enable_add', 'class': settings.prefix + '-add', 'html': settings.add, 'condition': !settings.add_at_the_end && elements.length < settings.max},
@@ -286,7 +287,7 @@
                var that = $(this);
                var collection = $('#' + that.data('collection'));
                var settings = collection.data('collection-settings');
-               var elements = collection.find('> div');
+               var elements = collection.find(settings.elements_selector);
 
                var element = that.data(settings.prefix + '-element') ? $('#' + that.data(settings.prefix + '-element')) : undefined;
                if ((that.is('.' + settings.prefix + '-add') || that.is('.' + settings.prefix + '-rescue-add')) && settings.enable_add &&
@@ -300,7 +301,7 @@
                      tmp.empty();
                      if (container.find('#' + id).length === 0) {
                         tmp.before(code);
-                        elements = collection.find('> div');
+                        elements = collection.find(settings.elements_selector);
                         var action = code.find('.' + settings.prefix + '-add');
                         if (action.length > 0) {
                            action.addClass(settings.prefix + '-action').data('collection', collection.attr('id'));
@@ -329,15 +330,15 @@
                var element = $('#' + that.data(settings.prefix + '-element'));
                var index = elements.index(element);
 
-               if (that.is('.' + settings.prefix + '-remove') && settings.enable_remove &&
-                       elements.length > settings.min && trueOrUndefined(settings.before_remove(collection, element))) {
+               if (that.is('.' + settings.prefix + '-delete') && settings.enable_delete &&
+                       elements.length > settings.min && trueOrUndefined(settings.before_delete(collection, element))) {
                     shiftElementsUp(collection, elements, index);
-                    var toRemove = elements.last();
-                    var backup = toRemove.clone({withDataAndEvents: true});
-                    toRemove.remove();
-                    if (!trueOrUndefined(settings.after_remove(collection, backup))) {
+                    var toDelete = elements.last();
+                    var backup = toDelete.clone({withDataAndEvents: true});
+                    toDelete.remove();
+                    if (!trueOrUndefined(settings.after_delete(collection, backup))) {
                        collection.find('> .' + settings.prefix + '-tmp').before(backup);
-                       elements = collection.find('> div');
+                       elements = collection.find(settings.elements_selector);
                        shiftElementsDown(collection, elements, index - 1);
                     }
                }

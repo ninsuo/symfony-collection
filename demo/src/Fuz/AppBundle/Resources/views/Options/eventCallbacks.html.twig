@@ -4,19 +4,19 @@
     <script src="{{ asset('bundles/fuzapp/js/collection/jquery.collection.js') }}"></script>
 {% endblock %}
 
-{% block title %}JavaScript options : minimum and maximum of collection elements{% endblock %}
+{% block title %}JavaScript options : events{% endblock %}
 
 {% block body %}
 
     <h2>{{ block('title') }}</h2>
 
     <p>
-        Use <code>before_up</code>, <code>before_down</code>, <code>before_add</code> and <code>before_remove</code>
+        Use <code>before_up</code>, <code>before_down</code>, <code>before_add</code> and <code>before_delete</code>
         options to set a callback <strong>before</strong> applying an action to the collection.
     </p>
 
     <p>
-        Use <code>after_up</code>, <code>after_down</code>, <code>after_add</code> and <code>after_remove</code>
+        Use <code>after_up</code>, <code>after_down</code>, <code>after_add</code> and <code>after_delete</code>
         options to set a callback <strong>after</strong> applying an action to the collection.
     </p>
 
@@ -82,14 +82,14 @@
             before_up: function(collection, element) { return confirm("Do you really want to move the element up?"); },
             before_down: function(collection, element) { return confirm("Do you really want to move the element down?"); },
             before_add: function(collection, element) { return confirm("Do you really want to add the element?"); },
-            before_remove: function(collection, element) { return confirm("Do you really want to remove the element?"); }
+            before_delete: function(collection, element) { return confirm("Do you really want to delete the element?"); }
         });
 
         $('.eventsAfter-collection').collection({
             after_up: function(collection, element) { return confirm("Do you really want to move the element up?"); },
             after_down: function(collection, element) { return confirm("Do you really want to move the element down?"); },
             after_add: function(collection, element) { return confirm("Do you really want to add the element?"); },
-            after_remove: function(collection, element) { return confirm("Do you really want to remove the element?"); }
+            after_delete: function(collection, element) { return confirm("Do you really want to delete the element?"); }
         });
 
     </script>
