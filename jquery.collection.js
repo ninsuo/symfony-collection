@@ -228,21 +228,16 @@
       };
 
       var settings = $.extend(true, {}, defaults, options);
-      if (settings.children) {
-         $.each(settings.children, function(i, child) {
-            settings.children[i] = $.extend(true, {}, defaults, child);
-         });
-      }
 
       if ($(settings.container).length === 0) {
-         console.log("jquery.collection.js: a container should exist to handle events.");
+         console.log("jquery.collection.js: a container should exist to handle events (basically, a <body> tag).");
          return false;
       }
 
       var elems = $(this);
 
       if (elems.length === 0) {
-         console.log("jquery.collection.js: given collection does not exist.");
+         console.log("jquery.collection.js: given collection selector does not exist.");
          return false;
       }
 
@@ -252,7 +247,7 @@
          if (elem.data('collection') !== undefined) {
             var collection = $('#' + elem.data('collection'));
             if (collection.length === 0) {
-               console.log("jquery.collection.js: given collection field does not exist.");
+               console.log("jquery.collection.js: given collection id does not exist.");
                return true;
             }
          } else {
@@ -263,6 +258,26 @@
             console.log("jquery.collection.js: given collection field has no prototype, check that your field has the prototype option set to true.");
             return true;
          }
+
+        if (collection.data('prototype-name') !== undefined) {
+            settings.prototype_name = collection.data('prototype-name');
+        }
+        if (collection.data('allow-add') !== undefined) {
+            settings.enable_add = collection.data('allow-add');
+        }
+        if (collection.data('allow-delete') !== undefined) {
+            settings.enable_delete = collection.data('allow-delete');
+        }
+        if (collection.data('name-prefix') !== undefined) {
+            settings.name_prefix = collection.data('name-prefix');
+        }
+
+        if (!settings.name_prefix) {
+            console.log("jquery.collection.js: the prefix used in descendant field names is mandatory, you can set it using 2 ways:");
+            console.log("jquery.collection.js: - use the form theme given with this plugin source");
+            console.log("jquery.collection.js: - set name_prefix option to  '{{ formView.myCollectionField.vars.full_name }}'");
+            return true;
+        }
 
          collection.addClass('collection-managed');
          collection.data('collection-settings', settings);
