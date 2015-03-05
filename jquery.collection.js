@@ -186,29 +186,61 @@
       };
 
       var swapElements = function(collection, elements, oldIndex, newIndex) {
+
          var settings = collection.data('collection-settings');
-         var oldField= elements.eq(oldIndex);
-         var newField = elements.eq(newIndex);
-         $.each(collection.data(settings.prefix + '-skeletons'), function(index, name) {
-            var regexp = new RegExp(pregQuote(settings.prototype_name), 'g');
-            var oldName = name.replace(regexp, oldIndex);
-            var newName = name.replace(regexp, newIndex);
-            var swap = getFieldValue(oldField.find("[name='" + oldName + "']"));
-            putFieldValue(oldField.find("[name='" + oldName + "']"), getFieldValue(newField.find("[name='" + newName + "']")));
-            putFieldValue(newField.find("[name='" + newName + "']"), swap);
-         });
-      };
 
-      var shiftElementsUp = function(collection, elements, index) {
+         var replaceAttrData = function(index, toReplace, replaceWith) {
+            elements.eq(index).find('*').each(function() {
+                var node = $(this);
+                $.each(this.attributes, function(i, attrib) {
+                    if ($.type(attrib.value) === 'string') {
+                        node.attr(attrib.name.replace(toReplace, replaceWith), attrib.value.replace(toReplace, replaceWith));
+                    }
+                });
+                $.each(node.data(), function(name, value) {
+                    if ($.type(value) === 'string') {
+                        node.data(name.replace(toReplace, replaceWith), value.replace(toReplace, replaceWith));
+                    }
+                });
+            });
+         };
+
+         var doSwap = function(index, oldIndex, newIndex) {
+            var toReplace = new RegExp(pregQuote(settings.name_prefix + '[' + oldIndex + ']'), 'g');
+            var replaceWith = settings.name_prefix + '[' + newIndex + ']';
+            replaceAttrData(index, toReplace, replaceWith);
+
+            var toReplace = new RegExp(pregQuote(collection.attr('id') + '_' + oldIndex), 'g');
+            var replaceWith = collection.attr('id') + '_' + newIndex;
+            replaceAttrData(index, toReplace, replaceWith);
+         };
+
+         doSwap(oldIndex, oldIndex, '__swap__');
+         doSwap(newIndex, newIndex, oldIndex);
+         doSwap(oldIndex, '__swap__', newIndex);
+
+         elements.eq(oldIndex).insertBefore(elements.eq(newIndex));
+         if (newIndex > oldIndex) {
+            elements.eq(newIndex).insertBefore(elements.eq(oldIndex));
+         } else {
+            elements.eq(newIndex).insertAfter(elements.eq(oldIndex));
+         }
+
+         return collection.find(settings.elements_selector);
+     };
+
+      var shiftElementsUp = function(collection, elements, settings, index) {
          for (var i = index + 1; i < elements.length; i++) {
-            swapElements(collection, elements, i - 1, i);
+            elements = swapElements(collection, elements, i - 1, i);
          }
+         return collection.find(settings.elements_selector);
       };
 
-      var shiftElementsDown = function(collection, elements, index) {
+      var shiftElementsDown = function(collection, elements, settings, index) {
          for (var i = elements.length - 2; i > index; i--) {
-            swapElements(collection, elements, i + 1, i);
+            elements = swapElements(collection, elements, i + 1, i);
          }
+         return collection.find(settings.elements_selector);
       };
 
       var enableChildrenCollections = function(collection, elements, settings) {
@@ -227,13 +259,6 @@
          }
       };
 
-      var settings = $.extend(true, {}, defaults, options);
-
-      if ($(settings.container).length === 0) {
-         console.log("jquery.collection.js: a container should exist to handle events (basically, a <body> tag).");
-         return false;
-      }
-
       var elems = $(this);
 
       if (elems.length === 0) {
@@ -242,6 +267,13 @@
       }
 
       elems.each(function() {
+
+         var settings = $.extend(true, {}, defaults, options);
+
+         if ($(settings.container).length === 0) {
+            console.log("jquery.collection.js: a container should exist to handle events (basically, a <body> tag).");
+            return false;
+         }
 
          var elem = $(this);
          if (elem.data('collection') !== undefined) {
@@ -282,13 +314,6 @@
          collection.addClass('collection-managed');
          collection.data('collection-settings', settings);
 
-         var skeletons = [];
-         $(collection.data('prototype')).find('[name]').each(function() {
-            var that = $(this);
-            skeletons.push(that.attr('name'));
-         });
-         collection.data(settings.prefix + '-skeletons', skeletons);
-
          resetCollectionActions(collection, settings);
          dumpCollectionActions(collection, settings);
          enableChildrenCollections(collection, null, settings);
@@ -300,8 +325,10 @@
             .on('click', '.' + settings.prefix + '-action', function(e) {
 
                var that = $(this);
+
                var collection = $('#' + that.data('collection'));
                var settings = collection.data('collection-settings');
+
                var elements = collection.find(settings.elements_selector);
 
                var element = that.data(settings.prefix + '-element') ? $('#' + that.data(settings.prefix + '-element')) : undefined;
@@ -325,7 +352,7 @@
                         if (that.data(settings.prefix + '-element') !== undefined) {
                            var index = elements.index($('#' + that.data(settings.prefix + '-element')));
                            if (index !== -1) {
-                              shiftElementsDown(collection, elements, index);
+                              elements = shiftElementsDown(collection, elements, settings, index);
                            }
                         }
 
@@ -333,7 +360,7 @@
 
                         if (!trueOrUndefined(settings.after_add(collection, code))) {
                             if (index !== -1) {
-                                shiftElementsUp(collection, elements, index + 1);
+                                elements = shiftElementsUp(collection, elements, settings, index + 1);
                             }
                             code.remove();
                         }
@@ -347,31 +374,31 @@
 
                if (that.is('.' + settings.prefix + '-delete') && settings.allow_delete &&
                        elements.length > settings.min && trueOrUndefined(settings.before_delete(collection, element))) {
-                    shiftElementsUp(collection, elements, index);
+                    element = shiftElementsUp(collection, elements, settings, index);
                     var toDelete = elements.last();
                     var backup = toDelete.clone({withDataAndEvents: true});
                     toDelete.remove();
                     if (!trueOrUndefined(settings.after_delete(collection, backup))) {
                        collection.find('> .' + settings.prefix + '-tmp').before(backup);
                        elements = collection.find(settings.elements_selector);
-                       shiftElementsDown(collection, elements, index - 1);
+                       element = shiftElementsDown(collection, elements, settings, index - 1);
                     }
                }
 
                if (that.is('.' + settings.prefix + '-up') && settings.allow_up) {
                   if (index !== 0 && trueOrUndefined(settings.before_up(collection, element))) {
-                     swapElements(collection, elements, index, index - 1);
+                     elements = swapElements(collection, elements, index, index - 1);
                      if (!trueOrUndefined(settings.after_up(collection, element))) {
-                         swapElements(collection, elements, index - 1, index);
+                         elements = swapElements(collection, elements, index - 1, index);
                      }
                   }
                }
 
                if (that.is('.' + settings.prefix + '-down') && settings.allow_down) {
                   if (index !== (elements.length - 1) && trueOrUndefined(settings.before_down(collection, element))) {
-                     swapElements(collection, elements, index, index + 1);
+                     elements = swapElements(collection, elements, index, index + 1);
                      if (!trueOrUndefined(settings.after_down(collection, elements))) {
-                         swapElements(collection, elements, index + 1, index);
+                         elements = swapElements(collection, elements, index + 1, index);
                      }
                   }
                }
