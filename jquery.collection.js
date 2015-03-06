@@ -1,5 +1,5 @@
 /*
-* jquery.collection.js v0.0.42
+* jquery.collection.js v1.0.0
 *
 * Copyright (c) 2015 alain tiemblo <alain at fuz dot org>
 *
@@ -384,7 +384,7 @@
                        elements = shiftElementsDown(collection, elements, settings, index - 1);
                     }
                }
-               
+
                if (that.is('.' + settings.prefix + '-up') && settings.allow_up) {
                   if (index !== 0 && trueOrUndefined(settings.before_up(collection, element))) {
                      elements = swapElements(collection, elements, index, index - 1);
