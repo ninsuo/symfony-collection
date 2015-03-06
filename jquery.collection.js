@@ -374,17 +374,17 @@
 
                if (that.is('.' + settings.prefix + '-delete') && settings.allow_delete &&
                        elements.length > settings.min && trueOrUndefined(settings.before_delete(collection, element))) {
-                    element = shiftElementsUp(collection, elements, settings, index);
+                    elements = shiftElementsUp(collection, elements, settings, index);
                     var toDelete = elements.last();
                     var backup = toDelete.clone({withDataAndEvents: true});
                     toDelete.remove();
                     if (!trueOrUndefined(settings.after_delete(collection, backup))) {
                        collection.find('> .' + settings.prefix + '-tmp').before(backup);
                        elements = collection.find(settings.elements_selector);
-                       element = shiftElementsDown(collection, elements, settings, index - 1);
+                       elements = shiftElementsDown(collection, elements, settings, index - 1);
                     }
                }
-
+               
                if (that.is('.' + settings.prefix + '-up') && settings.allow_up) {
                   if (index !== 0 && trueOrUndefined(settings.before_up(collection, element))) {
                      elements = swapElements(collection, elements, index, index - 1);

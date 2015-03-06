@@ -8,10 +8,6 @@ This is even more true when you need your elements to be moved up and down or ad
 form will be proceeded using field names, we should swap field contents or field names instead of moving fields themselves to get the job done. That's
 not really friendly in javascript, so this plugin also aims to deal with that.
 
-# Note
-
-This plugin works for simple collections but is **still in active development** regarding collections of form collections.
-
 # Basic usage
 
 Your collection type should contain `prototype`, `allow_add`, `allow_delete` options (depending on which buttons
