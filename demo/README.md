@@ -10,7 +10,6 @@ php -r "readfile('https://getcomposer.org/installer');" | php
 php composer.phar update
 php app/console assetic:dump
 php app/console assets:install web --symlink
-php app/console doctrine:schema:create
 ```
 
 ## Usage

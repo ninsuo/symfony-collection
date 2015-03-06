@@ -18,7 +18,7 @@ class AppKernel extends Kernel
                 new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
                 new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
                 new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
-                new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+//                new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
                 new JMS\I18nRoutingBundle\JMSI18nRoutingBundle(),
                 new JMS\TranslationBundle\JMSTranslationBundle(),
                 new Knp\Bundle\MenuBundle\KnpMenuBundle(),
