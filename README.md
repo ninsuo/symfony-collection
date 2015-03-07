@@ -32,7 +32,7 @@ Then, render your form after applying the given custom theme:
 
 ```jinja
      {% form_theme myForm 'AcmeDemoBundle::jquery.collection.html.twig' %}
-     {{ form(fmyForm) }}
+     {{ form(myForm) }}
 ```
 
 Finally, put the following code at the bottom of your page.
