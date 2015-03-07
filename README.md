@@ -39,12 +39,14 @@ Finally, put the following code at the bottom of your page.
 
 ```html
     <script src="{{ asset('js/jquery.js') }}"></script>
-    <script src="{{ asset('bundles/fuzapp/js/jquery.collection.js') }}"></script>
+    <script src="{{ asset('bundles/acmedemo/js/jquery.collection.js') }}"></script>
 
     <script type="text/javascript">
         $('.my-selector').collection();
     </script>
 ```
+
+**Notes**
 
 If you don't want to use the form theme, you should set the `name_prefix` option manually (see below).
 
@@ -88,6 +90,8 @@ For example, if you do not want your elements to be moved up and down, use:
      });
 ```
 
+If you are using the given form theme, those options are automatically set following your form type configuration.
+
 **Set minimum and maximum of elements in the collection**
 
 You can set the minimum of elements allowed in the collection by using the `min` option. By default, it is disabled (set to 0).
@@ -112,7 +116,7 @@ If you prefer having only one `add` button at the bottom of the collection inste
 
 ```js
      $('.collection').collection({
-         add_at_the_end: false
+         add_at_the_end: true
      });
 ```
 
@@ -175,7 +179,7 @@ You can use any custom clickable element as soon has it has one action class:
 - `collection-up` for a `move up` button
 - `collection-down` for a `move down` button
 
-**Important note**: `collection` is taken from the `prefix` option: if you change the plugin's prefix, you should change this class too.
+*Warning*: `collection` is taken from the `prefix` option: if you change the plugin's prefix, you should change this class too.
 
 Example:
 
@@ -217,7 +221,7 @@ This plugin has the ability to manage collection of form collections, but to avo
 
 In your form type:
 
-- set a distinct prototype_name for each of your collections
+- set a distinct `prototype_name` option and selector class for each of your collections
 
 ```php
     ->add('collections', 'collection',
@@ -252,17 +256,14 @@ In the plugin options:
 
 - use a distinct collection prefix, so clicking `add` button on a collection will add an item to the right collection
 
-- define children's collection parameters in the `children` option
-
 - define children's selector in the `selector` attribute of `children` option (must select the root node of your children collections)
 
 ```js
-     $('.parent').collection({
+     $('.parent-collection').collection({
          prefix: 'parent',
          children: [{
              selector: '.child-collection',
              prefix: 'child',
-             add: '<a href="#" class="btn btn-default">Add</span></a>',
              ...
          }]
      });
