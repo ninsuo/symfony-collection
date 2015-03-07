@@ -90,7 +90,7 @@ For example, if you do not want your elements to be moved up and down, use:
      });
 ```
 
-If you are using the given form theme, those options are automatically set following your form type configuration.
+If you are using the given form theme, `allow_add` and `allow_delete` are automatically set following your form type configuration.
 
 **Set minimum and maximum of elements in the collection**
 
