@@ -110,12 +110,6 @@
          return (string + '').replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
       };
 
-      var resetCollectionActions = function(collection, settings) {
-         collection.find('.' + settings.prefix + '-tmp').remove();
-         collection.find('.' + settings.prefix + '-rescue-add').remove();
-         collection.find('.' + settings.prefix + '-actions').remove();
-      };
-
       var dumpCollectionActions = function(collection, settings) {
          var init = collection.find('.' + settings.prefix + '-tmp').length === 0;
          var elements = collection.find(settings.elements_selector);
@@ -310,10 +304,8 @@
             return true;
         }
 
-         collection.addClass('collection-managed');
          collection.data('collection-settings', settings);
 
-         resetCollectionActions(collection, settings);
          dumpCollectionActions(collection, settings);
          enableChildrenCollections(collection, null, settings);
 
