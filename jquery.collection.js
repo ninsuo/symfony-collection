@@ -143,14 +143,14 @@
             }
 
             var buttons = [
-               {'enabled': 'allow_delete', 'class': settings.prefix + '-delete', 'html': settings.delete, 'condition': elements.length > settings.min},
-               {'enabled': 'allow_up', 'class': settings.prefix + '-up', 'html': settings.up, 'condition': elements.index(element) !== 0},
-               {'enabled': 'allow_down', 'class': settings.prefix + '-down', 'html': settings.down, 'condition': elements.index(element) !== elements.length - 1},
-               {'enabled': 'allow_add', 'class': settings.prefix + '-add', 'html': settings.add, 'condition': !settings.add_at_the_end && elements.length < settings.max},
+               {'enabled': settings.allow_delete, 'class': settings.prefix + '-delete', 'html': settings.delete, 'condition': elements.length > settings.min},
+               {'enabled': settings.allow_up, 'class': settings.prefix + '-up', 'html': settings.up, 'condition': elements.index(element) !== 0},
+               {'enabled': settings.allow_down, 'class': settings.prefix + '-down', 'html': settings.down, 'condition': elements.index(element) !== elements.length - 1},
+               {'enabled': settings.allow_add, 'class': settings.prefix + '-add', 'html': settings.add, 'condition': !settings.add_at_the_end && elements.length < settings.max},
             ];
 
             $.each(buttons, function(index, button) {
-               if (settings[button.enabled]) {
+               if (button.enabled) {
                    var action = element.find('.' + button.class);
                    if (action.length === 0 && button.html) {
                        action = $(button.html)
