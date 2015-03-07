@@ -242,15 +242,15 @@
          return collection.find(settings.elements_selector);
       };
 
-      var enableChildrenCollections = function(collection, elements, settings) {
+      var enableChildrenCollections = function(collection, element, settings) {
          if (settings.children) {
             $.each(settings.children, function(index, childrenSettings) {
                if (!childrenSettings.selector) {
                  console.log("jquery.collection.js: given collection " + collection.attr('id') + " has children collections, but children's root selector is undefined.");
                  return true;
                }
-               if (elements !== null) {
-                  elements.find(childrenSettings.selector).collection(childrenSettings);
+               if (element !== null) {
+                  element.find(childrenSettings.selector).collection(childrenSettings);
                } else {
                   collection.find(childrenSettings.selector).collection(childrenSettings);
                }

@@ -52,6 +52,7 @@
             <p>The default functionnality is not really beautiful but let you add, move and delete elements in your collection. Don't worry, everything is easily customizable.</p>
             <br/>
 
+            {% form_theme withPlugin 'FuzAppBundle::jquery.collection.html.twig' %}
             {{ form(withPlugin) }}
 
             {% for value in withPluginData.values %}
