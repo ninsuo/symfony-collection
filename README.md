@@ -46,6 +46,16 @@ Finally, put the following code at the bottom of your page.
 
 If you don't want to use the form theme, you should set the `name_prefix` option manually (see below).
 
+If you want to use the form theme, but you already use one, you can use both with:
+
+```jinja
+     {%
+        form_theme myForm
+            'AcmeDemoBundle::jquery.collection.html.twig'
+            'AcmeDemoBundle::my-own-form-theme.html.twig'
+    %}
+```
+
 # Options
 
 **Customize rendered links**

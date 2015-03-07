@@ -1,5 +1,5 @@
 /*
-* jquery.collection.js v1.0.0
+* jquery.collection.js v1.0.1
 *
 * Copyright (c) 2015 alain tiemblo <alain at fuz dot org>
 *
@@ -117,7 +117,6 @@
       };
 
       var dumpCollectionActions = function(collection, settings) {
-
          var init = collection.find('.' + settings.prefix + '-tmp').length === 0;
          var elements = collection.find(settings.elements_selector);
 
@@ -151,21 +150,21 @@
 
             $.each(buttons, function(index, button) {
                if (button.enabled) {
-                   var action = element.find('.' + button.class);
-                   if (action.length === 0 && button.html) {
-                       action = $(button.html)
-                           .appendTo(actions)
-                           .addClass(button.class);
-                   }
-                   if (button.condition) {
-                      action.css('display', 'initial');
-                   } else {
+                  var action = element.find('.' + button.class);
+                  if (action.length === 0 && button.html) {
+                      action = $(button.html)
+                          .appendTo(actions)
+                          .addClass(button.class);
+                  }
+                  if (button.condition) {
+                     action.css('display', 'initial');
+                  } else {
                       action.css('display', 'none');
-                   }
-                   action
-                     .addClass(settings.prefix + '-action')
-                     .data('collection', collection.attr('id'))
-                     .data(settings.prefix + '-element', getOrCreateId(element));
+                  }
+                  action
+                    .addClass(settings.prefix + '-action')
+                    .data('collection', collection.attr('id'))
+                    .data(settings.prefix + '-element', getOrCreateId(element));
                } else {
                   element.find('.' + button.class).css('display', 'none');
                }
