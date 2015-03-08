@@ -18,11 +18,9 @@ class AppKernel extends Kernel
                 new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
                 new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
                 new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
-//                new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
                 new JMS\I18nRoutingBundle\JMSI18nRoutingBundle(),
                 new JMS\TranslationBundle\JMSTranslationBundle(),
                 new Knp\Bundle\MenuBundle\KnpMenuBundle(),
-                new SmartCore\Bundle\AcceleratorCacheBundle\AcceleratorCacheBundle(),
                 new Fuz\QuickStartBundle\FuzQuickStartBundle(),
                 new Fuz\AppBundle\FuzAppBundle(),
         );

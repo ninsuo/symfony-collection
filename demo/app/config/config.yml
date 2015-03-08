@@ -69,12 +69,6 @@ braincrafted_bootstrap:
     auto_configure:
       knp_menu: false
 
-# cache cleaning
-accelerator_cache:
-    host: %site_url%
-    web_dir: %kernel.root_dir%/../web
-    mode: curl
-
 jms_i18n_routing:
     default_locale: en
     locales: [en, fr]

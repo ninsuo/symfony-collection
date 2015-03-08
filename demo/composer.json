@@ -1,8 +1,8 @@
 {
-   "name": "ninsuo/quickstart",
+   "name": "ninsuo/symfony2-collection",
    "license": "MIT",
    "type": "project",
-   "description": "An empty Symfony2 project that provides lots of ready-to-use tools for quick & not-so-dirty developments",
+   "description": "Symfony2 collection demo website",
    "autoload": {
       "psr-0": {"": "src/", "SymfonyStandard": "app/"}
    },
@@ -41,8 +41,7 @@
          "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
          "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
          "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
-         "Braincrafted\\Bundle\\BootstrapBundle\\Composer\\ScriptHandler::install",
-         "SmartCore\\Bundle\\AcceleratorCacheBundle\\Composer\\ScriptHandler::clearCache"
+         "Braincrafted\\Bundle\\BootstrapBundle\\Composer\\ScriptHandler::install"
       ],
       "post-update-cmd": [
          "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
@@ -51,8 +50,7 @@
          "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
          "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
          "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
-         "Braincrafted\\Bundle\\BootstrapBundle\\Composer\\ScriptHandler::install",
-         "SmartCore\\Bundle\\AcceleratorCacheBundle\\Composer\\ScriptHandler::clearCache"
+         "Braincrafted\\Bundle\\BootstrapBundle\\Composer\\ScriptHandler::install"
       ]
    },
    "config": {
