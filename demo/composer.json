@@ -21,11 +21,9 @@
       "braincrafted/bootstrap-bundle": "~2.0",
       "twbs/bootstrap": "3.0.*",
       "oyejorge/less.php": "~1.5",
-      "hwi/oauth-bundle": "0.4.*@dev",
       "jms/i18n-routing-bundle": "~1.1",
       "jms/translation-bundle": "~1.1",
-      "knplabs/knp-menu-bundle": "~2",
-      "smart-core/accelerator-cache-bundle": "~1"
+      "knplabs/knp-menu-bundle": "~2"
    },
    "require-dev": {
       "sensio/generator-bundle": "~2.3"
