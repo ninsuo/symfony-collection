@@ -64,7 +64,7 @@ If you want to use the form theme, but already use one, you can use both with:
 
 **Customize rendered links**
 
-You can customize displayed links by setting `up`, `down`, `add` and `remove` options.
+You can customize displayed links by setting `up`, `down`, `add` and `delete` options.
 
 Default values are:
 
@@ -126,7 +126,8 @@ There are `before_*` and `after_*` options that let you put callbacks before and
 elements in the collection.
 
 - `before_up`, `before_down`, `before_add` and `before_delete` are called before modifying the collection.
-The modification will be cancelled if the callback you given returned `false`, and will proceed if it returned true.
+The modification will be cancelled if the callback you given returned `false`, and will proceed if it returned `true`
+or `undefined`.
 
 - `after_up`, `after_down`, `after_add` and `after_delete` are called after modifying the collection.
 The modification will be reverted if the callback you given returned `false`.
@@ -168,7 +169,7 @@ Note that only `name_prefix` option is mandatory, all other ones have default va
 **Changing action's positions**
 
 By default :
-- `add`, `move up`, `delete` and `move down` are located in this order below each element of the collection
+- `add`, `move up`, `move down` and `delete`are located in this order below each collection's element
 - `add` button can be located at the bottom of the collection using `add_at_the_bottom` option
 
 You can change those button's positions by creating them manually anywhere in your form theme.
@@ -209,7 +210,7 @@ we will use something like this:
 {% endblock %}
 ```
 
-Note: do not forget to set the `add` option when enabling the plugin, because if your collection is emptied,
+*Note* : do not forget to set the `add` option when enabling the plugin, because if your collection is emptied,
 the plugin will generate an `add` button based on the plugin's configuraiton.
 
 *Tip*: when `add` buttons are put inside collection's elements, new element is created next to the clicked
