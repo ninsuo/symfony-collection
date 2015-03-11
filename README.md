@@ -57,7 +57,7 @@ If you want to use the form theme, but already use one, you can use both with:
         form_theme myForm
             'AcmeDemoBundle::jquery.collection.html.twig'
             'AcmeDemoBundle::my-own-form-theme.html.twig'
-    %}
+     %}
 ```
 
 # Options
