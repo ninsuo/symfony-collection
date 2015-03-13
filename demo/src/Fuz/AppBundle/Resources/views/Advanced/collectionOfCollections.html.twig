@@ -66,10 +66,13 @@
             down: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-arrow-down"></span> Move collection down</a>',
             add: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Add collection</a>',
             delete: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> Remove collection</a>',
+            duplicate: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-th-large"></span> Duplicate collection</a>',
             prefix: 'parent',
+            allow_duplicate: true,
             children: [{
                 selector: '.child-collection',
-                add: '<a href="#" class="btn btn-default">Add</span></a>'
+                add: '<a href="#" class="btn btn-default">Add</span></a>',
+                allow_duplicate: true
             }]
         });
 

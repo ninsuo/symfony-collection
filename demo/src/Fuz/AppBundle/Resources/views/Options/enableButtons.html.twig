@@ -47,6 +47,11 @@
            <input id="delete"  class="reload-collection" type="checkbox" checked/> Enable Delete
          </label>
        </div>
+      <div class="checkbox">
+         <label>
+           <input id="duplicate"  class="reload-collection" type="checkbox" checked/> Enable Duplicate
+         </label>
+       </div>
     </form>
 
     <br/>
@@ -96,7 +101,8 @@
            allow_up: $('#up').is(':checked'),
            allow_down: $('#down').is(':checked'),
            allow_add: $('#add').is(':checked'),
-           allow_delete: $('#delete').is(':checked')
+           allow_delete: $('#delete').is(':checked'),
+           allow_duplicate: $('#duplicate').is(':checked')
         });
 
         $('.advancedForm-collection').collection({
@@ -104,7 +110,8 @@
            allow_up: $('#up').is(':checked'),
            allow_down: $('#down').is(':checked'),
            allow_add: $('#add').is(':checked'),
-           allow_delete: $('#delete').is(':checked')
+           allow_delete: $('#delete').is(':checked'),
+           allow_duplicate: $('#duplicate').is(':checked')
         });
       }
 

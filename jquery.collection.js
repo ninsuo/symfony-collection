@@ -1,5 +1,5 @@
 /*
-* jquery.collection.js v1.0.1
+* jquery.collection.js v1.1.0
 *
 * Copyright (c) 2015 alain tiemblo <alain at fuz dot org>
 *
@@ -38,6 +38,10 @@
          delete: '<a href="#">[ - ]</a>',
          before_delete: function(collection, element) { return true; },
          after_delete: function(collection, element) { return true; },
+         allow_duplicate: false,
+         duplicate: '<a href="#">[ # ]</a>',
+         before_duplicate: function(collection, element) { return true; },
+         after_duplicate: function(collection, element) { return true; },
          min: 0,
          max: 100,
          add_at_the_end: false,
@@ -55,11 +59,11 @@
          }).join('');
       };
 
-      var getOrCreateId = function(obj) {
+      var getOrCreateId = function(prefix, obj) {
          if (!obj.attr('id')) {
             var generated_id;
             do {
-               generated_id = 'i' + randomNumber();
+               generated_id = prefix + '_' + randomNumber();
             } while ($('#' + generated_id).length > 0);
             obj.attr('id', generated_id);
          }
@@ -110,6 +114,83 @@
          return (string + '').replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
       };
 
+      var replaceAttrData = function(elements, index, toReplace, replaceWith) {
+
+         var replaceAttrDataNode = function(node) {
+             var jqNode = $(node);
+            $.each(node.attributes, function(i, attrib) {
+                if ($.type(attrib.value) === 'string') {
+                   jqNode.attr(attrib.name.replace(toReplace, replaceWith), attrib.value.replace(toReplace, replaceWith));
+                }
+             });
+             $.each(jqNode.data(), function(name, value) {
+                if ($.type(value) === 'string') {
+                   jqNode.data(name.replace(toReplace, replaceWith), value.replace(toReplace, replaceWith));
+                }
+             });
+          };
+
+         var element = elements.eq(index);
+         replaceAttrDataNode(element[0]);
+         element.find('*').each(function() {
+             replaceAttrDataNode(this);
+         });
+      };
+
+      var changeElementIndex = function(collection, elements, settings, index, oldIndex, newIndex) {
+         var toReplace = new RegExp(pregQuote(settings.name_prefix + '[' + oldIndex + ']'), 'g');
+         var replaceWith = settings.name_prefix + '[' + newIndex + ']';
+         replaceAttrData(elements, index, toReplace, replaceWith);
+
+         var toReplace = new RegExp(pregQuote(collection.attr('id') + '_' + oldIndex), 'g');
+         var replaceWith = collection.attr('id') + '_' + newIndex;
+         replaceAttrData(elements, index, toReplace, replaceWith);
+      };
+
+      var changeHtmlIndex = function(collection, settings, html, oldIndex, newIndex) {
+         var toReplace = new RegExp(pregQuote(settings.name_prefix + '[' + oldIndex + ']'), 'g');
+         var replaceWith = settings.name_prefix + '[' + newIndex + ']';
+         html = html.replace(toReplace, replaceWith);
+
+         var toReplace = new RegExp(pregQuote(collection.attr('id') + '_' + oldIndex), 'g');
+         var replaceWith = collection.attr('id') + '_' + newIndex;
+         html = html.replace(toReplace, replaceWith);
+
+         return html;
+      };
+
+      var swapElements = function(collection, elements, oldIndex, newIndex) {
+
+         var settings = collection.data('collection-settings');
+
+         changeElementIndex(collection, elements, settings, oldIndex, oldIndex, '__swap__');
+         changeElementIndex(collection, elements, settings, newIndex, newIndex, oldIndex);
+         changeElementIndex(collection, elements, settings, oldIndex, '__swap__', newIndex);
+
+         elements.eq(oldIndex).insertBefore(elements.eq(newIndex));
+         if (newIndex > oldIndex) {
+            elements.eq(newIndex).insertBefore(elements.eq(oldIndex));
+         } else {
+            elements.eq(newIndex).insertAfter(elements.eq(oldIndex));
+         }
+
+         return collection.find(settings.elements_selector);
+      };
+
+      var shiftElementsUp = function(collection, elements, settings, index) {
+         for (var i = index + 1; i < elements.length; i++) {
+            elements = swapElements(collection, elements, i - 1, i);
+         }
+         return collection.find(settings.elements_selector);
+      };
+
+      var shiftElementsDown = function(collection, elements, settings, index) {
+         for (var i = elements.length - 2; i > index; i--) {
+            elements = swapElements(collection, elements, i + 1, i);
+         }
+         return collection.find(settings.elements_selector);
+      };
+
       var dumpCollectionActions = function(collection, settings) {
          var init = collection.find('.' + settings.prefix + '-tmp').length === 0;
          var elements = collection.find(settings.elements_selector);
@@ -127,7 +208,7 @@
             }
          }
 
-         elements.each(function() {
+         elements.each(function(index) {
             var element = $(this);
 
             if (element.find('> .' + settings.prefix + '-actions').length === 0) {
@@ -140,9 +221,10 @@
                {'enabled': settings.allow_up, 'class': settings.prefix + '-up', 'html': settings.up, 'condition': elements.index(element) !== 0},
                {'enabled': settings.allow_down, 'class': settings.prefix + '-down', 'html': settings.down, 'condition': elements.index(element) !== elements.length - 1},
                {'enabled': settings.allow_add, 'class': settings.prefix + '-add', 'html': settings.add, 'condition': !settings.add_at_the_end && elements.length < settings.max},
+               {'enabled': settings.allow_duplicate, 'class': settings.prefix + '-duplicate', 'html': settings.duplicate, 'condition': elements.length < settings.max},
             ];
 
-            $.each(buttons, function(index, button) {
+            $.each(buttons, function(i, button) {
                if (button.enabled) {
                   var action = element.find('.' + button.class);
                   if (action.length === 0 && button.html) {
@@ -158,7 +240,7 @@
                   action
                     .addClass(settings.prefix + '-action')
                     .data('collection', collection.attr('id'))
-                    .data(settings.prefix + '-element', getOrCreateId(element));
+                    .data(settings.prefix + '-element', getOrCreateId(collection.attr('id') + '_' + index, element));
                } else {
                   element.find('.' + button.class).css('display', 'none');
                }
@@ -172,68 +254,10 @@
                 rescueAdd.css('display', 'none');
             }
             if (elements.length >= settings.max) {
-                collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add').css('display', 'none');
+                collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').css('display', 'none');
             }
          }
 
-      };
-
-      var swapElements = function(collection, elements, oldIndex, newIndex) {
-
-         var settings = collection.data('collection-settings');
-
-         var replaceAttrData = function(index, toReplace, replaceWith) {
-            elements.eq(index).find('*').each(function() {
-                var node = $(this);
-                $.each(this.attributes, function(i, attrib) {
-                    if ($.type(attrib.value) === 'string') {
-                        node.attr(attrib.name.replace(toReplace, replaceWith), attrib.value.replace(toReplace, replaceWith));
-                    }
-                });
-                $.each(node.data(), function(name, value) {
-                    if ($.type(value) === 'string') {
-                        node.data(name.replace(toReplace, replaceWith), value.replace(toReplace, replaceWith));
-                    }
-                });
-            });
-         };
-
-         var doSwap = function(index, oldIndex, newIndex) {
-            var toReplace = new RegExp(pregQuote(settings.name_prefix + '[' + oldIndex + ']'), 'g');
-            var replaceWith = settings.name_prefix + '[' + newIndex + ']';
-            replaceAttrData(index, toReplace, replaceWith);
-
-            var toReplace = new RegExp(pregQuote(collection.attr('id') + '_' + oldIndex), 'g');
-            var replaceWith = collection.attr('id') + '_' + newIndex;
-            replaceAttrData(index, toReplace, replaceWith);
-         };
-
-         doSwap(oldIndex, oldIndex, '__swap__');
-         doSwap(newIndex, newIndex, oldIndex);
-         doSwap(oldIndex, '__swap__', newIndex);
-
-         elements.eq(oldIndex).insertBefore(elements.eq(newIndex));
-         if (newIndex > oldIndex) {
-            elements.eq(newIndex).insertBefore(elements.eq(oldIndex));
-         } else {
-            elements.eq(newIndex).insertAfter(elements.eq(oldIndex));
-         }
-
-         return collection.find(settings.elements_selector);
-     };
-
-      var shiftElementsUp = function(collection, elements, settings, index) {
-         for (var i = index + 1; i < elements.length; i++) {
-            elements = swapElements(collection, elements, i - 1, i);
-         }
-         return collection.find(settings.elements_selector);
-      };
-
-      var shiftElementsDown = function(collection, elements, settings, index) {
-         for (var i = elements.length - 2; i > index; i--) {
-            elements = swapElements(collection, elements, i + 1, i);
-         }
-         return collection.find(settings.elements_selector);
       };
 
       var enableChildrenCollections = function(collection, element, settings) {
@@ -289,6 +313,7 @@
         }
         if (collection.data('allow-add') !== undefined) {
             settings.allow_add = collection.data('allow-add');
+            settings.allow_duplicate = collection.data('allow-add') ? settings.allow_duplicate : false;
         }
         if (collection.data('allow-delete') !== undefined) {
             settings.allow_delete = collection.data('allow-delete');
@@ -321,59 +346,70 @@
                var settings = collection.data('collection-settings');
 
                var elements = collection.find(settings.elements_selector);
-
                var element = that.data(settings.prefix + '-element') ? $('#' + that.data(settings.prefix + '-element')) : undefined;
-               if ((that.is('.' + settings.prefix + '-add') || that.is('.' + settings.prefix + '-rescue-add')) && settings.allow_add &&
-                       elements.length < settings.max && trueOrUndefined(settings.before_add(collection, element))) {
-                  var prototype = collection.data('prototype');
-                  for (var index = 0; (index < settings.max); index++) {
-                     var regexp = new RegExp(pregQuote(settings.prototype_name), 'g');
-                     var code = $(prototype.replace(regexp, index));
-                     var tmp = collection.find('> .' + settings.prefix + '-tmp');
-                     var id = tmp.html(code).find('[id]').first().attr('id');
-                     tmp.empty();
-                     if (container.find('#' + id).length === 0) {
-                        tmp.before(code);
-                        elements = collection.find(settings.elements_selector);
-                        var action = code.find('.' + settings.prefix + '-add');
-                        if (action.length > 0) {
-                           action.addClass(settings.prefix + '-action').data('collection', collection.attr('id'));
-                        }
+               var index = element && element.length ? elements.index(element) : -1;
 
-                        if (that.data(settings.prefix + '-element') !== undefined) {
-                           var index = elements.index($('#' + that.data(settings.prefix + '-element')));
-                           if (index !== -1) {
-                              elements = shiftElementsDown(collection, elements, settings, index);
+               var isDuplicate = that.is('.' + settings.prefix + '-duplicate');
+               if ((that.is('.' + settings.prefix + '-add') || that.is('.' + settings.prefix + '-rescue-add') || isDuplicate) && settings.allow_add) {
+                  if (elements.length < settings.max && (isDuplicate && trueOrUndefined(settings.before_duplicate(collection, element)) || trueOrUndefined(settings.before_add(collection, element)))) {
+                     var prototype = collection.data('prototype');
+                     for (var freeIndex = 0; (freeIndex < settings.max); freeIndex++) {
+                        var regexp = new RegExp(pregQuote(settings.prototype_name), 'g');
+                        var code = $(prototype.replace(regexp, freeIndex));
+                        var tmp = collection.find('> .' + settings.prefix + '-tmp');
+                        var id = tmp.html(code).find('[id]').first().attr('id');
+                        tmp.empty();
+                        if (container.find('#' + id).length === 0) {
+
+                           if (isDuplicate) {
+                              var oldHtml = $("<div/>").append(elements.eq(index).clone()).html();
+                              var newHtml = changeHtmlIndex(collection, settings, oldHtml, index, freeIndex);
+                              code = $('<div/>').html(newHtml).contents();
+                              tmp.before(code).find(settings.prefix + '-actions').remove();
+                           } else {
+                              tmp.before(code);
                            }
-                        }
 
-                        enableChildrenCollections(collection, code, settings);
+                           elements = collection.find(settings.elements_selector);
+                           var action = code.find('.' + settings.prefix + '-add, .' + settings.prefix + '-duplicate');
+                           if (action.length > 0) {
+                              action.addClass(settings.prefix + '-action').data('collection', collection.attr('id'));
+                           }
 
-                        if (!trueOrUndefined(settings.after_add(collection, code))) {
-                            if (index !== -1) {
-                                elements = shiftElementsUp(collection, elements, settings, index + 1);
-                            }
-                            code.remove();
+                           if (that.data(settings.prefix + '-element') !== undefined) {
+                              var index = elements.index($('#' + that.data(settings.prefix + '-element')));
+                              if (index !== -1) {
+                                 elements = shiftElementsDown(collection, elements, settings, index);
+                              }
+                           }
+
+                           enableChildrenCollections(collection, code, settings);
+
+                           if ((isDuplicate && !trueOrUndefined(settings.after_duplicate(collection, code))) || !trueOrUndefined(settings.after_add(collection, code))) {
+                              if (index !== -1) {
+                                  elements = shiftElementsUp(collection, elements, settings, index + 1);
+                              }
+                              code.remove();
+                           }
+
+                           break;
                         }
-                        break;
                      }
                   }
                }
 
-               var element = $('#' + that.data(settings.prefix + '-element'));
-               var index = elements.index(element);
-
-               if (that.is('.' + settings.prefix + '-delete') && settings.allow_delete &&
-                       elements.length > settings.min && trueOrUndefined(settings.before_delete(collection, element))) {
-                    elements = shiftElementsUp(collection, elements, settings, index);
-                    var toDelete = elements.last();
-                    var backup = toDelete.clone({withDataAndEvents: true});
-                    toDelete.remove();
-                    if (!trueOrUndefined(settings.after_delete(collection, backup))) {
-                       collection.find('> .' + settings.prefix + '-tmp').before(backup);
-                       elements = collection.find(settings.elements_selector);
-                       elements = shiftElementsDown(collection, elements, settings, index - 1);
-                    }
+               if (that.is('.' + settings.prefix + '-delete') && settings.allow_delete) {
+                  if (elements.length > settings.min && trueOrUndefined(settings.before_delete(collection, element))) {
+                     elements = shiftElementsUp(collection, elements, settings, index);
+                     var toDelete = elements.last();
+                     var backup = toDelete.clone({withDataAndEvents: true});
+                     toDelete.remove();
+                     if (!trueOrUndefined(settings.after_delete(collection, backup))) {
+                        collection.find('> .' + settings.prefix + '-tmp').before(backup);
+                        elements = collection.find(settings.elements_selector);
+                        elements = shiftElementsDown(collection, elements, settings, index - 1);
+                     }
+                  }
                }
 
                if (that.is('.' + settings.prefix + '-up') && settings.allow_up) {

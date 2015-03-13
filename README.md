@@ -64,7 +64,7 @@ If you want to use the form theme, but already use one, you can use both with:
 
 **Customize rendered links**
 
-You can customize displayed links by setting `up`, `down`, `add` and `delete` options.
+You can customize displayed links by setting `up`, `down`, `add`, `delete`and `duplicate` options.
 
 Default values are:
 
@@ -73,13 +73,15 @@ Default values are:
          up: '<a href="#">&#x25B2;</a>',
          down: '<a href="#">&#x25BC;</a>',
          add: '<a href="#">[ + ]</a>',
-         delete: '<a href="#">[ - ]</a>'
+         delete: '<a href="#">[ - ]</a>',
+         duplicate: '<a href="#">[ # ]</a>'
      });
 ```
 
 **Disable links**
 
-You can disable some buttons by using `allow_up`, `allow_down`, `allow_add` and `allow_delete` options.
+You can disable some buttons by using `allow_up`, `allow_down`, `allow_add`, `allow_delete`
+and `allow_duplicate` options. By default, all buttons except `duplicate` are enabled.
 
 For example, if you do not want your elements to be moved up and down, use:
 
@@ -90,7 +92,8 @@ For example, if you do not want your elements to be moved up and down, use:
      });
 ```
 
-If you are using the given form theme, `allow_add` and `allow_delete` are automatically set following your form type configuration.
+If you are using the given form theme, `allow_add`, `allow_delete` and `allow_duplicate` are automatically
+set following your form type configuration.
 
 **Set minimum and maximum of elements in the collection**
 
