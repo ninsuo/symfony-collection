@@ -22,4 +22,5 @@ class HomeController extends BaseController
            $this->createContextSample($request, 'noPlugin'), $this->createAdvancedContextSample($request, 'withPlugin')
         );
     }
+    
 }
