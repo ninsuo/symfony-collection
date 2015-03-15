@@ -1,6 +1,10 @@
 Symfony2 Collection demo website
 ========================
 
+## See this website [live](http://symfony2-collection.fuz.org/)
+
+---
+
 ## Installation
 
 This is a classic Symfony2 project based on [Symfony2 QuickStart](https://github.com/ninsuo/symfony2-quickstart).

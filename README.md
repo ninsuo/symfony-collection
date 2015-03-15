@@ -10,6 +10,10 @@ not really friendly in javascript, so this plugin also aims to deal with that.
 
 ![sample](http://alain.ocarina.fr/medias/duplicate.png)
 
+# Live demo
+
+The `demo` directory is available live at http://symfony2-collection.fuz.org
+
 # Basic usage
 
 Your collection type should contain `prototype`, `allow_add`, `allow_delete` options (depending on which buttons
