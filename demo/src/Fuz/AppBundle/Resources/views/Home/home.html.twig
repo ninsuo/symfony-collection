@@ -52,7 +52,11 @@
             <p>The default functionnality is not really beautiful but let you add, move and delete elements in your collection. Don't worry, everything is easily customizable.</p>
             <br/>
 
-            {% form_theme withPlugin 'FuzAppBundle::jquery.collection.html.twig' %}
+            {%
+                form_theme withPlugin
+                    'FuzAppBundle::jquery.collection.html.twig'
+                    'FuzAppBundle:Options:options-theme.html.twig'
+            %}
             {{ form(withPlugin) }}
 
             {% for value in withPluginData.values %}
@@ -70,7 +74,7 @@
 {% block script %}
 
     <script type="text/javascript">
-        $('.collection').collection();
+        $('.withPlugin-collection').collection({allow_duplicate:true});
     </script>
 
 {% endblock %}
