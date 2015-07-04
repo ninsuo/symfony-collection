@@ -1,7 +1,7 @@
 Symfony2 Collection demo website
 ========================
 
-## See this website [live](http://symfony2-collection.fuz.org/)
+## See this website [live](http://symfony-collection.fuz.org/)
 
 ---
 
