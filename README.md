@@ -12,7 +12,7 @@ not really friendly in javascript, so this plugin also aims to deal with that.
 
 # Live demo
 
-The `demo` directory is available live at http://symfony2-collection.fuz.org
+The `demo` directory is available live at http://symfony-collection.fuz.org
 
 # Basic usage
 
