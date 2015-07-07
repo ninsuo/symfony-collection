@@ -1,4 +1,4 @@
-# symfony2-collection
+# symfony-collection
 A jQuery plugin that manages adding, deleting and moving elements from a Symfony2 collection
 
 This is not really difficult to manage your collections using the `data-prototype` Symfony2 provides. But
@@ -12,7 +12,7 @@ not really friendly in javascript, so this plugin also aims to deal with that.
 
 # Live demo
 
-The `demo` directory is available live at http://symfony2-collection.fuz.org
+The `demo` directory is available live at http://symfony-collection.fuz.org
 
 # Basic usage
 
