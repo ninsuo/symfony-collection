@@ -49,7 +49,8 @@
          prototype_name: '__name__',
          name_prefix: null,
          elements_selector: '> div',
-         children: null
+         children: null,
+         init_with_n_elements: 0
       };
 
       var randomNumber = function() {
@@ -191,7 +192,7 @@
          return collection.find(settings.elements_selector);
       };
 
-      var dumpCollectionActions = function(collection, settings) {
+      var dumpCollectionActions = function(collection, settings, isInitialization) {
          var init = collection.find('.' + settings.prefix + '-tmp').length === 0;
          var elements = collection.find(settings.elements_selector);
 
@@ -256,6 +257,12 @@
             if (elements.length >= settings.max) {
                 collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').css('display', 'none');
             }
+            if (isInitialization) {
+                while (elements.length < settings.init_with_n_elements) {
+                    collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').first().trigger('click');
+                    elements = collection.find(settings.elements_selector);
+                }
+            }
          }
 
       };
@@ -308,31 +315,32 @@
             return true;
          }
 
-        if (collection.data('prototype-name') !== undefined) {
-            settings.prototype_name = collection.data('prototype-name');
-        }
-        if (collection.data('allow-add') !== undefined) {
-            settings.allow_add = collection.data('allow-add');
-            settings.allow_duplicate = collection.data('allow-add') ? settings.allow_duplicate : false;
-        }
-        if (collection.data('allow-delete') !== undefined) {
-            settings.allow_delete = collection.data('allow-delete');
-        }
-        if (collection.data('name-prefix') !== undefined) {
-            settings.name_prefix = collection.data('name-prefix');
-        }
+         if (collection.data('prototype-name') !== undefined) {
+             settings.prototype_name = collection.data('prototype-name');
+         }
+         if (collection.data('allow-add') !== undefined) {
+             settings.allow_add = collection.data('allow-add');
+             settings.allow_duplicate = collection.data('allow-add') ? settings.allow_duplicate : false;
+         }
+         if (collection.data('allow-delete') !== undefined) {
+             settings.allow_delete = collection.data('allow-delete');
+         }
+         if (collection.data('name-prefix') !== undefined) {
+             settings.name_prefix = collection.data('name-prefix');
+         }
 
-        if (!settings.name_prefix) {
-            console.log("jquery.collection.js: the prefix used in descendant field names is mandatory, you can set it using 2 ways:");
-            console.log("jquery.collection.js: - use the form theme given with this plugin source");
-            console.log("jquery.collection.js: - set name_prefix option to  '{{ formView.myCollectionField.vars.full_name }}'");
-            return true;
-        }
+         if (!settings.name_prefix) {
+             console.log("jquery.collection.js: the prefix used in descendant field names is mandatory, you can set it using 2 ways:");
+             console.log("jquery.collection.js: - use the form theme given with this plugin source");
+             console.log("jquery.collection.js: - set name_prefix option to  '{{ formView.myCollectionField.vars.full_name }}'");
+             return true;
+         }
+
+         if (settings.init_with_n_elements < settings.min) {
+             settings.init_with_n_elements = settings.min;
+         }
 
          collection.data('collection-settings', settings);
-
-         dumpCollectionActions(collection, settings);
-         enableChildrenCollections(collection, null, settings);
 
          var container = $(settings.container);
 
@@ -430,11 +438,13 @@
                   }
                }
 
-               dumpCollectionActions(collection, settings);
+               dumpCollectionActions(collection, settings, false);
                e.preventDefault();
             })
          ;
 
+         dumpCollectionActions(collection, settings, true);
+         enableChildrenCollections(collection, null, settings);
       });
 
       return true;

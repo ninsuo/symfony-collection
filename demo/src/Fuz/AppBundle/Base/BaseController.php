@@ -10,9 +10,9 @@ use Fuz\AppBundle\Form\ValueType;
 class BaseController extends QuickStartBase
 {
 
-   protected function createContextSample(Request $request, $name = 'form')
+   protected function createContextSample(Request $request, $name = 'form', $values = array ("a", "b", "c"))
    {
-      $data = array ('values' => array ("a", "b", "c"));
+      $data = array ('values' => $values);
 
       $form = $this
          ->get('form.factory')

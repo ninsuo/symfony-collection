@@ -99,4 +99,16 @@ class OptionsController extends BaseController
         return $this->createContextSample($request);
     }
 
+    /**
+     * JavaScript options
+     *
+     * Initialize a collection with a given minimum number of elements
+     *
+     * @Route("/givenMinimumElements", name="givenMinimumElements")
+     * @Template()
+     */
+    public function givenMinimumElementsAction(Request $request)
+    {
+        return $this->createContextSample($request, 'form', array());
+    }
 }
