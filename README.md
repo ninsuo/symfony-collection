@@ -117,6 +117,14 @@ You can set the maximum of elements allowed in the collection by using the `max`
      });
 ```
 
+You can initialize your collection with a minimum of elements created (even if they do not exist on the data object).
+
+```js
+     $('.collection').collection({
+         init_with_n_elements: 3
+     });
+```
+
 **Only one add button at the bottom**
 
 If you prefer having only one `add` button at the bottom of the collection instead of one add button per collection element, use the `add_at_the_end` option:
