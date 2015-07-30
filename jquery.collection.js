@@ -90,7 +90,7 @@
          }
       };
 
-      var putFieldValue = function (selector, value) {
+      var putFieldValue = function (selector, value, physical) {
          try {
             var jqElem = $(selector);
          } catch (e) {
@@ -98,10 +98,18 @@
          }
          if (jqElem.length === 0) {
             return null;
-         } else if (jqElem.is('input[type="checkbox"]') && value) {
-            jqElem.attr('checked', true);
+         } else if (jqElem.is('input[type="checkbox"]')) {
+            if (value) {
+               jqElem.attr('checked', true);
+           } else {
+               jqElem.removeAttr('checked');
+           }
          } else if (jqElem.prop('value') !== undefined) {
-            jqElem.val(value);
+            if (physical) {
+               jqElem.attr('value', value);
+            } else {
+               jqElem.val(value);
+            }
          } else {
             jqElem.html(value);
          }
@@ -118,7 +126,7 @@
       var replaceAttrData = function(elements, index, toReplace, replaceWith) {
 
          var replaceAttrDataNode = function(node) {
-             var jqNode = $(node);
+            var jqNode = $(node);
             $.each(node.attributes, function(i, attrib) {
                 if ($.type(attrib.value) === 'string') {
                    jqNode.attr(attrib.name.replace(toReplace, replaceWith), attrib.value.replace(toReplace, replaceWith));
@@ -158,6 +166,12 @@
          html = html.replace(toReplace, replaceWith);
 
          return html;
+      };
+
+      var putFieldValuesInDom = function(element) {
+         $(element).find(':input').each(function(index, inputObj) {
+            putFieldValue(inputObj, getFieldValue(inputObj), true);
+         });
       };
 
       var swapElements = function(collection, elements, oldIndex, newIndex) {
@@ -370,6 +384,7 @@
                         if (container.find('#' + id).length === 0) {
 
                            if (isDuplicate) {
+                              putFieldValuesInDom(elements.eq(index));
                               var oldHtml = $("<div/>").append(elements.eq(index).clone()).html();
                               var newHtml = changeHtmlIndex(collection, settings, oldHtml, index, freeIndex);
                               code = $('<div/>').html(newHtml).contents();
