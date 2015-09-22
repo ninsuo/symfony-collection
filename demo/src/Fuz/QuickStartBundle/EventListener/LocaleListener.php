@@ -8,7 +8,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class LocaleListener implements EventSubscriberInterface
 {
-
     private $defaultLocale;
 
     public function __construct($defaultLocale = 'en')
@@ -19,27 +18,22 @@ class LocaleListener implements EventSubscriberInterface
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
-        if (!$request->hasPreviousSession())
-        {
+        if (!$request->hasPreviousSession()) {
             return;
         }
 
         $locale = $request->attributes->get('_locale');
-        if ($locale)
-        {
+        if ($locale) {
             $request->getSession()->set('_locale', $locale);
-        }
-        else
-        {
+        } else {
             $request->setLocale($request->getSession()->get('_locale', $this->defaultLocale));
         }
     }
 
     public static function getSubscribedEvents()
     {
-        return array (
-                KernelEvents::REQUEST => array (array ('onKernelRequest', 17)),
+        return array(
+                KernelEvents::REQUEST => array(array('onKernelRequest', 17)),
         );
     }
-
 }

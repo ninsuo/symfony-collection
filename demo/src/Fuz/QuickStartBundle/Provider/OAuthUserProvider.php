@@ -8,7 +8,6 @@ use Fuz\QuickStartBundle\Entity\User;
 
 class OAuthUserProvider extends BaseUserProvider
 {
-
     protected $session;
     protected $em;
 
@@ -20,15 +19,14 @@ class OAuthUserProvider extends BaseUserProvider
 
     public function loadUserByUsername($username)
     {
-        if (!is_null($this->session->get('user')))
-        {
+        if (!is_null($this->session->get('user'))) {
             $username = $this->session->get('user');
         }
-        if (is_null($username))
-        {
-            return null;
+        if (is_null($username)) {
+            return;
         }
         list($resourceOwner, $resourceOwnerId) = json_decode($username);
+
         return $this->em->getRepository('FuzQuickStartBundle:User')->getUserByResourceOwnerId($resourceOwner, $resourceOwnerId);
     }
 
@@ -39,8 +37,7 @@ class OAuthUserProvider extends BaseUserProvider
         $name = $this->getNameToDisplay($resourceOwner, $response);
 
         $user = $this->em->getRepository('FuzQuickStartBundle:User')->getUserByResourceOwnerId($resourceOwner, $resourceOwnerId);
-        if (is_null($user))
-        {
+        if (is_null($user)) {
             $user = new User();
             $user->setResourceOwner($resourceOwner);
             $user->setResourceOwnerId($resourceOwnerId);
@@ -48,24 +45,22 @@ class OAuthUserProvider extends BaseUserProvider
             $user->setSigninCount(1);
             $this->em->persist($user);
             $this->em->flush($user);
-        }
-        else
-        {
+        } else {
             $user->setSigninCount($user->getSigninCount() + 1);
             $this->em->persist($user);
             $this->em->flush($user);
         }
 
-        $json = json_encode(array ($resourceOwner, $resourceOwnerId));
+        $json = json_encode(array($resourceOwner, $resourceOwnerId));
         $this->session->set('user', $json);
+
         return $this->loadUserByUsername($json);
     }
 
     public function getNameToDisplay($resourceOwner, $response)
     {
         $name = null;
-        switch ($resourceOwner)
-        {
+        switch ($resourceOwner) {
             case 'google':
                 $name = $response->getNickname();
                 break;
@@ -78,6 +73,7 @@ class OAuthUserProvider extends BaseUserProvider
             default:
                 break;
         }
+
         return $name;
     }
 
@@ -85,5 +81,4 @@ class OAuthUserProvider extends BaseUserProvider
     {
         return $class === 'Fuz\\QuickStartBundle\\Entity\\User';
     }
-
 }

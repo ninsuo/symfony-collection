@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
-
     public function getUserByResourceOwnerId($resourceOwner, $resourceOwnerId)
     {
         $query = $this->_em->createQuery("
@@ -19,7 +18,7 @@ class UserRepository extends EntityRepository
             AND u.resourceOwnerId = :resourceOwnerId
         ");
 
-        $params = array (
+        $params = array(
                 'resourceOwner' => $resourceOwner,
                 'resourceOwnerId' => $resourceOwnerId,
         );
@@ -32,5 +31,4 @@ class UserRepository extends EntityRepository
 
         return $user;
     }
-
 }

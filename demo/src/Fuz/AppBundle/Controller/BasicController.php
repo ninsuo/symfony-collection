@@ -9,7 +9,6 @@ use Fuz\AppBundle\Base\BaseController;
 
 class BasicController extends BaseController
 {
-
     /**
      * Basic usage
      *
@@ -18,15 +17,15 @@ class BasicController extends BaseController
      */
     public function basicAction(Request $request)
     {
-        $data = array ('values' => array ("a", "b", "c"));
+        $data = array('values' => array("a", "b", "c"));
 
         $form = $this
            ->createFormBuilder($data)
            ->add('values', 'collection',
-              array (
+              array(
                    'type' => 'text',
                    'label' => 'Add, move, remove values and press Submit.',
-                   'options' => array (
+                   'options' => array(
                            'label' => 'Value',
                    ),
                    'allow_add' => true,
@@ -42,15 +41,13 @@ class BasicController extends BaseController
         ;
 
         $form->handleRequest($request);
-        if ($form->isValid())
-        {
+        if ($form->isValid()) {
             $data = $form->getData();
         }
 
-        return array (
+        return array(
                 'form' => $form->createView(),
                 'data' => $data,
         );
     }
-
 }

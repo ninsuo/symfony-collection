@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UserPreference
 {
-
     /**
      * @var User
      *
@@ -40,7 +39,7 @@ class UserPreference
     /**
      * Set user
      *
-     * @param User $user
+     * @param  User         $user
      * @return UserFavorite
      */
     public function setUser(User $user)
@@ -63,7 +62,7 @@ class UserPreference
     /**
      * Set hook
      *
-     * @param string $hook
+     * @param  string         $hook
      * @return UserPreference
      */
     public function setHook($hook)
@@ -86,7 +85,7 @@ class UserPreference
     /**
      * Set value
      *
-     * @param string $value
+     * @param  string         $value
      * @return UserPreference
      */
     public function setValue($value)
@@ -105,5 +104,4 @@ class UserPreference
     {
         return $this->value;
     }
-
 }
