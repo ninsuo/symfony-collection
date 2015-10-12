@@ -50,7 +50,8 @@
             name_prefix: null,
             elements_selector: '> div',
             children: null,
-            init_with_n_elements: 0
+            init_with_n_elements: 0,
+            hide_disabled_buttons: true
         };
 
         var randomNumber = function() {
@@ -249,9 +250,15 @@
                                 .addClass(button.class);
                         }
                         if (button.condition) {
-                            action.css('display', 'initial');
+                            action.removeClass(settings.prefix + '-action-disabled');
+                            if (settings.hide_disabled_buttons) {
+                                action.css('display', '');
+                            }
                         } else {
-                            action.css('display', 'none');
+                            action.addClass(settings.prefix + '-action-disabled');
+                            if (settings.hide_disabled_buttons) {
+                                action.css('display', 'none');
+                            }
                         }
                         action
                             .addClass(settings.prefix + '-action')
@@ -264,7 +271,7 @@
             });
 
             if (settings.allow_add) {
-                var rescueAdd = collection.find('.' + settings.prefix + '-rescue-add').css('display', 'initial');
+                var rescueAdd = collection.find('.' + settings.prefix + '-rescue-add').css('display', '');
                 var adds = collection.find('.' + settings.prefix + '-add:visible');
                 if (adds.length > 0) {
                     rescueAdd.css('display', 'none');

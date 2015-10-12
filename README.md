@@ -135,6 +135,10 @@ If you prefer having only one `add` button at the bottom of the collection inste
      });
 ```
 
+**Disabled buttons**
+
+The up button of the first item and the down button of the last item are hidden by default. You can disable this by setting the `hide_disabled_buttons` to false and style them yourself using CSS.
+
 **Events**
 
 There are `before_*` and `after_*` options that let you put callbacks before and after adding, deleting or moving
