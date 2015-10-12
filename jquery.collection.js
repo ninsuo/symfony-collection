@@ -226,8 +226,9 @@
             elements.each(function(index) {
                 var element = $(this);
 
-                if (element.find('> .' + settings.prefix + '-actions').length === 0) {
-                    var actions = $('<div class="' + settings.prefix + '-actions"></div>');
+                var actions = element.children().andSelf().filter('.' + settings.prefix + '-actions');
+                if (actions.length === 0) {
+                    actions = $('<div class="' + settings.prefix + '-actions"></div>');
                     element.append(actions);
                 }
 
