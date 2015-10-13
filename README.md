@@ -135,9 +135,16 @@ If you prefer having only one `add` button at the bottom of the collection inste
      });
 ```
 
-**Disabled buttons**
+**Display useless buttons**
 
-The up button of the first item and the down button of the last item are hidden by default. You can disable this by setting the `hide_disabled_buttons` to false and style them yourself using CSS.
+By default, `move up` button is hidden on the first item, and `move down` button on the last one. You can make them appear
+anyway by setting `hide_useless_buttons` to `false`. This can be useful if you want to beautify them using CSS, for example.
+
+```js
+     $('.collection').collection({
+         hide_useless_buttons: true
+     });
+```
 
 **Events**
 

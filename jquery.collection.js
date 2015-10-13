@@ -51,7 +51,7 @@
             elements_selector: '> div',
             children: null,
             init_with_n_elements: 0,
-            hide_disabled_buttons: true
+            hide_useless_buttons: true
         };
 
         var randomNumber = function() {
@@ -251,12 +251,12 @@
                         }
                         if (button.condition) {
                             action.removeClass(settings.prefix + '-action-disabled');
-                            if (settings.hide_disabled_buttons) {
+                            if (settings.hide_useless_buttons) {
                                 action.css('display', '');
                             }
                         } else {
                             action.addClass(settings.prefix + '-action-disabled');
-                            if (settings.hide_disabled_buttons) {
+                            if (settings.hide_useless_buttons) {
                                 action.css('display', 'none');
                             }
                         }
