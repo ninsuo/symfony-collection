@@ -25,6 +25,7 @@
        Check out this page's
        <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Controller/AdvancedController.php" target="_blank">controller</a>,
        <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Resources/views/Advanced/usageWithDoctrine.html.twig" target="_blank">view</a>,
+       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Resources/views/Advanced/doctrine-theme.html.twig" target="_blank">theme</a>,
        <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Entity/MyArray.php" target="_blank">MyArray entity</a>,
        <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Form/MyArrayType.php" target="_blank">MyArray form</a>,
        <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Entity/MyElement.php" target="_blank">MyElement entity</a>,
@@ -35,21 +36,18 @@
 
     <hr/>
 
-    {% form_theme form 'FuzAppBundle::jquery.collection.html.twig' %}
+    {%
+        form_theme form
+            'FuzAppBundle::jquery.collection.html.twig'
+            'FuzAppBundle:Advanced:doctrine-theme.html.twig'
+    %}
     {{ form(form) }}
 
     <hr/>
 
-    {#
-    {% for key, collection in data.collections %}
-        <p>Collection {{ key + 1 }}:</p>
-
-        {% for value in collection %}
-            <p style="margin-left: 25px;">{{ value }}</p>
-        {% endfor %}
-
+    {% for key, element in data.elements %}
+        <p>db id = {{ element.id }}, value = {{ element.value }}</p>
     {% endfor %}
-    #}
 
     <hr/>
 

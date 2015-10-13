@@ -1,0 +1,24 @@
+
+{% block my_element_label %}{% endblock %}
+{% block my_element_errors %}{% endblock %}
+
+{% block my_element_widget %}
+
+    <div class="row">
+        <div class="col-md-7">
+            {{ form_widget(form.value) }}
+        </div>
+        <div class="col-md-2">
+            <a href="#" class="collection-up btn btn-default">Up</a>
+            <a href="#" class="collection-down btn btn-default">Down</a>
+        </div>
+        <div class="col-md-2">
+            <a href="#" class="collection-delete btn btn-default">Delete</a>
+            <a href="#" class="collection-add btn btn-default">Add</a>
+        </div>
+        <div class="col-md-1">
+            <a href="#" class="collection-duplicate btn btn-default">Duplicate</a>
+        </div>
+    </div>
+
+{% endblock %}

@@ -194,6 +194,7 @@ class AdvancedController extends BaseController
         // creating and processing the form
         $form = $this->createForm(new MyArrayType(), $data);
         $form->handleRequest($request);
+
         foreach ($data->getElements() as $element) {
             $element->setArray($data);
         }
