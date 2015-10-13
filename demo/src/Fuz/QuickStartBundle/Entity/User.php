@@ -21,7 +21,6 @@ use Symfony\Component\Security\Core\User\EquatableInterface;
  */
 class User implements UserInterface, EquatableInterface
 {
-
     /**
      * @var integer
      *
@@ -91,7 +90,7 @@ class User implements UserInterface, EquatableInterface
     /**
      * Set resourceOwner
      *
-     * @param string $resourceOwner
+     * @param  string $resourceOwner
      * @return User
      */
     public function setResourceOwner($resourceOwner)
@@ -114,7 +113,7 @@ class User implements UserInterface, EquatableInterface
     /**
      * Set resourceOwnerId
      *
-     * @param string $resourceOwnerId
+     * @param  string $resourceOwnerId
      * @return User
      */
     public function setResourceOwnerId($resourceOwnerId)
@@ -137,7 +136,7 @@ class User implements UserInterface, EquatableInterface
     /**
      * Set username
      *
-     * @param string $username
+     * @param  string $username
      * @return User
      */
     public function setUsername($username)
@@ -158,7 +157,7 @@ class User implements UserInterface, EquatableInterface
     /**
      * Set lastSeen
      *
-     * @param \DateTime $lastSeen
+     * @param  \DateTime $lastSeen
      * @return User
      */
     public function setLastSeen($lastSeen)
@@ -181,7 +180,7 @@ class User implements UserInterface, EquatableInterface
     /**
      * Set signinCount
      *
-     * @param integer $signinCount
+     * @param  integer $signinCount
      * @return User
      */
     public function setSigninCount($signinCount)
@@ -204,7 +203,7 @@ class User implements UserInterface, EquatableInterface
     /**
      * Set preferences
      *
-     * @param ArrayCollection[UserPreference] $preferences
+     * @param  ArrayCollection[UserPreference] $preferences
      * @return User
      */
     public function setPreferences(ArrayCollection $preferences)
@@ -245,7 +244,7 @@ class User implements UserInterface, EquatableInterface
      */
     public function getRoles()
     {
-        return array ('ROLE_USER');
+        return array('ROLE_USER');
     }
 
     /**
@@ -253,7 +252,7 @@ class User implements UserInterface, EquatableInterface
      */
     public function getPassword()
     {
-        return null;
+        return;
     }
 
     /**
@@ -261,7 +260,7 @@ class User implements UserInterface, EquatableInterface
      */
     public function getSalt()
     {
-        return null;
+        return;
     }
 
     /**
@@ -277,12 +276,10 @@ class User implements UserInterface, EquatableInterface
      */
     public function isEqualTo(UserInterface $user)
     {
-        if ((int) $this->getId() === $user->getId())
-        {
+        if ((int) $this->getId() === $user->getId()) {
             return true;
         }
 
         return false;
     }
-
 }

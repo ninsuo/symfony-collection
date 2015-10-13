@@ -7,7 +7,6 @@ use Fuz\QuickStartBundle\Base\BaseMenu;
 
 class Builder extends BaseMenu
 {
-
    public function mainMenu(FactoryInterface $factory, array $options)
    {
       $menu = $this->createMenu($factory);
@@ -28,6 +27,7 @@ class Builder extends BaseMenu
       $this->addRoute($menu['Advanced usage'], "A better MVC Compliance", "mvcCompliance");
       $this->addRoute($menu['Advanced usage'], "Custom form theme", "customFormTheme");
       $this->addRoute($menu['Advanced usage'], "Collection of form collections", "collectionOfCollections");
+      $this->addRoute($menu['Advanced usage'], "Usage with Doctrine", "usageWithDoctrine");
 
       return $menu;
    }
@@ -39,5 +39,4 @@ class Builder extends BaseMenu
 
       return $menu;
    }
-
 }

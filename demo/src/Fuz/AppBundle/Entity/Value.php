@@ -2,9 +2,8 @@
 
 namespace Fuz\AppBundle\Entity;
 
-class ValueData
+class Value
 {
-
     protected $value;
 
     public function __construct($value = '')
@@ -15,6 +14,7 @@ class ValueData
     public function setValue($value)
     {
         $this->value = $value;
+
         return $this;
     }
 
@@ -27,5 +27,4 @@ class ValueData
     {
         return $this->value;
     }
-
 }

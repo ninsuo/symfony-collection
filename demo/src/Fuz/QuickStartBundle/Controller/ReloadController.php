@@ -9,7 +9,6 @@ use Fuz\QuickStartBundle\Base\BaseController;
 
 class ReloadController extends BaseController
 {
-
     /**
      * Get back to the previous route
      *
@@ -20,5 +19,4 @@ class ReloadController extends BaseController
     {
         return $this->goBack($request);
     }
-
 }

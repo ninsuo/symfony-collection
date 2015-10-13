@@ -8,12 +8,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class ValueType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
            ->add('value', 'text',
-              array (
+              array(
                    'required' => true,
                    'label' => 'Value',
            ))
@@ -22,8 +21,8 @@ class ValueType extends AbstractType
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array (
-                'data_class' => 'Fuz\AppBundle\Entity\ValueData',
+        $resolver->setDefaults(array(
+                'data_class' => 'Fuz\AppBundle\Entity\Value',
         ));
     }
 
@@ -31,5 +30,4 @@ class ValueType extends AbstractType
     {
         return 'ValueType';
     }
-
 }

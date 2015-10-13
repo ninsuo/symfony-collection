@@ -9,7 +9,6 @@ use Fuz\AppBundle\Base\BaseController;
 
 class HomeController extends BaseController
 {
-
     /**
      * Home
      *
@@ -22,5 +21,4 @@ class HomeController extends BaseController
            $this->createContextSample($request, 'noPlugin'), $this->createAdvancedContextSample($request, 'withPlugin')
         );
     }
-    
 }

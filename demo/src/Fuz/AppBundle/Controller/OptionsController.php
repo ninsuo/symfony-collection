@@ -12,7 +12,6 @@ use Fuz\AppBundle\Base\BaseController;
  */
 class OptionsController extends BaseController
 {
-
     /**
      * JavaScript options
      *

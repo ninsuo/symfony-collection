@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class BaseController extends Controller
 {
-
     /**
      * Symfony's var_dump
      *
@@ -25,29 +24,23 @@ class BaseController extends Controller
      * This method comes from Flip's answer on Stackoverflow:
      * http://stackoverflow.com/a/17428869/731138
      *
-     * @param Form $form
+     * @param  Form  $form
      * @return array
      */
     protected function getErrorMessages(Form $form)
     {
-        $errors = array ();
+        $errors = array();
 
-        foreach ($form->getErrors() as $error)
-        {
-            if ($form->isRoot())
-            {
+        foreach ($form->getErrors() as $error) {
+            if ($form->isRoot()) {
                 $errors['#'][] = $error->getMessage();
-            }
-            else
-            {
+            } else {
                 $errors[] = $error->getMessage();
             }
         }
 
-        foreach ($form->all() as $child)
-        {
-            if (!$child->isValid())
-            {
+        foreach ($form->all() as $child) {
+            if (!$child->isValid()) {
                 $errors[$child->getName()] = $this->getErrorMessages($child);
             }
         }
@@ -83,7 +76,7 @@ class BaseController extends Controller
      *
      * $('.error-container').html('');
      *
-     * @param Form $form
+     * @param  Form  $form
      * @return array
      * @see Symfony\Component\Form\Extension\DataCollector\FormDataExtractor::buildId
      * @see Fuz\QuickStartBundle\Resources\public\js\jquery.symfony2.js
@@ -93,15 +86,13 @@ class BaseController extends Controller
         $originalErrors = $this->getErrorMessages($form);
 
         $globalErrors = null;
-        if (array_key_exists('#', $originalErrors))
-        {
+        if (array_key_exists('#', $originalErrors)) {
             $globalErrors = $originalErrors['#'];
             unset($originalErrors['#']);
         }
 
         $normalizedErrors = $this->normalizeErrorMessagesAjaxFormat($originalErrors, $form->getName());
-        if (!is_null($globalErrors))
-        {
+        if (!is_null($globalErrors)) {
             $normalizedErrors['#'] = $globalErrors;
         }
 
@@ -110,40 +101,36 @@ class BaseController extends Controller
 
     private function normalizeErrorMessagesAjaxFormat(array $errors, $prefix)
     {
-        $normalizedErrors = array ();
-        foreach ($errors as $key => $error)
-        {
-            if (is_array($error))
-            {
+        $normalizedErrors = array();
+        foreach ($errors as $key => $error) {
+            if (is_array($error)) {
                 $normalizedErrors = array_merge($normalizedErrors,
                    $this->normalizeErrorMessagesAjaxFormat($error, "{$prefix}_{$key}"));
-            }
-            else
-            {
+            } else {
                 $normalizedErrors[$prefix][$key] = $error;
             }
         }
+
         return $normalizedErrors;
     }
 
     /**
      * This method sends user back to the last url he comes from.
      *
-     * @param Request $request
+     * @param  Request          $request
      * @return RedirectResponse
      */
     protected function goBack(Request $request)
     {
-        if ($request->getSession()->has('previous_route'))
-        {
+        if ($request->getSession()->has('previous_route')) {
             $route = $request->getSession()->get('previous_route');
             $route['params']['_locale'] = $request->getLocale();
+
             return $this->redirect($this->generateUrl($route['name'], $route['params']));
         }
 
         $referer = $request->headers->get('referer');
-        if (!is_null($referer))
-        {
+        if (!is_null($referer)) {
             return $this->redirect($referer);
         }
 
@@ -174,5 +161,4 @@ class BaseController extends Controller
     {
         return $this->container->get('translator')->trans($property, $parameters);
     }
-
 }
