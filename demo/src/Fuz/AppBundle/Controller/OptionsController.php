@@ -110,4 +110,17 @@ class OptionsController extends BaseController
     {
         return $this->createContextSample($request, 'form', array());
     }
+
+    /**
+     * JavaScript options
+     *
+     * Hide move-up on the first item and move-down on the last one
+     *
+     * @Route("/hideMoveUpDown", name="hideMoveUpDown")
+     * @Template()
+     */
+    public function hideMoveUpDownAction(Request $request)
+    {
+        return $this->createContextSample($request, 'form');
+    }
 }
