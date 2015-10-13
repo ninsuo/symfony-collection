@@ -1,0 +1,66 @@
+{% extends 'FuzAppBundle::layout.html.twig' %}
+
+{% block extra_js %}
+    <script src="{{ asset('bundles/fuzapp/js/collection/jquery.collection.js') }}"></script>
+{% endblock %}
+
+{% block title %}JavaScript options : hide Up and Down buttons on useless elements{% endblock %}
+
+{% block body %}
+
+    <h2>{{ block('title') }}</h2>
+
+    <p>Use <code>hide_useless_buttons</code> option to display or not the up button on the first item, and the down button on the last one.</p>
+
+    <p>This can be useful if you want to style useless buttons by yourself, instead of <code>display:none</code>.</p>
+
+    <p>Test it live: <input type="checkbox" id="test-it" /></p>
+
+    <p>
+        Check out this page's
+        <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Controller/OptionsController.php" target="_blank">controller</a>,
+        <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Resources/views/Options/hideMoveUpDown.html.twig" target="_blank">view</a>
+        and
+        <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Resources/views/Options/options-theme.html.twig" target="_blank">theme</a>
+        to know how to create such form and enable the plugin.
+    </p>
+
+    <hr/>
+
+    {% form_theme form 'FuzAppBundle::jquery.collection.html.twig' %}
+    {{ form(form) }}
+
+    <hr/>
+
+    {% for value in formData.values %}
+        <p>Value : {{ value }}</p>
+    {% endfor %}
+
+    <hr/>
+
+    <p>Code used:</p>
+    <pre>{{ block('script') | e }}</pre>
+
+{% endblock %}
+
+{% block script %}
+
+    <script type="text/javascript">
+
+        $('.form-collection').collection({
+            hide_useless_buttons: false
+        });
+
+        $('#test-it').on('click', function() {
+
+            // only useful for the demo
+            $('.collection-up, .collection-down').css('display', '');
+
+            $('.form-collection').collection({
+                hide_useless_buttons: $('#test-it').is(':checked')
+            });
+        });
+
+    </script>
+
+{% endblock %}
