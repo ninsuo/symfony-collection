@@ -36,6 +36,15 @@
 
     <hr/>
 
+    Switch to an existing array:
+    <select id="current-array" class="form-control">
+        {% for name in names %}
+            <option value="{{ name | e('html_attr') }}">{{ name }}</option>
+        {% endfor %}
+    </select>
+
+    <br/><br/>
+
     {%
         form_theme form
             'FuzAppBundle::jquery.collection.html.twig'

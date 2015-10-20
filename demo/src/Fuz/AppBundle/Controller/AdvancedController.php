@@ -191,20 +191,43 @@ class AdvancedController extends BaseController
             $em->flush();
         }
 
-        // creating and processing the form
         $form = $this->createForm(new MyArrayType(), $data);
         $form->handleRequest($request);
 
-        foreach ($data->getElements() as $element) {
-            $element->setArray($data);
+        if ($form->get('save')->isClicked()) {
+            foreach ($data->getElements() as $element) {
+                $element->setArray($data);
+            }
+            if ($form->isValid()) {
+                $em->persist($data);
+                $em->flush();
+            }
         }
-        if ($form->isValid()) {
-            $em->persist($data);
+
+        if ($form->get('delete')->isClicked()) {
+            foreach ($data->getElements() as $element) {
+                $em->remove($element);
+            }
+            $em->remove($data);
             $em->flush();
+        }
+
+        // recovering available arrays
+        $arrays = $em
+           ->createQuery("
+               SELECT arr.name
+               FROM Fuz\AppBundle\Entity\MyArray arr
+            ")
+           ->execute()
+         ;
+        $names = array();
+        foreach ($arrays as $array) {
+            $names[] = $array['name'];
         }
 
         // rendering the view
         return array(
+            'names' => $names,
             'form' => $form->createView(),
             "data" => $data,
         );
