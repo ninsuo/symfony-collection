@@ -169,67 +169,56 @@ class AdvancedController extends BaseController
      * https://github.com/ninsuo/symfony-collection/issues/7
      * Let's test that live!
      *
+     * ... hmm, doesn't look bad anyway
+     *
      * @Route(
      *      "/usageWithDoctrine/{name}",
      *      name = "usageWithDoctrine",
      *      defaults = {
-     *          "name" = "example",
+     *          "name" = "example"
      *      }
      * )
      * @Template()
      */
     public function usageWithDoctrineAction(Request $request, $name)
     {
-        // intializing the context
         $repo = $this->getDoctrine()->getRepository('FuzAppBundle:MyArray');
-        $em   = $this->getDoctrine()->getEntityManager();
+
         $data = $repo->findOneByName($name);
         if (is_null($data)) {
-            $data = new MyArray();
-            $data->setName($name);
-            $em->persist($data);
-            $em->flush();
+            $data = $repo->create($name);
         }
 
         $form = $this->createForm(new MyArrayType(), $data);
         $form->handleRequest($request);
 
-        if ($form->get('save')->isClicked()) {
-            foreach ($data->getElements() as $element) {
-                $element->setArray($data);
-            }
-            if ($form->isValid()) {
-                $em->persist($data);
-                $em->flush();
-            }
-        }
+        $form->get('save')->isClicked() && $form->isValid() && $repo->save($data);
 
-        if ($form->get('delete')->isClicked()) {
-            foreach ($data->getElements() as $element) {
-                $em->remove($element);
-            }
-            $em->remove($data);
-            $em->flush();
-        }
-
-        // recovering available arrays
-        $arrays = $em
-           ->createQuery("
-               SELECT arr.name
-               FROM Fuz\AppBundle\Entity\MyArray arr
-            ")
-           ->execute()
-         ;
-        $names = array();
-        foreach ($arrays as $array) {
-            $names[] = $array['name'];
-        }
-
-        // rendering the view
         return array(
-            'names' => $names,
+            'names' => $repo->getArrayNames(),
             'form' => $form->createView(),
             "data" => $data,
         );
     }
+
+    /**
+     * Related to usageWithDoctrine demo
+     *
+     * @Route(
+     *      "/usageWithDoctrineDelete/{name}",
+     *      name = "usageWithDoctrineDelete"
+     * )
+     */
+    public function usageWithDoctrineDeleteAction(Request $request, $name)
+    {
+        $repo = $this->getDoctrine()->getRepository('FuzAppBundle:MyArray');
+        if (!is_null($data = $repo->findOneByName($name))) {
+            $repo->delete($data);
+        }
+
+        return $this->forward('FuzAppBundle:Advanced:usageWithDoctrine', array(
+            'name' => 'example',
+        ));
+    }
+
 }

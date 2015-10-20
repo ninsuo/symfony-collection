@@ -21,6 +21,8 @@ class MyArrayType extends AbstractType
             'allow_delete' => true,
             'prototype'    => true,
             'required'     => false,
+            'by_reference' => true,
+            'delete_empty' => true,
             'attr'         => array(
                 'class' => 'doctrine-sample',
             ),
@@ -28,10 +30,6 @@ class MyArrayType extends AbstractType
 
         $builder->add('save', 'submit', array(
                 'label' => 'Save this array',
-        ));
-
-        $builder->add('delete', 'submit', array (
-                'label' => 'Delete this array',
         ));
     }
 
