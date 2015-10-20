@@ -10,7 +10,9 @@ class MyArrayType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name');
+        $builder->add('name', 'text', array(
+                'label' => 'Array name:',
+        ));
 
         $builder->add('elements', 'collection', array(
             'label'        => 'Add an element...',
@@ -19,12 +21,16 @@ class MyArrayType extends AbstractType
             'allow_delete' => true,
             'prototype'    => true,
             'required'     => false,
+            'by_reference' => true,
+            'delete_empty' => true,
             'attr'         => array(
                 'class' => 'doctrine-sample',
             ),
         ));
 
-        $builder->add('submit', 'submit');
+        $builder->add('save', 'submit', array(
+                'label' => 'Save this array',
+        ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

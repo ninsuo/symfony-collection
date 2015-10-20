@@ -36,6 +36,10 @@
 
     <hr/>
 
+    <div class="text-center">
+        <input type="button" id="new" class="btn btn-default" value="Create new array"/>
+    </div>
+
     {%
         form_theme form
             'FuzAppBundle::jquery.collection.html.twig'
@@ -45,20 +49,42 @@
 
     <hr/>
 
-    {% for key, element in data.elements %}
-        <p>db id = {{ element.id }}, value = {{ element.value }}</p>
-    {% endfor %}
-
-    <hr/>
-
-    <p>Code used:</p>
-    <pre>{{ block('script') | e }}</pre>
+    {% if names|length %}
+        Existing arrays:
+        <table class="table">
+            <thead>
+                <th>Name</th>
+                <th>Open</th>
+                <th>Delete</th>
+            </thead>
+            <tbody>
+                {% for name in names %}
+                    <tr>
+                        <td>{{ name }}</td>
+                        <td>
+                            {% if data.name != name %}<a href="{{ path('usageWithDoctrine', {'name': name}) }}">Open</a>{% endif %}
+                        </td>
+                        <td><a href="{{ path('usageWithDoctrineDelete', {'name': name}) }}">Delete</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 
 {% endblock %}
 
 {% block script %}
 
     <script type="text/javascript">
+
+        // only useful for the "new" button...
+        $('#new').on('click', function() {
+           var name = prompt("Which name would you like to use?");
+           if (name) {
+               var uri = '{{ path('usageWithDoctrine', {'name': 'a'}) }}';
+               document.location = uri.substr(0, uri.length - 1) + encodeURIComponent(name);
+           }
+        });
 
         $('.doctrine-sample').collection();
 

@@ -169,44 +169,56 @@ class AdvancedController extends BaseController
      * https://github.com/ninsuo/symfony-collection/issues/7
      * Let's test that live!
      *
+     * ... hmm, doesn't look bad anyway
+     *
      * @Route(
      *      "/usageWithDoctrine/{name}",
      *      name = "usageWithDoctrine",
      *      defaults = {
-     *          "name" = "example",
+     *          "name" = "example"
      *      }
      * )
      * @Template()
      */
     public function usageWithDoctrineAction(Request $request, $name)
     {
-        // intializing the context
         $repo = $this->getDoctrine()->getRepository('FuzAppBundle:MyArray');
-        $em   = $this->getDoctrine()->getEntityManager();
+
         $data = $repo->findOneByName($name);
         if (is_null($data)) {
-            $data = new MyArray();
-            $data->setName($name);
-            $em->persist($data);
-            $em->flush();
+            $data = $repo->create($name);
         }
 
-        // creating and processing the form
         $form = $this->createForm(new MyArrayType(), $data);
         $form->handleRequest($request);
 
-        foreach ($data->getElements() as $element) {
-            $element->setArray($data);
-        }
-        if ($form->isValid()) {
-            $em->persist($data);
-            $em->flush();
-        }
+        $form->get('save')->isClicked() && $form->isValid() && $repo->save($data);
 
-        // rendering the view
         return array(
+            'names' => $repo->getArrayNames(),
             'form' => $form->createView(),
             "data" => $data,
         );
     }
+
+    /**
+     * Related to usageWithDoctrine demo
+     *
+     * @Route(
+     *      "/usageWithDoctrineDelete/{name}",
+     *      name = "usageWithDoctrineDelete"
+     * )
+     */
+    public function usageWithDoctrineDeleteAction(Request $request, $name)
+    {
+        $repo = $this->getDoctrine()->getRepository('FuzAppBundle:MyArray');
+        if (!is_null($data = $repo->findOneByName($name))) {
+            $repo->delete($data);
+        }
+
+        return $this->forward('FuzAppBundle:Advanced:usageWithDoctrine', array(
+            'name' => 'example',
+        ));
+    }
+
 }
