@@ -8,8 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Fuz\AppBundle\Base\BaseController;
 use Fuz\AppBundle\Entity\Value;
 use Fuz\AppBundle\Form\ValueType;
-use Fuz\AppBundle\Entity\MyArray;
 use Fuz\AppBundle\Form\MyArrayType;
+use Fuz\AppBundle\Entity\Addresses;
+use Fuz\AppBundle\Entity\Address;
+use Fuz\AppBundle\Form\AddressesType;
 
 /**
  * @Route("/advanced")
@@ -219,6 +221,39 @@ class AdvancedController extends BaseController
         return $this->forward('FuzAppBundle:Advanced:usageWithDoctrine', array(
             'name' => 'example',
         ));
+    }
+
+    /**
+     * A form having a theme and containing several fields
+     *
+     * @Route(
+     *      "/formHavingSeveralFields",
+     *      name = "formHavingSeveralFields"
+     * )
+     * @Template()
+     */
+    public function formHavingSeveralFieldsAction(Request $request)
+    {
+        $address = new Address();
+        $address->setName('Mickael Steller');
+        $address->setCompany('fuz.org');
+        $address->setStreet('41 rue de la Paix');
+        $address->setPostalcode('75002');
+        $address->setCity('Paris');
+        $address->setCountry('France');
+
+        $addresses = new Addresses();
+        $addresses->getAddresses()->add($address);
+
+        $form = $this->createForm(new AddressesType(), $addresses);
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+        }
+
+        return array(
+            'form' => $form->createView(),
+            "data" => $addresses,
+        );
     }
 
 }
