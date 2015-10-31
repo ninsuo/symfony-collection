@@ -255,5 +255,4 @@ class AdvancedController extends BaseController
             "data" => $addresses,
         );
     }
-
 }
