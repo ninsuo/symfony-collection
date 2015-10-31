@@ -10,7 +10,6 @@ use Fuz\AppBundle\Entity\MyArray;
  */
 class MyArrayRepository extends EntityRepository
 {
-
     public function create($name)
     {
         $data = new MyArray();
@@ -58,5 +57,4 @@ class MyArrayRepository extends EntityRepository
         $this->_em->remove($data);
         $this->_em->flush();
     }
-
 }
