@@ -195,7 +195,7 @@ Note that only `name_prefix` option is mandatory, all other ones have default va
 If you are using Jquery UI and have the `sortable` component available in your application, the `drag_drop` option is
 automatically enabled and let you change your element positions using drag & drop.
 
-You can disable this behaviour by explicitely setting `drag_drop` option to false:
+You can disable this behavior by explicitely setting `drag_drop` option to false:
 
 ```js
      $('.collection').collection({
