@@ -199,6 +199,20 @@
             return collection.find(settings.elements_selector);
         };
 
+        var swapElementsUp = function(collection, elements, settings, oldIndex, newIndex) {
+            for (var i = oldIndex + 1; (i <= newIndex); i++) {
+                elements = swapElements(collection, elements, i, i - 1);
+            }
+            return collection.find(settings.elements_selector);
+        };
+
+        var swapElementsDown = function(collection, elements, settings, oldIndex, newIndex) {
+            for (var i = oldIndex - 1; (i >= newIndex); i--) {
+                elements = swapElements(collection, elements, i, i + 1);
+            }
+            return collection.find(settings.elements_selector);
+        };
+
         var shiftElementsUp = function(collection, elements, settings, index) {
             for (var i = index + 1; i < elements.length; i++) {
                 elements = swapElements(collection, elements, i - 1, i);
@@ -379,7 +393,7 @@
                             var elements = collection.find(settings.elements_selector);
                             var element = ui.item;
                             var that = $(this);
-                            if (false === settings.drag_drop_start(event, ui, elements, element)) {
+                            if (!trueOrUndefined(settings.drag_drop_start(event, ui, elements, element))) {
                                 that.sortable("cancel");
                                 return ;
                             }
@@ -392,21 +406,26 @@
                             var element = ui.item;
                             var that = $(this);
                             that.sortable("cancel");
-                            if (false === settings.drag_drop_update(event, ui, elements, element)) {
+                            if (false === settings.drag_drop_update(event, ui, elements, element) || !(newPosition - oldPosition > 0 ? trueOrUndefined(settings.before_up(collection, element)) : trueOrUndefined(settings.before_down(collection, element)))) {
                                 return ;
                             }
                             newPosition = elements.index(element);
                             elements = collection.find(settings.elements_selector);
                             if (1 === Math.abs(newPosition - oldPosition)) {
-                                swapElements(collection, elements, oldPosition, newPosition);
+                                elements = swapElements(collection, elements, oldPosition, newPosition);
+                                if (!(newPosition - oldPosition > 0 ? trueOrUndefined(settings.after_up(collection, element)) : trueOrUndefined(settings.after_down(collection, element)))) {
+                                    elements = swapElements(collection, elements, newPosition, oldPosition);
+                                }
                             } else {
                                 if (oldPosition < newPosition) {
-                                    for (var i = 1; (i <= newPosition); i++) {
-                                        elements = swapElements(collection, elements, i, i - 1);
+                                    elements = swapElementsUp(collection, elements, settings, oldPosition, newPosition);
+                                    if (!(newPosition - oldPosition > 0 ? trueOrUndefined(settings.after_up(collection, element)) : trueOrUndefined(settings.after_down(collection, element)))) {
+                                        elements = swapElementsDown(collection, elements, settings, newPosition, oldPosition);
                                     }
                                 } else {
-                                    for (var i = elements.length - 2; (i >= newPosition); i--) {
-                                        elements = swapElements(collection, elements, i, i + 1);
+                                    elements = swapElementsDown(collection, elements, settings, oldPosition, newPosition);
+                                    if (!(newPosition - oldPosition > 0 ? trueOrUndefined(settings.after_up(collection, element)) : trueOrUndefined(settings.after_down(collection, element)))) {
+                                        elements = swapElementsUp(collection, elements, settings, newPosition, oldPosition);
                                     }
                                 }
                             }
