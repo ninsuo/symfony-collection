@@ -5,8 +5,15 @@
 {% block AddressType_label %}{% endblock %}
 {% block AddressType_errors %}{% endblock %}
 
-{% block AddressType_widget %}
+{% block AddressType_row %}
 <div class="col-md-3">
+  {{ form_label(form) }}
+  {{ form_errors(form) }}
+  {{ form_widget(form) }}
+</div>
+{% endblock %}
+
+{% block AddressType_widget %}
     {{ form_widget(form) }}
     <br/>
     <p class="text-center">
@@ -15,7 +22,6 @@
         <a href="#" class="collection-add btn btn-default">+</a>
         <a href="#" class="collection-down btn btn-default">&gt;</a>
     </p>
-</div>
 {% endblock %}
 
 {% block AddressesType_widget %}

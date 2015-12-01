@@ -193,15 +193,24 @@ Note that only `name_prefix` option is mandatory, all other ones have default va
 **Drag & drop support**
 
 If you are using Jquery UI and have the `sortable` component available in your application, the `drag_drop` option is
-automatically enabled and let you change your element positions using drag & drop.
+automatically enabled and let you change your element positions using drag & drop. You can disable this behavior by explicitely
+setting `drag_drop` option to false.
 
-You can disable this behavior by explicitely setting `drag_drop` option to false:
+If required, you can customize `sortable` by overloading options given to `jQuery.ui.sortable` using the `drag_drop_options` option.
+
+By default, your collection is initialized with the following options:
 
 ```js
      $('.collection').collection({
-         drag_drop: false
+         drag_drop: true,
+         drag_drop_options: {
+            placeholder: 'ui-state-highlight'
+         }
      });
 ```
+
+Note that you should not overload `start` and `update` callbacks as they are used by this plugin, see
+`drag_drop_start` and `drag_drop_update` options in advanced usage below for more details.
 
 # Advanced usage
 
@@ -254,6 +263,29 @@ the plugin will generate an `add` button based on the plugin's configuraiton.
 
 *Tip*: when `add` buttons are put inside collection's elements, new element is created next to the clicked
 element instead of at the end of the collection.
+
+**Advanced drag & drop support**
+
+If you need to listen for `start` and/or `update` events from `jQuery.ui.sortable` in your collection,
+you should not overload the `start` and `update` options in `drag_drop_options`, but use the built-in
+`drag_drop_start` and `drag_drop_update` options instead:
+
+```js
+     $('.collection').collection({
+         drag_drop_start: function (event, ui, elements, element) {
+            // ...
+         },
+         drag_drop_update: function (event, ui, elements, element) {
+            // ...
+         }
+     });
+```
+
+Notes:
+
+- `elements` contains all elements from the impacted collection
+- `element` is the moved element in the collection
+- If your callback return false, the position change will be cancelled/reverted.
 
 **Collection of collections**
 

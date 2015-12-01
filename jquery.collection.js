@@ -52,7 +52,12 @@
             children: null,
             init_with_n_elements: 0,
             hide_useless_buttons: true,
-            drag_drop: true
+            drag_drop: true,
+            drag_drop_options: {
+                'placeholder': 'ui-state-highlight'
+            },
+            drag_drop_start: function(event, ui) { return true; },
+            drag_drop_update: function(event, ui) { return true; }
         };
 
         var randomNumber = function() {
@@ -369,20 +374,28 @@
                 if (typeof jQuery.ui.sortable === 'undefined') {
                     settings.drag_drop = false;
                 } else {
-                    collection.sortable({
-                        placeholder: "ui-state-highlight",
+                    collection.sortable($.extend(true, {}, {
                         start: function(event, ui) {
                             var elements = collection.find(settings.elements_selector);
                             var element = ui.item;
+                            var that = $(this);
+                            if (false === settings.drag_drop_start(event, ui, elements, element)) {
+                                that.sortable("cancel");
+                                return ;
+                            }
                             ui.placeholder.height(ui.item.height());
+                            ui.placeholder.width(ui.item.width());
                             oldPosition = elements.index(element);
                         },
                         update: function(event, ui) {
                             var elements = collection.find(settings.elements_selector);
                             var element = ui.item;
                             var that = $(this);
-                            newPosition = elements.index(element);
                             that.sortable("cancel");
+                            if (false === settings.drag_drop_update(event, ui, elements, element)) {
+                                return ;
+                            }
+                            newPosition = elements.index(element);
                             elements = collection.find(settings.elements_selector);
                             if (1 === Math.abs(newPosition - oldPosition)) {
                                 swapElements(collection, elements, oldPosition, newPosition);
@@ -399,7 +412,7 @@
                             }
                             dumpCollectionActions(collection, settings, false);
                         }
-                    });
+                    }, settings.drag_drop_options));
                 }
             }
 
