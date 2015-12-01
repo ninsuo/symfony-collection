@@ -51,7 +51,8 @@
             elements_selector: '> div',
             children: null,
             init_with_n_elements: 0,
-            hide_useless_buttons: true
+            hide_useless_buttons: true,
+            drag_drop: true
         };
 
         var randomNumber = function() {
@@ -360,6 +361,46 @@
 
             if (settings.init_with_n_elements < settings.min) {
                 settings.init_with_n_elements = settings.min;
+            }
+
+            if (settings.drag_drop && settings.allow_up && settings.allow_down) {
+                var oldPosition;
+                var newPosition;
+                if (typeof jQuery.ui.sortable === 'undefined') {
+                    settings.drag_drop = false;
+                } else {
+                    collection.sortable({
+                        placeholder: "ui-state-highlight",
+                        start: function(event, ui) {
+                            var elements = collection.find(settings.elements_selector);
+                            var element = ui.item;
+                            ui.placeholder.height(ui.item.height());
+                            oldPosition = elements.index(element);
+                        },
+                        update: function(event, ui) {
+                            var elements = collection.find(settings.elements_selector);
+                            var element = ui.item;
+                            var that = $(this);
+                            newPosition = elements.index(element);
+                            that.sortable("cancel");
+                            elements = collection.find(settings.elements_selector);
+                            if (1 === Math.abs(newPosition - oldPosition)) {
+                                swapElements(collection, elements, oldPosition, newPosition);
+                            } else {
+                                if (oldPosition < newPosition) {
+                                    for (var i = 1; (i <= newPosition); i++) {
+                                        elements = swapElements(collection, elements, i, i - 1);
+                                    }
+                                } else {
+                                    for (var i = elements.length - 2; (i >= newPosition); i--) {
+                                        elements = swapElements(collection, elements, i, i + 1);
+                                    }
+                                }
+                            }
+                            dumpCollectionActions(collection, settings, false);
+                        }
+                    });
+                }
             }
 
             collection.data('collection-settings', settings);

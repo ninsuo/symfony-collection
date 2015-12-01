@@ -23,6 +23,7 @@
     "license": "MIT",
     "ignore": ["*", "!jquery.collection.js", "!jquery.collection.html.twig"],
     "dependencies": {
-        "jquery": ">=1.7"
+        "jquery": ">=1.7",
+        "jquery-ui": ">=1.0"
     }
 }
