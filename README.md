@@ -283,6 +283,7 @@ you should not overload the `start` and `update` options in `drag_drop_options`,
 
 Notes:
 
+- `event` and `ui` come from `jQuery.ui.sortable` `start` callback.
 - `elements` contains all elements from the impacted collection
 - `element` is the moved element in the collection
 - If your callback return false, the position change will be cancelled/reverted.
