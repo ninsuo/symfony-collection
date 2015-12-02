@@ -123,4 +123,22 @@ class OptionsController extends BaseController
     {
         return $this->createContextSample($request, 'form');
     }
+
+    /**
+     * JavaScript options
+     *
+     * Drag & Drop allow to get rid of "move up" and "move down" buttons
+     *
+     * @Route("/dragAndDrop", name="dragAndDrop")
+     * @Template()
+     */
+    public function dragAndDropAction(Request $request)
+    {
+        return array(
+            'disabled' => $this->createAdvancedContextSample($request, 'disabled'),
+            'nobuttons' => $this->createAdvancedContextSample($request, 'nobuttons'),
+            'moreoptions' => $this->createAdvancedContextSample($request, 'moreoptions'),
+            'startupdate' => $this->createAdvancedContextSample($request, 'startupdate'),
+       );
+    }
 }
