@@ -22,6 +22,7 @@ class Builder extends BaseMenu
         $this->addRoute($menu['JavaScript Options'], "Without form theme", 'withoutFormTheme');
         $this->addRoute($menu['JavaScript Options'], "Initialized with a given minimum of elements", 'givenMinimumElements');
         $this->addRoute($menu['JavaScript Options'], "Hide Up and Down buttons on useless elements", 'hideMoveUpDown');
+        $this->addRoute($menu['JavaScript Options'], "Drag & Drop", 'dragAndDrop');
 
         $this->addSubMenu($menu, 'Advanced usage');
         $this->addRoute($menu['Advanced usage'], "A better MVC Compliance", "mvcCompliance");

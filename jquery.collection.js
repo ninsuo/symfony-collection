@@ -51,7 +51,13 @@
             elements_selector: '> div',
             children: null,
             init_with_n_elements: 0,
-            hide_useless_buttons: true
+            hide_useless_buttons: true,
+            drag_drop: true,
+            drag_drop_options: {
+                'placeholder': 'ui-state-highlight'
+            },
+            drag_drop_start: function(event, ui) { return true; },
+            drag_drop_update: function(event, ui) { return true; }
         };
 
         var randomNumber = function() {
@@ -190,6 +196,20 @@
                 elements.eq(newIndex).insertAfter(elements.eq(oldIndex));
             }
 
+            return collection.find(settings.elements_selector);
+        };
+
+        var swapElementsUp = function(collection, elements, settings, oldIndex, newIndex) {
+            for (var i = oldIndex + 1; (i <= newIndex); i++) {
+                elements = swapElements(collection, elements, i, i - 1);
+            }
+            return collection.find(settings.elements_selector);
+        };
+
+        var swapElementsDown = function(collection, elements, settings, oldIndex, newIndex) {
+            for (var i = oldIndex - 1; (i >= newIndex); i--) {
+                elements = swapElements(collection, elements, i, i + 1);
+            }
             return collection.find(settings.elements_selector);
         };
 
@@ -360,6 +380,59 @@
 
             if (settings.init_with_n_elements < settings.min) {
                 settings.init_with_n_elements = settings.min;
+            }
+
+            if (settings.drag_drop && settings.allow_up && settings.allow_down) {
+                var oldPosition;
+                var newPosition;
+                if (typeof jQuery.ui.sortable === 'undefined') {
+                    settings.drag_drop = false;
+                } else {
+                    collection.sortable($.extend(true, {}, {
+                        start: function(event, ui) {
+                            var elements = collection.find(settings.elements_selector);
+                            var element = ui.item;
+                            var that = $(this);
+                            if (!trueOrUndefined(settings.drag_drop_start(event, ui, elements, element))) {
+                                that.sortable("cancel");
+                                return ;
+                            }
+                            ui.placeholder.height(ui.item.height());
+                            ui.placeholder.width(ui.item.width());
+                            oldPosition = elements.index(element);
+                        },
+                        update: function(event, ui) {
+                            var elements = collection.find(settings.elements_selector);
+                            var element = ui.item;
+                            var that = $(this);
+                            that.sortable("cancel");
+                            if (false === settings.drag_drop_update(event, ui, elements, element) || !(newPosition - oldPosition > 0 ? trueOrUndefined(settings.before_up(collection, element)) : trueOrUndefined(settings.before_down(collection, element)))) {
+                                return ;
+                            }
+                            newPosition = elements.index(element);
+                            elements = collection.find(settings.elements_selector);
+                            if (1 === Math.abs(newPosition - oldPosition)) {
+                                elements = swapElements(collection, elements, oldPosition, newPosition);
+                                if (!(newPosition - oldPosition > 0 ? trueOrUndefined(settings.after_up(collection, element)) : trueOrUndefined(settings.after_down(collection, element)))) {
+                                    elements = swapElements(collection, elements, newPosition, oldPosition);
+                                }
+                            } else {
+                                if (oldPosition < newPosition) {
+                                    elements = swapElementsUp(collection, elements, settings, oldPosition, newPosition);
+                                    if (!(newPosition - oldPosition > 0 ? trueOrUndefined(settings.after_up(collection, element)) : trueOrUndefined(settings.after_down(collection, element)))) {
+                                        elements = swapElementsDown(collection, elements, settings, newPosition, oldPosition);
+                                    }
+                                } else {
+                                    elements = swapElementsDown(collection, elements, settings, oldPosition, newPosition);
+                                    if (!(newPosition - oldPosition > 0 ? trueOrUndefined(settings.after_up(collection, element)) : trueOrUndefined(settings.after_down(collection, element)))) {
+                                        elements = swapElementsUp(collection, elements, settings, newPosition, oldPosition);
+                                    }
+                                }
+                            }
+                            dumpCollectionActions(collection, settings, false);
+                        }
+                    }, settings.drag_drop_options));
+                }
             }
 
             collection.data('collection-settings', settings);
