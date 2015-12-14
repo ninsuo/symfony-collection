@@ -247,7 +247,7 @@
             elements.each(function(index) {
                 var element = $(this);
 
-                var actions = element.children().andSelf().filter('.' + settings.prefix + '-actions');
+                var actions = element.find('.' + settings.prefix + '-actions').andSelf().filter('.' + settings.prefix + '-actions');
                 if (actions.length === 0) {
                     actions = $('<div class="' + settings.prefix + '-actions"></div>');
                     element.append(actions);
