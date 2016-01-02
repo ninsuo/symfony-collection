@@ -290,20 +290,21 @@
                 });
             });
 
+            if (isInitialization) {
+                while (elements.length < settings.init_with_n_elements) {
+                    collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').first().trigger('click');
+                    elements = collection.find(settings.elements_selector);
+                }
+            }
+
             if (settings.allow_add) {
                 var rescueAdd = collection.find('.' + settings.prefix + '-rescue-add').css('display', '');
-                var adds = collection.find('.' + settings.prefix + '-add:visible');
+                var adds = collection.find('.' + settings.prefix + '-add');
                 if (adds.length > 0) {
                     rescueAdd.css('display', 'none');
                 }
                 if (elements.length >= settings.max) {
                     collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').css('display', 'none');
-                }
-                if (isInitialization) {
-                    while (elements.length < settings.init_with_n_elements) {
-                        collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').first().trigger('click');
-                        elements = collection.find(settings.elements_selector);
-                    }
                 }
             }
 
