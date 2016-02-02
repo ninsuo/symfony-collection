@@ -344,6 +344,7 @@
                     id = code.find('[id]').first().attr('id');
                     ++freeIndex;
                 } while (container.find('#' + id).length !== 0);
+                --freeIndex;
 
                 if (isDuplicate) {
                     putFieldValuesInDom(elements.eq(index));
