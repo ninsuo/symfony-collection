@@ -343,7 +343,7 @@
                     code = $(prototype.replace(regexp, freeIndex));
                     id = code.find('[id]').first().attr('id');
                     ++freeIndex;
-                } while (container.find('#' + id).length === 0);
+                } while (container.find('#' + id).length !== 0);
 
                 if (isDuplicate) {
                     putFieldValuesInDom(elements.eq(index));
