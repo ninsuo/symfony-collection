@@ -341,7 +341,7 @@
 
                 do {
                     code = $(prototype.replace(regexp, freeIndex));
-                    id = code.find('[id]').first().attr('id');
+                    id = $('<div/>').html(code).find('[id]').first().attr('id');
                     ++freeIndex;
                 } while (container.find('#' + id).length !== 0);
                 --freeIndex;
