@@ -1,5 +1,5 @@
 /*
-* jquery.collection.js v1.1.0
+* jquery.collection.js v1.2.3
 *
 * Copyright (c) 2015 alain tiemblo <alain at fuz dot org>
 *
