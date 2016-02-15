@@ -1,20 +1,20 @@
 /*
-* jquery.collection.js v1.2.3
-*
-* Copyright (c) 2015 alain tiemblo <alain at fuz dot org>
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the
-* "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish,
-* distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
-* following conditions:
-*
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
-* OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
+ * jquery.collection.js v1.2.3
+ *
+ * Copyright (c) 2015 alain tiemblo <alain at fuz dot org>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
 ;(function($) {
 
@@ -267,7 +267,7 @@
                     {'enabled': settings.allow_delete, 'class': settings.prefix + '-delete', 'html': settings.delete, 'condition': elements.length > settings.min},
                     {'enabled': settings.allow_up, 'class': settings.prefix + '-up', 'html': settings.up, 'condition': elements.index(element) !== 0},
                     {'enabled': settings.allow_down, 'class': settings.prefix + '-down', 'html': settings.down, 'condition': elements.index(element) !== elements.length - 1},
-                    {'enabled': settings.allow_add, 'class': settings.prefix + '-add', 'html': settings.add, 'condition': elements.length < settings.max && (!settings.add_at_the_end || index == elements.length)},
+                    {'enabled': settings.allow_add, 'class': settings.prefix + '-add', 'html': settings.add, 'condition': elements.length < settings.max && (!settings.add_at_the_end || index == elements.length - 1)},
                     {'enabled': settings.allow_duplicate, 'class': settings.prefix + '-duplicate', 'html': settings.duplicate, 'condition': elements.length < settings.max},
                 ];
 
