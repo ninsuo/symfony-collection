@@ -478,7 +478,7 @@
             if (settings.drag_drop && settings.allow_up && settings.allow_down) {
                 var oldPosition;
                 var newPosition;
-                if (typeof jQuery.ui.sortable === 'undefined') {
+                if (typeof jQuery.ui === 'undefined' || typeof jQuery.ui.sortable === 'undefined') {
                     settings.drag_drop = false;
                 } else {
                     collection.sortable($.extend(true, {}, {
