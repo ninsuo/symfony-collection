@@ -65,7 +65,7 @@ swiftmailer:
 # BootstrapBundle Configuration
 braincrafted_bootstrap:
     jquery_path: %kernel.root_dir%/../src/Fuz/QuickStartBundle/Resources/public/js/jquery-2.1.1.min.js
-    less_filter: lessphp
+    css_preprocessor: lessphp
     auto_configure:
       knp_menu: false
 
