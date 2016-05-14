@@ -14,16 +14,13 @@
 
     <p>Use <code>add_at_the_end</code> option set to <code>true</code> if you want to have only one <code>add</code> button, located below the collection.</p>
 
-    <p>
-        Check out this page's
-        <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Controller/OptionsController.php" target="_blank">controller</a>,
-        and
-        <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Resources/views/Options/addButtonAtTheBottom.html.twig" target="_blank">view</a>
-        to know how to create such form and enable the plugin.
-    </p>
-
-    <hr/>
-
+    {{
+        github([
+            'Controller/OptionsController.php',
+            'Resources/views/Options/addButtonAtTheBottom.html.twig',
+        ])
+    }}
+    
     <div class="row">
 
         <div class="col-md-6">

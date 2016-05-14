@@ -28,16 +28,13 @@
 
     <p>Drag & drop do not work if <code>allow_move_up</code> or <code>allow_move_down</code> are disabled.</p>
 
-    <p>
-        Check out this page's
-        <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Controller/OptionsController.php" target="_blank">controller</a>
-        and
-        <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Resources/views/Options/dragAndDrop.html.twig" target="_blank">view</a>
-        to know how to create such form and enable the plugin.
-    </p>
-
-    <hr/>
-
+    {{
+        github([
+            'Controller/OptionsController.php',
+            'Resources/views/Options/dragAndDrop.html.twig',
+        ])
+    }}
+    
     <div class="row">
 
         {# demo 1: drag & drop disabled #}

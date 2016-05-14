@@ -14,20 +14,17 @@
         An example that shows how works theming on a form with more than one field.
     </p>
 
-    <p>
-       Check out this page's
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Controller/AdvancedController.php" target="_blank">controller</a>,
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Resources/views/Advanced/addressesTheme.html.twig" target="_blank">theme</a>,
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Resources/views/Advanced/formHavingSeveralFields.html.twig" target="_blank">view</a>,
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Data/Addresses.php" target="_blank">collection entity</a>,
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Data/Address.php" target="_blank">child entity</a>,
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Form/Addresses.php" target="_blank">collection form</a>,
-       and
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Form/Addresses.php" target="_blank">child form</a>.
-       to know how to create such form and enable the plugin.
-    </p>
-
-    <hr/>
+    {{
+        github([
+            'Controller/AdvancedController.php',
+            'Resources/views/Advanced/addressesTheme.html.twig',
+            'Resources/views/Advanced/formHavingSeveralFields.html.twig',
+            'Entity/Addresses.php',
+            'Entity/Address.php',
+            'Form/AddressesType.php',
+            'Form/AddressType.php',
+        ])
+    }}
 
     <div class="row">
         {%

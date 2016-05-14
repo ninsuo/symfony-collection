@@ -32,15 +32,12 @@
 
     <p>Your callback should return <code>true</code> or <code>undefined</code> to apply the action else it is cancelled or rollbacked.</p>
 
-    <p>
-        Check out this page's
-        <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Controller/OptionsController.php" target="_blank">controller</a>,
-        and
-        <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Resources/views/Options/eventCallbacks.html.twig" target="_blank">view</a>
-        to know how to create such form and enable the plugin.
-    </p>
-
-    <hr>
+    {{
+        github([
+            'Controller/OptionsController.php',
+            'Resources/views/Options/eventCallbacks.html.twig',
+        ])
+    }}
 
     <div class="row">
 

@@ -14,16 +14,13 @@
 
     <p><b>Warning</b>: if you're using the plugin's form theme, <code>allow_add</code> and <code>allow_delete</code> are taken from your form type configuration.</p>
 
-    <p>
-        Check out this page's
-        <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Controller/OptionsController.php" target="_blank">controller</a>,
-        <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Resources/views/Options/enableButtons.html.twig" target="_blank">view</a>
-        and
-        <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Resources/views/Options/options-theme.html.twig" target="_blank">theme</a>
-        to know how to create such form and enable the plugin.
-    </p>
-
-    <hr/>
+    {{
+        github([
+            'Controller/OptionsController.php',
+            'Resources/views/Options/enableButtons.html.twig',
+            'Resources/views/Options/options-theme.html.twig',
+        ])
+    }}
 
     <form class="form-inline">
       <strong>Enable or disable collection's actions : </strong>

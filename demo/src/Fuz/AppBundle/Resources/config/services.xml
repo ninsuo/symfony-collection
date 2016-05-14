@@ -6,6 +6,7 @@
 
     <services>
         <service id="fuz_app.twig.helper" class="Fuz\AppBundle\Twig\Extension\HelperExtension" public="false">
+            <argument type="service" id="twig"></argument>
             <tag name="twig.extension" />
         </service>
     </services>

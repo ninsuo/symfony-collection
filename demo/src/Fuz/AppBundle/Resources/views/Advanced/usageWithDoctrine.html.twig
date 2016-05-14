@@ -21,20 +21,18 @@
         in all demos, but persisted.
     </p>
 
-    <p>
-       Check out this page's
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Controller/AdvancedController.php" target="_blank">controller</a>,
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Resources/views/Advanced/usageWithDoctrine.html.twig" target="_blank">view</a>,
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Resources/views/Advanced/doctrine-theme.html.twig" target="_blank">theme</a>,
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Entity/MyArray.php" target="_blank">MyArray entity</a>,
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Form/MyArrayType.php" target="_blank">MyArray form</a>,
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Entity/MyElement.php" target="_blank">MyElement entity</a>,
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Form/MyElementType.php" target="_blank">MyElement form</a> and
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Repository/MyArrayRepository.php" target="_blank">MyArray repository</a>
-       to know how to create such form and enable the plugin.
-    </p>
-
-    <hr/>
+    {{
+        github([
+            'Controller/AdvancedController.php',
+            'Resources/views/Advanced/usageWithDoctrine.html.twig',
+            'Resources/views/Advanced/doctrine-theme.html.twig',
+            'Entity/MyArray.php',
+            'Form/MyArrayType.php',
+            'Entity/MyElement.php',
+            'Form/MyElementType.php',
+            'Repository/MyArrayRepository.php',
+        ])
+    }}
 
     <div class="text-center">
         <input type="button" id="new" class="btn btn-default" value="Create new array"/>

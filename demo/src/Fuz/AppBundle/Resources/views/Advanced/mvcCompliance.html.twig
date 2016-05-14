@@ -20,15 +20,12 @@
         <code>data-collection="{% verbatim %}{{ form.collectionField.vars.id }}{% endverbatim %}"</code>.
     </p>
 
-    <p>
-       Check out this page's
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Controller/AdvancedController.php" target="_blank">controller</a>
-       and
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Resources/views/Advanced/mvcCompliance.html.twig" target="_blank">view</a>
-       to know how to create such form and enable the plugin.
-    </p>
-
-    <hr/>
+    {{
+        github([
+            'Controller/AdvancedController.php',
+            'Resources/views/Advanced/mvcCompliance.html.twig',
+        ])
+    }}
 
     {% form_theme form 'FuzAppBundle::jquery.collection.html.twig' %}
     {{ form(form) }}

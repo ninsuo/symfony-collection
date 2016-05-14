@@ -19,15 +19,12 @@
         In fact, that's easier to explain if you look at the sample displayed at the bottom of this page.
     </p>
 
-    <p>
-       Check out this page's
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Controller/AdvancedController.php" target="_blank">controller</a>
-       and
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Resources/views/Advanced/collectionOfCollections.html.twig" target="_blank">view</a>
-       to know how to create such form and enable the plugin.
-    </p>
-
-    <hr/>
+    {{
+        github([
+            'Controller/AdvancedController.php',
+            'Resources/views/Advanced/collectionOfCollections.html.twig',
+        ])
+    }}
 
     {%
         form_theme form

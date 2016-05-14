@@ -4,6 +4,12 @@ namespace Fuz\AppBundle\Twig\Extension;
 
 class HelperExtension extends \Twig_Extension
 {
+    protected $twig;
+
+    public function __construct(\Twig_Environment $twig)
+    {
+        $this->twig = $twig;
+    }
 
     public function getFunctions()
     {
@@ -12,18 +18,26 @@ class HelperExtension extends \Twig_Extension
         ];
     }
 
-    public function github($file)
+    public function github($files)
     {
-        $basedir  = __DIR__.'/../../';
-        $realpath = realpath($basedir.$file);
+        $paths = [];
+        foreach ($files as $file)
+        {
+            $basedir  = realpath(__DIR__.'/../../');
+            $realpath = realpath($basedir.'/'.$file);
 
-        if (!is_file($realpath)) {
-            throw new \LogicException("File {$file} not found");
+            if (!is_file($realpath)) {
+                throw new \LogicException("File {$file} not found");
+            }
+
+           $paths[] = substr($realpath, strlen($basedir) + 1);
         }
 
-        $relativepath = substr($realpath, strlen($basedir) + 1);
+        sort($paths);
 
-        return '<a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/'.$relativepath.'" target="_blank">'.basename($file).'</a>';
+        return $this->twig->render('FuzAppBundle::github.html.twig', [
+            'paths' => $paths
+        ]);
     }
 
     public function getName()

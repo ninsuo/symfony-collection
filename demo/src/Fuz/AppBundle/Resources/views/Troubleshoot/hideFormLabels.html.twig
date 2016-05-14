@@ -19,17 +19,16 @@
         </p>
     {% endverbatim %}
 
-    <p>
-       This page is made of the following files:
-       {{ github('Controller/TroubleshootController.php') }},
-       {{ github('Entity/Task.php') }},
-       {{ github('Form/TaskType.php') }},
-       {{ github('Entity/Tasks.php') }},
-       {{ github('Form/TasksType.php') }} and most importantly:
-       {{ github('Resources/views/Troubleshoot/hideFormLabels.html.twig') }}
-    </p>
-
-    <hr/>
+    {{
+        github([
+            'Controller/TroubleshootController.php',
+            'Entity/Task.php',
+            'Form/TaskType.php',
+            'Entity/Tasks.php',
+            'Form/TasksType.php',
+            'Resources/views/Troubleshoot/hideFormLabels.html.twig',
+        ])
+    }}
 
     {# Demo A : default behavior #}
 

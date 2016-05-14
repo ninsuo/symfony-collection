@@ -25,16 +25,13 @@
         elements. If you feel that the <code>&gt; div</code> selector should be customizable in a plugin option, please open an issue on Github.
     </p>
 
-    <p>
-       Check out this page's
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Controller/AdvancedController.php" target="_blank">controller</a>,
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Resources/views/Advanced/customFormTheme.html.twig" target="_blank">view</a>
-       and
-       <a href="https://github.com/ninsuo/symfony-collection/blob/master/demo/src/Fuz/AppBundle/Resources/views/Advanced/advanced-theme.html.twig" target="_blank">theme</a>
-       to know how to create such form and enable the plugin.
-    </p>
-
-    <hr/>
+    {{
+        github([
+            'Controller/AdvancedController.php',
+            'Resources/views/Advanced/customFormTheme.html.twig',
+            'Resources/views/Advanced/advanced-theme.html.twig',
+        ])
+    }}
 
     {%
         form_theme form
