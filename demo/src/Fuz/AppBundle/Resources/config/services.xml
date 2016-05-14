@@ -4,13 +4,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
     <services>
-        <service id="fuz_app.example" class="Fuz\AppBundle\Example">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="fuz_app.twig.helper" class="Fuz\AppBundle\Twig\Extension\HelperExtension" public="false">
+            <tag name="twig.extension" />
         </service>
     </services>
-    -->
 </container>

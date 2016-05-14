@@ -31,6 +31,9 @@ class Builder extends BaseMenu
         $this->addRoute($menu['Advanced usage'], "Usage with Doctrine", "usageWithDoctrine");
         $this->addRoute($menu['Advanced usage'], "Example wtih multiple fields", "formHavingSeveralFields");
 
+        $this->addSubMenu($menu, 'Troubleshoot');
+        $this->addRoute($menu['Troubleshoot'], "Hide form labels", "hideFormLabels");
+
         return $menu;
     }
 
