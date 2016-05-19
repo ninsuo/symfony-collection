@@ -13,6 +13,7 @@ not really friendly in javascript, so this plugin also aims to deal with that.
 # Live demo
 
 Demo of this plugin is available live at: http://symfony-collection.fuz.org
+
 Demo source code is here: https://github.com/ninsuo/symfony-collection-demo
 
 # Basic usage
