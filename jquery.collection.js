@@ -303,7 +303,7 @@
             if (settings.allow_add) {
                 var rescueAdd = collection.find('.' + settings.prefix + '-rescue-add').css('display', '');
                 var adds = collection.find('.' + settings.prefix + '-add');
-                if (adds.length > 0) {
+                if (!settings.add_at_the_end && adds.length > 0) {
                     rescueAdd.css('display', 'none');
                 }
                 if (elements.length >= settings.max) {
