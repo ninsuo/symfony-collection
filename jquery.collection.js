@@ -35,7 +35,7 @@
             before_add: function(collection, element) { return true; },
             after_add: function(collection, element) { return true; },
             allow_delete: true,
-            delete: '<a href="#">[ - ]</a>',
+            'delete': '<a href="#">[ - ]</a>',
             before_delete: function(collection, element) { return true; },
             after_delete: function(collection, element) { return true; },
             allow_duplicate: false,
