@@ -34,10 +34,10 @@
             add: '<a href="#">[ + ]</a>',
             before_add: function(collection, element) { return true; },
             after_add: function(collection, element) { return true; },
-            allow_delete: true,
-            delete: '<a href="#">[ - ]</a>',
-            before_delete: function(collection, element) { return true; },
-            after_delete: function(collection, element) { return true; },
+            allow_remove: true,
+            remove: '<a href="#">[ - ]</a>',
+            before_remove: function(collection, element) { return true; },
+            after_remove: function(collection, element) { return true; },
             allow_duplicate: false,
             duplicate: '<a href="#">[ # ]</a>',
             before_duplicate: function(collection, element) { return true; },
@@ -104,7 +104,7 @@
                 return;
             }
             if (jqElem.length === 0) {
-                return null;
+                return;
             } else if (jqElem.is('input[type="checkbox"]')) {
                 if (value) {
                     jqElem.attr('checked', true);
@@ -158,8 +158,8 @@
             var replaceWith = settings.name_prefix + '[' + newIndex + ']';
             replaceAttrData(elements, index, toReplace, replaceWith);
 
-            var toReplace = new RegExp(pregQuote(collection.attr('id') + '_' + oldIndex), 'g');
-            var replaceWith = collection.attr('id') + '_' + newIndex;
+            toReplace = new RegExp(pregQuote(collection.attr('id') + '_' + oldIndex), 'g');
+            replaceWith = collection.attr('id') + '_' + newIndex;
             replaceAttrData(elements, index, toReplace, replaceWith);
         };
 
@@ -168,8 +168,8 @@
             var replaceWith = settings.name_prefix + '[' + newIndex + ']';
             html = html.replace(toReplace, replaceWith);
 
-            var toReplace = new RegExp(pregQuote(collection.attr('id') + '_' + oldIndex), 'g');
-            var replaceWith = collection.attr('id') + '_' + newIndex;
+            toReplace = new RegExp(pregQuote(collection.attr('id') + '_' + oldIndex), 'g');
+            replaceWith = collection.attr('id') + '_' + newIndex;
             html = html.replace(toReplace, replaceWith);
 
             return html;
@@ -264,20 +264,20 @@
                 }
 
                 var buttons = [
-                    {'enabled': settings.allow_delete, 'class': settings.prefix + '-delete', 'html': settings.delete, 'condition': elements.length > settings.min},
-                    {'enabled': settings.allow_up, 'class': settings.prefix + '-up', 'html': settings.up, 'condition': elements.index(element) !== 0},
-                    {'enabled': settings.allow_down, 'class': settings.prefix + '-down', 'html': settings.down, 'condition': elements.index(element) !== elements.length - 1},
-                    {'enabled': settings.allow_add && !settings.add_at_the_end, 'class': settings.prefix + '-add', 'html': settings.add, 'condition': elements.length < settings.max},
-                    {'enabled': settings.allow_duplicate, 'class': settings.prefix + '-duplicate', 'html': settings.duplicate, 'condition': elements.length < settings.max},
+                    {'enabled': settings.allow_remove, 'selector': settings.prefix + '-remove', 'html': settings.remove, 'condition': elements.length > settings.min},
+                    {'enabled': settings.allow_up, 'selector': settings.prefix + '-up', 'html': settings.up, 'condition': elements.index(element) !== 0},
+                    {'enabled': settings.allow_down, 'selector': settings.prefix + '-down', 'html': settings.down, 'condition': elements.index(element) !== elements.length - 1},
+                    {'enabled': settings.allow_add && !settings.add_at_the_end, 'selector': settings.prefix + '-add', 'html': settings.add, 'condition': elements.length < settings.max},
+                    {'enabled': settings.allow_duplicate, 'selector': settings.prefix + '-duplicate', 'html': settings.duplicate, 'condition': elements.length < settings.max},
                 ];
 
                 $.each(buttons, function(i, button) {
                     if (button.enabled) {
-                        var action = element.find('.' + button.class);
+                        var action = element.find('.' + button.selector);
                         if (action.length === 0 && button.html) {
                             action = $(button.html)
                                 .appendTo(actions)
-                                .addClass(button.class);
+                                .addClass(button.selector);
                         }
                         if (button.condition) {
                             action.removeClass(settings.prefix + '-action-disabled');
@@ -295,7 +295,7 @@
                             .data('collection', collection.attr('id'))
                             .data(settings.prefix + '-element', getOrCreateId(collection.attr('id') + '_' + index, element));
                     } else {
-                        element.find('.' + button.class).css('display', 'none');
+                        element.find('.' + button.selector).css('display', 'none');
                     }
                 });
             });
@@ -381,12 +381,12 @@
         };
 
         var doDelete = function (collection, settings, elements, element, index) {
-            if (elements.length > settings.min && trueOrUndefined(settings.before_delete(collection, element))) {
+            if (elements.length > settings.min && trueOrUndefined(settings.before_remove(collection, element))) {
                 elements = shiftElementsUp(collection, elements, settings, index);
                 var toDelete = elements.last();
                 var backup = toDelete.clone({withDataAndEvents: true});
                 toDelete.remove();
-                if (!trueOrUndefined(settings.after_delete(collection, backup))) {
+                if (!trueOrUndefined(settings.after_remove(collection, backup))) {
                     collection.find('> .' + settings.prefix + '-tmp').before(backup);
                     elements = collection.find(settings.elements_selector);
                     elements = shiftElementsDown(collection, elements, settings, index - 1);
@@ -457,8 +457,8 @@
                 settings.allow_add = collection.data('allow-add');
                 settings.allow_duplicate = collection.data('allow-add') ? settings.allow_duplicate : false;
             }
-            if (collection.data('allow-delete') !== undefined) {
-                settings.allow_delete = collection.data('allow-delete');
+            if (collection.data('allow-remove') !== undefined) {
+                settings.allow_remove = collection.data('allow-remove');
             }
             if (collection.data('name-prefix') !== undefined) {
                 settings.name_prefix = collection.data('name-prefix');
@@ -550,7 +550,7 @@
                         elements = doAdd(container, that, collection, settings, elements, element, index, isDuplicate);
                     }
 
-                    if (that.is('.' + settings.prefix + '-delete') && settings.allow_delete) {
+                    if (that.is('.' + settings.prefix + '-remove') && settings.allow_remove) {
                         elements = doDelete(collection, settings, elements, element, index);
                     }
 
