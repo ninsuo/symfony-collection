@@ -18,7 +18,7 @@ Demo source code is here: https://github.com/ninsuo/symfony-collection-demo
 
 # Basic usage
 
-Your collection type should contain `prototype`, `allow_add`, `allow_delete` options (depending on which buttons
+Your collection type should contain `prototype`, `allow_add`, `allow_remove` options (depending on which buttons
 you require of course). And a class that will be used as a selector to run the collection plugin.
 
 ```php
@@ -26,7 +26,7 @@ you require of course). And a class that will be used as a selector to run the c
    array (
         // ...
         'allow_add' => true,
-        'allow_delete' => true,
+        'allow_remove' => true,
         'prototype' => true,
         'attr' => array(
                 'class' => 'my-selector',
@@ -70,7 +70,7 @@ If you want to use the form theme, but already use one, you can use both with:
 
 **Customize rendered links**
 
-You can customize displayed links by setting `up`, `down`, `add`, `delete`and `duplicate` options.
+You can customize displayed links by setting `up`, `down`, `add`, `remove`and `duplicate` options.
 
 Default values are:
 
@@ -79,14 +79,14 @@ Default values are:
          up: '<a href="#">&#x25B2;</a>',
          down: '<a href="#">&#x25BC;</a>',
          add: '<a href="#">[ + ]</a>',
-         delete: '<a href="#">[ - ]</a>',
+         remove: '<a href="#">[ - ]</a>',
          duplicate: '<a href="#">[ # ]</a>'
      });
 ```
 
 **Disable links**
 
-You can disable some buttons by using `allow_up`, `allow_down`, `allow_add`, `allow_delete`
+You can disable some buttons by using `allow_up`, `allow_down`, `allow_add`, `allow_remove`
 and `allow_duplicate` options. By default, all buttons except `duplicate` are enabled.
 
 For example, if you do not want your elements to be moved up and down, use:
@@ -98,7 +98,7 @@ For example, if you do not want your elements to be moved up and down, use:
      });
 ```
 
-If you are using the given form theme, `allow_add`, `allow_delete` and `allow_duplicate` are automatically
+If you are using the given form theme, `allow_add`, `allow_remove` and `allow_duplicate` are automatically
 set following your form type configuration.
 
 **Set minimum and maximum of elements in the collection**
@@ -153,11 +153,11 @@ anyway by setting `hide_useless_buttons` to `false`. This can be useful if you w
 There are `before_*` and `after_*` options that let you put callbacks before and after adding, deleting or moving
 elements in the collection.
 
-- `before_up`, `before_down`, `before_add` and `before_delete` are called before modifying the collection.
+- `before_up`, `before_down`, `before_add` and `before_remove` are called before modifying the collection.
 The modification will be cancelled if the callback you given returned `false`, and will proceed if it returned `true`
 or `undefined`.
 
-- `after_up`, `after_down`, `after_add` and `after_delete` are called after modifying the collection.
+- `after_up`, `after_down`, `after_add` and `after_remove` are called after modifying the collection.
 The modification will be reverted if the callback you given returned `false`.
 
 Callback functions receive 2 arguments:
@@ -184,8 +184,8 @@ following equivalents:
 ```js
     $('.my-selector').collection({
         prototype_name: '{{ myForm.myCollection.vars.prototype.vars.name }}',
-        enable_add: false,
-        enable_delete: false,
+        allow_add: false,
+        allow_remove: false,
         name_prefix:  '{{ myForm.myCollection.vars.full_name }}'
     });
 ```
@@ -219,14 +219,14 @@ Note that you should not overload `start` and `update` callbacks as they are use
 **Changing action's positions**
 
 By default :
-- `add`, `move up`, `move down` and `delete`are located in this order below each collection's element
+- `add`, `move up`, `move down` and `remove`are located in this order below each collection's element
 - `add` button can be located at the bottom of the collection using `add_at_the_bottom` option
 
 You can change those button's positions by creating them manually anywhere in your form theme.
 
 You can use any custom clickable element as soon has it has one action class:
 - `collection-add` for an `add` button
-- `collection-delete` for a `delete` button
+- `collection-remove` for a `remove` button
 - `collection-up` for a `move up` button
 - `collection-down` for a `move down` button
 
@@ -252,7 +252,7 @@ we will use something like this:
             <a href="#" class="collection-down btn btn-default">Move Down</a>
         </div>
         <div class="col-md-2">
-            <a href="#" class="collection-delete btn btn-default">Remove</a>
+            <a href="#" class="collection-remove btn btn-default">Remove</a>
             <a href="#" class="collection-add btn btn-default">Add</a>
         </div>
     </div>
@@ -310,7 +310,7 @@ In your form type:
                             'label' => 'Value',
                     ),
                     'allow_add' => true,
-                    'allow_delete' => true,
+                    'allow_remove' => true,
                     'prototype' => true,
                     'prototype_name' => '__children_name__',
                     'attr' => array (
@@ -318,7 +318,7 @@ In your form type:
                     ),
             ),
             'allow_add' => true,
-            'allow_delete' => true,
+            'allow_remove' => true,
             'prototype' => true,
             'prototype_name' => '__parent_name__',
             'attr' => array (
