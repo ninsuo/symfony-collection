@@ -1,47 +1,68 @@
 /*
-* jquery.collection.js v1.2.3
-*
-* Copyright (c) 2015 alain tiemblo <alain at fuz dot org>
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the
-* "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish,
-* distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
-* following conditions:
-*
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
-* OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
+ * jquery.collection.js
+ *
+ * Copyright (c) 2015 alain tiemblo <alain at fuz dot org>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
-;(function($) {
+;
+(function ($) {
 
-    $.fn.collection = function(options) {
+    $.fn.collection = function (options) {
 
         var defaults = {
             container: 'body',
             allow_up: true,
             up: '<a href="#">&#x25B2;</a>',
-            before_up: function(collection, element) { return true; },
-            after_up: function(collection, element) { return true; },
+            before_up: function (collection, element) {
+                return true;
+            },
+            after_up: function (collection, element) {
+                return true;
+            },
             allow_down: true,
             down: '<a href="#">&#x25BC;</a>',
-            before_down: function(collection, element) { return true; },
-            after_down: function(collection, element) { return true; },
+            before_down: function (collection, element) {
+                return true;
+            },
+            after_down: function (collection, element) {
+                return true;
+            },
             allow_add: true,
             add: '<a href="#">[ + ]</a>',
-            before_add: function(collection, element) { return true; },
-            after_add: function(collection, element) { return true; },
+            before_add: function (collection, element) {
+                return true;
+            },
+            after_add: function (collection, element) {
+                return true;
+            },
             allow_remove: true,
             remove: '<a href="#">[ - ]</a>',
-            before_remove: function(collection, element) { return true; },
-            after_remove: function(collection, element) { return true; },
+            before_remove: function (collection, element) {
+                return true;
+            },
+            after_remove: function (collection, element) {
+                return true;
+            },
             allow_duplicate: false,
             duplicate: '<a href="#">[ # ]</a>',
-            before_duplicate: function(collection, element) { return true; },
-            after_duplicate: function(collection, element) { return true; },
+            before_duplicate: function (collection, element) {
+                return true;
+            },
+            after_duplicate: function (collection, element) {
+                return true;
+            },
             min: 0,
             max: 100,
             add_at_the_end: false,
@@ -56,18 +77,22 @@
             drag_drop_options: {
                 'placeholder': 'ui-state-highlight'
             },
-            drag_drop_start: function(event, ui) { return true; },
-            drag_drop_update: function(event, ui) { return true; }
+            drag_drop_start: function (event, ui) {
+                return true;
+            },
+            drag_drop_update: function (event, ui) {
+                return true;
+            }
         };
 
-        var randomNumber = function() {
+        var randomNumber = function () {
             var rand = '' + Math.random() * 1000 * new Date().getTime();
             return rand.replace('.', '').split('').sort(function () {
                 return 0.5 - Math.random();
             }).join('');
         };
 
-        var getOrCreateId = function(prefix, obj) {
+        var getOrCreateId = function (prefix, obj) {
             if (!obj.attr('id')) {
                 var generated_id;
                 do {
@@ -109,7 +134,7 @@
                 if (value) {
                     jqElem.attr('checked', true);
                 } else {
-                        jqElem.removeAttr('checked');
+                    jqElem.removeAttr('checked');
                 }
             } else if (jqElem.prop('value') !== undefined) {
                 if (physical) {
@@ -122,24 +147,24 @@
             }
         };
 
-        var trueOrUndefined = function(value) {
+        var trueOrUndefined = function (value) {
             return undefined === value || value;
         };
 
-        var pregQuote = function(string) {
+        var pregQuote = function (string) {
             return (string + '').replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
         };
 
-        var replaceAttrData = function(elements, index, toReplace, replaceWith) {
+        var replaceAttrData = function (elements, index, toReplace, replaceWith) {
 
-            var replaceAttrDataNode = function(node) {
+            var replaceAttrDataNode = function (node) {
                 var jqNode = $(node);
-                $.each(node.attributes, function(i, attrib) {
+                $.each(node.attributes, function (i, attrib) {
                     if ($.type(attrib.value) === 'string') {
                         jqNode.attr(attrib.name.replace(toReplace, replaceWith), attrib.value.replace(toReplace, replaceWith));
                     }
                 });
-                $.each(jqNode.data(), function(name, value) {
+                $.each(jqNode.data(), function (name, value) {
                     if ($.type(value) === 'string') {
                         jqNode.data(name.replace(toReplace, replaceWith), value.replace(toReplace, replaceWith));
                     }
@@ -148,12 +173,12 @@
 
             var element = elements.eq(index);
             replaceAttrDataNode(element[0]);
-            element.find('*').each(function() {
+            element.find('*').each(function () {
                 replaceAttrDataNode(this);
             });
         };
 
-        var changeElementIndex = function(collection, elements, settings, index, oldIndex, newIndex) {
+        var changeElementIndex = function (collection, elements, settings, index, oldIndex, newIndex) {
             var toReplace = new RegExp(pregQuote(settings.name_prefix + '[' + oldIndex + ']'), 'g');
             var replaceWith = settings.name_prefix + '[' + newIndex + ']';
             replaceAttrData(elements, index, toReplace, replaceWith);
@@ -163,7 +188,7 @@
             replaceAttrData(elements, index, toReplace, replaceWith);
         };
 
-        var changeHtmlIndex = function(collection, settings, html, oldIndex, newIndex) {
+        var changeHtmlIndex = function (collection, settings, html, oldIndex, newIndex) {
             var toReplace = new RegExp(pregQuote(settings.name_prefix + '[' + oldIndex + ']'), 'g');
             var replaceWith = settings.name_prefix + '[' + newIndex + ']';
             html = html.replace(toReplace, replaceWith);
@@ -175,13 +200,13 @@
             return html;
         };
 
-        var putFieldValuesInDom = function(element) {
-            $(element).find(':input').each(function(index, inputObj) {
+        var putFieldValuesInDom = function (element) {
+            $(element).find(':input').each(function (index, inputObj) {
                 putFieldValue(inputObj, getFieldValue(inputObj), true);
             });
         };
 
-        var swapElements = function(collection, elements, oldIndex, newIndex) {
+        var swapElements = function (collection, elements, oldIndex, newIndex) {
 
             var settings = collection.data('collection-settings');
 
@@ -199,35 +224,35 @@
             return collection.find(settings.elements_selector);
         };
 
-        var swapElementsUp = function(collection, elements, settings, oldIndex, newIndex) {
+        var swapElementsUp = function (collection, elements, settings, oldIndex, newIndex) {
             for (var i = oldIndex + 1; (i <= newIndex); i++) {
                 elements = swapElements(collection, elements, i, i - 1);
             }
             return collection.find(settings.elements_selector);
         };
 
-        var swapElementsDown = function(collection, elements, settings, oldIndex, newIndex) {
+        var swapElementsDown = function (collection, elements, settings, oldIndex, newIndex) {
             for (var i = oldIndex - 1; (i >= newIndex); i--) {
                 elements = swapElements(collection, elements, i, i + 1);
             }
             return collection.find(settings.elements_selector);
         };
 
-        var shiftElementsUp = function(collection, elements, settings, index) {
+        var shiftElementsUp = function (collection, elements, settings, index) {
             for (var i = index + 1; i < elements.length; i++) {
                 elements = swapElements(collection, elements, i - 1, i);
             }
             return collection.find(settings.elements_selector);
         };
 
-        var shiftElementsDown = function(collection, elements, settings, index) {
+        var shiftElementsDown = function (collection, elements, settings, index) {
             for (var i = elements.length - 2; i > index; i--) {
                 elements = swapElements(collection, elements, i + 1, i);
             }
             return collection.find(settings.elements_selector);
         };
 
-        var dumpCollectionActions = function(collection, settings, isInitialization) {
+        var dumpCollectionActions = function (collection, settings, isInitialization) {
             var init = collection.find('.' + settings.prefix + '-tmp').length === 0;
             var elements = collection.find(settings.elements_selector);
 
@@ -236,10 +261,10 @@
                     collection.append('<span class="' + settings.prefix + '-tmp"></span>');
                     if (settings.add) {
                         collection.append(
-                            $(settings.add)
+                                $(settings.add)
                                 .addClass(settings.prefix + '-action ' + settings.prefix + '-rescue-add')
                                 .data('collection', collection.attr('id'))
-                        );
+                                );
                     }
                 }
             }
@@ -254,7 +279,7 @@
                 }
             }
 
-            elements.each(function(index) {
+            elements.each(function (index) {
                 var element = $(this);
 
                 var actions = element.find('.' + settings.prefix + '-actions').andSelf().filter('.' + settings.prefix + '-actions');
@@ -264,20 +289,41 @@
                 }
 
                 var buttons = [
-                    {'enabled': settings.allow_remove, 'selector': settings.prefix + '-remove', 'html': settings.remove, 'condition': elements.length > settings.min},
-                    {'enabled': settings.allow_up, 'selector': settings.prefix + '-up', 'html': settings.up, 'condition': elements.index(element) !== 0},
-                    {'enabled': settings.allow_down, 'selector': settings.prefix + '-down', 'html': settings.down, 'condition': elements.index(element) !== elements.length - 1},
-                    {'enabled': settings.allow_add && !settings.add_at_the_end, 'selector': settings.prefix + '-add', 'html': settings.add, 'condition': elements.length < settings.max},
-                    {'enabled': settings.allow_duplicate, 'selector': settings.prefix + '-duplicate', 'html': settings.duplicate, 'condition': elements.length < settings.max},
+                    {
+                        'enabled': settings.allow_remove,
+                        'selector': settings.prefix + '-remove',
+                        'html': settings.remove,
+                        'condition': elements.length > settings.min
+                    }, {
+                        'enabled': settings.allow_up,
+                        'selector': settings.prefix + '-up',
+                        'html': settings.up,
+                        'condition': elements.index(element) !== 0
+                    }, {
+                        'enabled': settings.allow_down,
+                        'selector': settings.prefix + '-down',
+                        'html': settings.down,
+                        'condition': elements.index(element) !== elements.length - 1
+                    }, {
+                        'enabled': settings.allow_add && !settings.add_at_the_end,
+                        'selector': settings.prefix + '-add',
+                        'html': settings.add,
+                        'condition': elements.length < settings.max
+                    }, {
+                        'enabled': settings.allow_duplicate,
+                        'selector': settings.prefix + '-duplicate',
+                        'html': settings.duplicate,
+                        'condition': elements.length < settings.max
+                    }
                 ];
 
-                $.each(buttons, function(i, button) {
+                $.each(buttons, function (i, button) {
                     if (button.enabled) {
                         var action = element.find('.' + button.selector);
                         if (action.length === 0 && button.html) {
                             action = $(button.html)
-                                .appendTo(actions)
-                                .addClass(button.selector);
+                                    .appendTo(actions)
+                                    .addClass(button.selector);
                         }
                         if (button.condition) {
                             action.removeClass(settings.prefix + '-action-disabled');
@@ -291,9 +337,9 @@
                             }
                         }
                         action
-                            .addClass(settings.prefix + '-action')
-                            .data('collection', collection.attr('id'))
-                            .data(settings.prefix + '-element', getOrCreateId(collection.attr('id') + '_' + index, element));
+                                .addClass(settings.prefix + '-action')
+                                .data('collection', collection.attr('id'))
+                                .data(settings.prefix + '-element', getOrCreateId(collection.attr('id') + '_' + index, element));
                     } else {
                         element.find('.' + button.selector).css('display', 'none');
                     }
@@ -313,9 +359,9 @@
 
         };
 
-        var enableChildrenCollections = function(collection, element, settings) {
+        var enableChildrenCollections = function (collection, element, settings) {
             if (settings.children) {
-                $.each(settings.children, function(index, childrenSettings) {
+                $.each(settings.children, function (index, childrenSettings) {
                     if (!childrenSettings.selector) {
                         console.log("jquery.collection.js: given collection " + collection.attr('id') + " has children collections, but children's root selector is undefined.");
                         return true;
@@ -425,7 +471,7 @@
             return false;
         }
 
-        elems.each(function() {
+        elems.each(function () {
 
             var settings = $.extend(true, {}, defaults, options);
 
@@ -482,25 +528,25 @@
                     settings.drag_drop = false;
                 } else {
                     collection.sortable($.extend(true, {}, {
-                        start: function(event, ui) {
+                        start: function (event, ui) {
                             var elements = collection.find(settings.elements_selector);
                             var element = ui.item;
                             var that = $(this);
                             if (!trueOrUndefined(settings.drag_drop_start(event, ui, elements, element))) {
                                 that.sortable("cancel");
-                                return ;
+                                return;
                             }
                             ui.placeholder.height(ui.item.height());
                             ui.placeholder.width(ui.item.width());
                             oldPosition = elements.index(element);
                         },
-                        update: function(event, ui) {
+                        update: function (event, ui) {
                             var elements = collection.find(settings.elements_selector);
                             var element = ui.item;
                             var that = $(this);
                             that.sortable("cancel");
                             if (false === settings.drag_drop_update(event, ui, elements, element) || !(newPosition - oldPosition > 0 ? trueOrUndefined(settings.before_up(collection, element)) : trueOrUndefined(settings.before_down(collection, element)))) {
-                                return ;
+                                return;
                             }
                             newPosition = elements.index(element);
                             elements = collection.find(settings.elements_selector);
@@ -533,39 +579,39 @@
             var container = $(settings.container);
 
             container
-                .off('click', '.' + settings.prefix + '-action')
-                .on('click', '.' + settings.prefix + '-action', function(e) {
+                    .off('click', '.' + settings.prefix + '-action')
+                    .on('click', '.' + settings.prefix + '-action', function (e) {
 
-                    var that = $(this);
+                        var that = $(this);
 
-                    var collection = $('#' + that.data('collection'));
-                    var settings = collection.data('collection-settings');
+                        var collection = $('#' + that.data('collection'));
+                        var settings = collection.data('collection-settings');
 
-                    var elements = collection.find(settings.elements_selector);
-                    var element = that.data(settings.prefix + '-element') ? $('#' + that.data(settings.prefix + '-element')) : undefined;
-                    var index = element && element.length ? elements.index(element) : -1;
+                        var elements = collection.find(settings.elements_selector);
+                        var element = that.data(settings.prefix + '-element') ? $('#' + that.data(settings.prefix + '-element')) : undefined;
+                        var index = element && element.length ? elements.index(element) : -1;
 
-                    var isDuplicate = that.is('.' + settings.prefix + '-duplicate');
-                    if ((that.is('.' + settings.prefix + '-add') || that.is('.' + settings.prefix + '-rescue-add') || isDuplicate) && settings.allow_add) {
-                        elements = doAdd(container, that, collection, settings, elements, element, index, isDuplicate);
-                    }
+                        var isDuplicate = that.is('.' + settings.prefix + '-duplicate');
+                        if ((that.is('.' + settings.prefix + '-add') || that.is('.' + settings.prefix + '-rescue-add') || isDuplicate) && settings.allow_add) {
+                            elements = doAdd(container, that, collection, settings, elements, element, index, isDuplicate);
+                        }
 
-                    if (that.is('.' + settings.prefix + '-remove') && settings.allow_remove) {
-                        elements = doDelete(collection, settings, elements, element, index);
-                    }
+                        if (that.is('.' + settings.prefix + '-remove') && settings.allow_remove) {
+                            elements = doDelete(collection, settings, elements, element, index);
+                        }
 
-                    if (that.is('.' + settings.prefix + '-up') && settings.allow_up) {
-                        elements = doUp(collection, settings, elements, element, index);
-                    }
+                        if (that.is('.' + settings.prefix + '-up') && settings.allow_up) {
+                            elements = doUp(collection, settings, elements, element, index);
+                        }
 
-                    if (that.is('.' + settings.prefix + '-down') && settings.allow_down) {
-                        elements = doDown(collection, settings, elements, element, index);
-                    }
+                        if (that.is('.' + settings.prefix + '-down') && settings.allow_down) {
+                            elements = doDown(collection, settings, elements, element, index);
+                        }
 
-                    dumpCollectionActions(collection, settings, false);
-                    e.preventDefault();
-                })
-            ;
+                        dumpCollectionActions(collection, settings, false);
+                        e.preventDefault();
+                    })
+                    ;
 
             dumpCollectionActions(collection, settings, true);
             enableChildrenCollections(collection, null, settings);
