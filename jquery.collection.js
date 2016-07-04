@@ -63,6 +63,10 @@
             after_duplicate: function (collection, element) {
                 return true;
             },
+            before_init: function (collection) {
+            },
+            after_init: function (collection) {
+            },
             min: 0,
             max: 100,
             add_at_the_end: false,
@@ -491,6 +495,8 @@
                 collection = elem;
             }
 
+            settings.before_init(collection);
+
             if (collection.data('prototype') === null) {
                 console.log("jquery.collection.js: given collection field has no prototype, check that your field has the prototype option set to true.");
                 return true;
@@ -615,6 +621,8 @@
 
             dumpCollectionActions(collection, settings, true);
             enableChildrenCollections(collection, null, settings);
+
+            settings.after_init(collection);
         });
 
         return true;

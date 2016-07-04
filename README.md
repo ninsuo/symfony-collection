@@ -160,6 +160,8 @@ or `undefined`.
 - `after_up`, `after_down`, `after_add` and `after_remove` are called after modifying the collection.
 The modification will be reverted if the callback you given returned `false`.
 
+- `before_init` and `after_init` are called when a collection is initialized. No return value are expected.
+
 Callback functions receive 2 arguments:
 
 - `collection` references the div that contains your whole collection (the symfony2 field)
