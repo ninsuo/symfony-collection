@@ -386,10 +386,8 @@
                     var regexp = new RegExp(pregQuote(settings.prototype_name), 'g');
                     var code = $(prototype.replace(regexp, freeIndex));
                     var tmp = collection.find('> .' + settings.prefix + '-tmp');
+                    var id = $(code).find('[id]').first().attr('id');
                     tmp.empty();
-                    var regexpFind = new RegExp('([a-zA-Z][\\w:.-]+'+pregQuote(settings.prototype_name)+'[\\w:.-]+)');
-                    var matchedTemplates = regexpFind.exec(prototype);
-                    var id = matchedTemplates[1].replace(regexp, freeIndex);
                     if (container.find('#' + id).length === 0) {
 
                         if (isDuplicate) {
