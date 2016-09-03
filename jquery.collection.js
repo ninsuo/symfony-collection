@@ -386,7 +386,7 @@
                     var regexp = new RegExp(pregQuote(settings.prototype_name), 'g');
                     var code = $(prototype.replace(regexp, freeIndex));
                     var tmp = collection.find('> .' + settings.prefix + '-tmp');
-                    var id = tmp.html(code).find('[id]').first().attr('id');
+                    var id = $(code).find('[id]').first().attr('id');
                     tmp.empty();
                     if (container.find('#' + id).length === 0) {
 
