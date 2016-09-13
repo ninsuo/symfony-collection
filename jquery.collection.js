@@ -31,6 +31,7 @@
             after_up: function (collection, element) {
                 return true;
             },
+            up_container: null,
             allow_down: true,
             down: '<a href="#">&#x25BC;</a>',
             before_down: function (collection, element) {
@@ -39,6 +40,7 @@
             after_down: function (collection, element) {
                 return true;
             },
+            down_container: null,
             allow_add: true,
             add: '<a href="#">[ + ]</a>',
             before_add: function (collection, element) {
@@ -47,6 +49,7 @@
             after_add: function (collection, element) {
                 return true;
             },
+            add_container: null,
             allow_remove: true,
             remove: '<a href="#">[ - ]</a>',
             before_remove: function (collection, element) {
@@ -55,6 +58,7 @@
             after_remove: function (collection, element) {
                 return true;
             },
+            remove_container: null,
             allow_duplicate: false,
             duplicate: '<a href="#">[ # ]</a>',
             before_duplicate: function (collection, element) {
@@ -63,6 +67,7 @@
             after_duplicate: function (collection, element) {
                 return true;
             },
+            duplicate_container: null,
             before_init: function (collection) {
             },
             after_init: function (collection) {
@@ -297,27 +302,32 @@
                         'enabled': settings.allow_remove,
                         'selector': settings.prefix + '-remove',
                         'html': settings.remove,
-                        'condition': elements.length > settings.min
+                        'condition': elements.length > settings.min,
+                        'container': settings.remove_container
                     }, {
                         'enabled': settings.allow_up,
                         'selector': settings.prefix + '-up',
                         'html': settings.up,
-                        'condition': elements.index(element) !== 0
+                        'condition': elements.index(element) !== 0,
+                        'container': settings.up_container
                     }, {
                         'enabled': settings.allow_down,
                         'selector': settings.prefix + '-down',
                         'html': settings.down,
-                        'condition': elements.index(element) !== elements.length - 1
+                        'condition': elements.index(element) !== elements.length - 1,
+                        'container': settings.down_container
                     }, {
                         'enabled': settings.allow_add && !settings.add_at_the_end,
                         'selector': settings.prefix + '-add',
                         'html': settings.add,
-                        'condition': elements.length < settings.max
+                        'condition': elements.length < settings.max,
+                        'container': settings.add_container
                     }, {
                         'enabled': settings.allow_duplicate,
                         'selector': settings.prefix + '-duplicate',
                         'html': settings.duplicate,
-                        'condition': elements.length < settings.max
+                        'condition': elements.length < settings.max,
+                        'container': settings.duplicate_container
                     }
                 ];
 
@@ -326,8 +336,8 @@
                         var action = element.find('.' + button.selector);
                         if (action.length === 0 && button.html) {
                             action = $(button.html)
-                                    .appendTo(actions)
-                                    .addClass(button.selector);
+                                .appendTo(actions)
+                                .addClass(button.selector);
                         }
                         if (button.condition) {
                             action.removeClass(settings.prefix + '-action-disabled');
@@ -341,9 +351,9 @@
                             }
                         }
                         action
-                                .addClass(settings.prefix + '-action')
-                                .data('collection', collection.attr('id'))
-                                .data(settings.prefix + '-element', getOrCreateId(collection.attr('id') + '_' + index, element));
+                            .addClass(settings.prefix + '-action')
+                            .data('collection', collection.attr('id'))
+                            .data(settings.prefix + '-element', getOrCreateId(collection.attr('id') + '_' + index, element));
                     } else {
                         element.find('.' + button.selector).css('display', 'none');
                     }
