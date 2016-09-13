@@ -31,7 +31,6 @@
             after_up: function (collection, element) {
                 return true;
             },
-            up_container: null,
             allow_down: true,
             down: '<a href="#">&#x25BC;</a>',
             before_down: function (collection, element) {
@@ -40,7 +39,6 @@
             after_down: function (collection, element) {
                 return true;
             },
-            down_container: null,
             allow_add: true,
             add: '<a href="#">[ + ]</a>',
             before_add: function (collection, element) {
@@ -58,7 +56,6 @@
             after_remove: function (collection, element) {
                 return true;
             },
-            remove_container: null,
             allow_duplicate: false,
             duplicate: '<a href="#">[ # ]</a>',
             before_duplicate: function (collection, element) {
@@ -270,10 +267,10 @@
                     collection.append('<span class="' + settings.prefix + '-tmp"></span>');
                     if (settings.add) {
                         collection.append(
-                                $(settings.add)
+                            $(settings.add)
                                 .addClass(settings.prefix + '-action ' + settings.prefix + '-rescue-add')
                                 .data('collection', collection.attr('id'))
-                                );
+                        );
                     }
                 }
             }
@@ -303,19 +300,19 @@
                         'selector': settings.prefix + '-remove',
                         'html': settings.remove,
                         'condition': elements.length > settings.min,
-                        'container': settings.remove_container
+                        'container': null
                     }, {
                         'enabled': settings.allow_up,
                         'selector': settings.prefix + '-up',
                         'html': settings.up,
                         'condition': elements.index(element) !== 0,
-                        'container': settings.up_container
+                        'container': null
                     }, {
                         'enabled': settings.allow_down,
                         'selector': settings.prefix + '-down',
                         'html': settings.down,
                         'condition': elements.index(element) !== elements.length - 1,
-                        'container': settings.down_container
+                        'container': null
                     }, {
                         'enabled': settings.allow_add && !settings.add_at_the_end,
                         'selector': settings.prefix + '-add',
@@ -335,9 +332,17 @@
                     if (button.enabled) {
                         var action = element.find('.' + button.selector);
                         if (action.length === 0 && button.html) {
-                            action = $(button.html)
-                                .appendTo(actions)
-                                .addClass(button.selector);
+                            if (button.container) {
+                                if ($(button.container).html() === '') {
+                                    action = $(button.html)
+                                        .appendTo(button.container)
+                                        .addClass(button.selector);
+                                }
+                            } else {
+                                action = $(button.html)
+                                    .appendTo(actions)
+                                    .addClass(button.selector);
+                            }
                         }
                         if (button.condition) {
                             action.removeClass(settings.prefix + '-action-disabled');
@@ -363,11 +368,17 @@
             if (settings.allow_add) {
                 var rescueAdd = collection.find('.' + settings.prefix + '-rescue-add').css('display', '');
                 var adds = collection.find('.' + settings.prefix + '-add');
-                if (!settings.add_at_the_end && adds.length > 0) {
+                if (settings.add_container) {
+                    $(settings.add_container).css('display', '');
+                }
+                if (!settings.add_at_the_end && adds.length > 0 || settings.add_container && $(settings.add_container).html() !== '') {
                     rescueAdd.css('display', 'none');
                 }
                 if (elements.length >= settings.max) {
                     collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').css('display', 'none');
+                    if (settings.add_container) {
+                        $(settings.add_container).css('display', 'none');
+                    }
                 }
             }
 
@@ -416,6 +427,9 @@
 
                 if (that.data(settings.prefix + '-element') !== undefined) {
                     var index = elements.index($('#' + that.data(settings.prefix + '-element')));
+
+                    alert(that.is(settings.add_container));
+
                     if (index !== -1) {
                         elements = shiftElementsDown(collection, elements, settings, index);
                     }
