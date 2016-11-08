@@ -137,6 +137,21 @@ If you prefer having only one `add` button at the bottom of the collection inste
      });
 ```
 
+**Customise add button location**
+
+If you want to set a specific location for your add button (not close to each collection element, nor at the bottom of the collection),
+you can use the `custom_add_location` option.
+
+```js
+        $('.collectionA').collection({
+            custom_add_location: true
+        });
+```
+
+```html
+        <button data-collection="collectionA" class="collection-action collection-add btn btn-success">Add element to collection</button>
+```
+
 **Hide useless buttons**
 
 By default, `move up` button is hidden on the first item, and `move down` button on the last one. You can make them appear

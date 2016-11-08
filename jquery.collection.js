@@ -88,7 +88,8 @@
             },
             drag_drop_update: function (event, ui) {
                 return true;
-            }
+            },
+            custom_add_location: false
         };
 
         var randomNumber = function () {
@@ -314,7 +315,7 @@
                         'condition': elements.index(element) !== elements.length - 1,
                         'container': null
                     }, {
-                        'enabled': settings.allow_add && !settings.add_at_the_end,
+                        'enabled': settings.allow_add && !settings.add_at_the_end && !settings.custom_add_location,
                         'selector': settings.prefix + '-add',
                         'html': settings.add,
                         'condition': elements.length < settings.max,
@@ -371,7 +372,7 @@
                 if (settings.add_container) {
                     $(settings.add_container).css('display', '');
                 }
-                if (!settings.add_at_the_end && adds.length > 0 || settings.add_container && $(settings.add_container).html() !== '') {
+                if (!settings.add_at_the_end && adds.length > 0 || settings.add_container && $(settings.add_container).html() !== '' || settings.custom_add_location) {
                     rescueAdd.css('display', 'none');
                 }
                 if (elements.length >= settings.max) {
@@ -427,9 +428,6 @@
 
                 if (that.data(settings.prefix + '-element') !== undefined) {
                     var index = elements.index($('#' + that.data(settings.prefix + '-element')));
-
-                    alert(that.is(settings.add_container));
-
                     if (index !== -1) {
                         elements = shiftElementsDown(collection, elements, settings, index);
                     }
@@ -601,7 +599,6 @@
             collection.data('collection-settings', settings);
 
             var container = $(settings.container);
-            var prefix = settings.prefix;
 
             container
                     .off('click', '.' + settings.prefix + '-action')
@@ -613,7 +610,7 @@
                         var settings = collection.data('collection-settings');
 
                         if (undefined === settings) {
-                            var collection = $('#' + that.data('collection')).find('.' + prefix + '-collection');
+                            var collection = $('#' + that.data('collection')).find('.' + that.data('collection') + '-collection');
                             var settings = collection.data('collection-settings');
                             if (undefined === settings) {
                                 throw "Can't find collection: " + that.data('collection');
