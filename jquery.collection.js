@@ -47,6 +47,7 @@
             after_add: function (collection, element) {
                 return true;
             },
+            add_container: null,
             allow_remove: true,
             remove: '<a href="#">[ - ]</a>',
             before_remove: function (collection, element) {
@@ -63,6 +64,7 @@
             after_duplicate: function (collection, element) {
                 return true;
             },
+            duplicate_container: null,
             before_init: function (collection) {
             },
             after_init: function (collection) {
@@ -86,7 +88,8 @@
             },
             drag_drop_update: function (event, ui) {
                 return true;
-            }
+            },
+            custom_add_location: false
         };
 
         var randomNumber = function () {
@@ -265,10 +268,10 @@
                     collection.append('<span class="' + settings.prefix + '-tmp"></span>');
                     if (settings.add) {
                         collection.append(
-                                $(settings.add)
+                            $(settings.add)
                                 .addClass(settings.prefix + '-action ' + settings.prefix + '-rescue-add')
                                 .data('collection', collection.attr('id'))
-                                );
+                        );
                     }
                 }
             }
@@ -297,27 +300,32 @@
                         'enabled': settings.allow_remove,
                         'selector': settings.prefix + '-remove',
                         'html': settings.remove,
-                        'condition': elements.length > settings.min
+                        'condition': elements.length > settings.min,
+                        'container': null
                     }, {
                         'enabled': settings.allow_up,
                         'selector': settings.prefix + '-up',
                         'html': settings.up,
-                        'condition': elements.index(element) !== 0
+                        'condition': elements.index(element) !== 0,
+                        'container': null
                     }, {
                         'enabled': settings.allow_down,
                         'selector': settings.prefix + '-down',
                         'html': settings.down,
-                        'condition': elements.index(element) !== elements.length - 1
+                        'condition': elements.index(element) !== elements.length - 1,
+                        'container': null
                     }, {
-                        'enabled': settings.allow_add && !settings.add_at_the_end,
+                        'enabled': settings.allow_add && !settings.add_at_the_end && !settings.custom_add_location,
                         'selector': settings.prefix + '-add',
                         'html': settings.add,
-                        'condition': elements.length < settings.max
+                        'condition': elements.length < settings.max,
+                        'container': settings.add_container
                     }, {
                         'enabled': settings.allow_duplicate,
                         'selector': settings.prefix + '-duplicate',
                         'html': settings.duplicate,
-                        'condition': elements.length < settings.max
+                        'condition': elements.length < settings.max,
+                        'container': settings.duplicate_container
                     }
                 ];
 
@@ -325,9 +333,17 @@
                     if (button.enabled) {
                         var action = element.find('.' + button.selector);
                         if (action.length === 0 && button.html) {
-                            action = $(button.html)
+                            if (button.container) {
+                                if ($(button.container).html() === '') {
+                                    action = $(button.html)
+                                        .appendTo(button.container)
+                                        .addClass(button.selector);
+                                }
+                            } else {
+                                action = $(button.html)
                                     .appendTo(actions)
                                     .addClass(button.selector);
+                            }
                         }
                         if (button.condition) {
                             action.removeClass(settings.prefix + '-action-disabled');
@@ -341,9 +357,9 @@
                             }
                         }
                         action
-                                .addClass(settings.prefix + '-action')
-                                .data('collection', collection.attr('id'))
-                                .data(settings.prefix + '-element', getOrCreateId(collection.attr('id') + '_' + index, element));
+                            .addClass(settings.prefix + '-action')
+                            .data('collection', collection.attr('id'))
+                            .data(settings.prefix + '-element', getOrCreateId(collection.attr('id') + '_' + index, element));
                     } else {
                         element.find('.' + button.selector).css('display', 'none');
                     }
@@ -353,11 +369,17 @@
             if (settings.allow_add) {
                 var rescueAdd = collection.find('.' + settings.prefix + '-rescue-add').css('display', '');
                 var adds = collection.find('.' + settings.prefix + '-add');
-                if (!settings.add_at_the_end && adds.length > 0) {
+                if (settings.add_container) {
+                    $(settings.add_container).css('display', '');
+                }
+                if (!settings.add_at_the_end && adds.length > 0 || settings.add_container && $(settings.add_container).html() !== '' || settings.custom_add_location) {
                     rescueAdd.css('display', 'none');
                 }
                 if (elements.length >= settings.max) {
                     collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').css('display', 'none');
+                    if (settings.add_container) {
+                        $(settings.add_container).css('display', 'none');
+                    }
                 }
             }
 
@@ -586,6 +608,14 @@
 
                         var collection = $('#' + that.data('collection'));
                         var settings = collection.data('collection-settings');
+
+                        if (undefined === settings) {
+                            var collection = $('#' + that.data('collection')).find('.' + that.data('collection') + '-collection');
+                            var settings = collection.data('collection-settings');
+                            if (undefined === settings) {
+                                throw "Can't find collection: " + that.data('collection');
+                            }
+                        }
 
                         var elements = collection.find(settings.elements_selector);
                         var element = that.data(settings.prefix + '-element') ? $('#' + that.data(settings.prefix + '-element')) : undefined;

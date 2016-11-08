@@ -1,7 +1,7 @@
 # symfony-collection
-A jQuery plugin that manages adding, deleting and moving elements from a Symfony2 collection
+A jQuery plugin that manages adding, deleting and moving elements from a Symfony collection
 
-This is not really difficult to manage your collections using the `data-prototype` Symfony2 provides. But
+This is not really difficult to manage your collections using the `data-prototype` Symfony provides. But
 after using several times collections, it appeared useful to me to create a jQuery plugin to do this job.
 
 This is even more true when you need your elements to be moved up and down or added at a specific position: as the
@@ -135,6 +135,21 @@ If you prefer having only one `add` button at the bottom of the collection inste
      $('.collection').collection({
          add_at_the_end: true
      });
+```
+
+**Customise add button location**
+
+If you want to set a specific location for your add button (not close to each collection element, nor at the bottom of the collection),
+you can use the `custom_add_location` option.
+
+```js
+        $('.collectionA').collection({
+            custom_add_location: true
+        });
+```
+
+```html
+        <button data-collection="collectionA" class="collection-action collection-add btn btn-success">Add element to collection</button>
 ```
 
 **Hide useless buttons**
