@@ -142,14 +142,19 @@ If you prefer having only one `add` button at the bottom of the collection inste
 If you want to set a specific location for your add button (not close to each collection element, nor at the bottom of the collection),
 you can use the `custom_add_location` option.
 
+JS:
 ```js
         $('.collectionA').collection({
             custom_add_location: true
         });
 ```
 
+HTML:
 ```html
-        <button data-collection="collectionA" class="collection-action collection-add btn btn-success">Add element to collection</button>
+        <button 
+            data-collection="collectionA" 
+            class="collection-action collection-add btn btn-success"
+        >Add element to collection</button>
 ```
 
 **Hide useless buttons**
