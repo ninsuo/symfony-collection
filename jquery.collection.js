@@ -601,6 +601,7 @@
             collection.data('collection-settings', settings);
 
             var container = $(settings.container);
+            var prefix = settings.prefix;
 
             container
                     .off('click', '.' + settings.prefix + '-action')
@@ -610,6 +611,14 @@
 
                         var collection = $('#' + that.data('collection'));
                         var settings = collection.data('collection-settings');
+
+                        if (undefined === settings) {
+                            var collection = $('#' + that.data('collection')).find('.' + prefix + '-collection');
+                            var settings = collection.data('collection-settings');
+                            if (undefined === settings) {
+                                throw "Can't find collection: " + that.data('collection');
+                            }
+                        }
 
                         var elements = collection.find(settings.elements_selector);
                         var element = that.data(settings.prefix + '-element') ? $('#' + that.data(settings.prefix + '-element')) : undefined;

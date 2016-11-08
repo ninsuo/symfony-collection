@@ -1,7 +1,7 @@
 # symfony-collection
-A jQuery plugin that manages adding, deleting and moving elements from a Symfony2 collection
+A jQuery plugin that manages adding, deleting and moving elements from a Symfony collection
 
-This is not really difficult to manage your collections using the `data-prototype` Symfony2 provides. But
+This is not really difficult to manage your collections using the `data-prototype` Symfony provides. But
 after using several times collections, it appeared useful to me to create a jQuery plugin to do this job.
 
 This is even more true when you need your elements to be moved up and down or added at a specific position: as the
