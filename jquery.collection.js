@@ -47,7 +47,6 @@
             after_add: function (collection, element) {
                 return true;
             },
-            add_container: null,
             allow_remove: true,
             remove: '<a href="#">[ - ]</a>',
             before_remove: function (collection, element) {
@@ -64,7 +63,6 @@
             after_duplicate: function (collection, element) {
                 return true;
             },
-            duplicate_container: null,
             before_init: function (collection) {
             },
             after_init: function (collection) {
@@ -300,32 +298,27 @@
                         'enabled': settings.allow_remove,
                         'selector': settings.prefix + '-remove',
                         'html': settings.remove,
-                        'condition': elements.length > settings.min,
-                        'container': null
+                        'condition': elements.length > settings.min
                     }, {
                         'enabled': settings.allow_up,
                         'selector': settings.prefix + '-up',
                         'html': settings.up,
-                        'condition': elements.index(element) !== 0,
-                        'container': null
+                        'condition': elements.index(element) !== 0
                     }, {
                         'enabled': settings.allow_down,
                         'selector': settings.prefix + '-down',
                         'html': settings.down,
-                        'condition': elements.index(element) !== elements.length - 1,
-                        'container': null
+                        'condition': elements.index(element) !== elements.length - 1
                     }, {
                         'enabled': settings.allow_add && !settings.add_at_the_end && !settings.custom_add_location,
                         'selector': settings.prefix + '-add',
                         'html': settings.add,
-                        'condition': elements.length < settings.max,
-                        'container': settings.add_container
+                        'condition': elements.length < settings.max
                     }, {
                         'enabled': settings.allow_duplicate,
                         'selector': settings.prefix + '-duplicate',
                         'html': settings.duplicate,
-                        'condition': elements.length < settings.max,
-                        'container': settings.duplicate_container
+                        'condition': elements.length < settings.max
                     }
                 ];
 
@@ -333,17 +326,9 @@
                     if (button.enabled) {
                         var action = element.find('.' + button.selector);
                         if (action.length === 0 && button.html) {
-                            if (button.container) {
-                                if ($(button.container).html() === '') {
-                                    action = $(button.html)
-                                        .appendTo(button.container)
-                                        .addClass(button.selector);
-                                }
-                            } else {
-                                action = $(button.html)
-                                    .appendTo(actions)
-                                    .addClass(button.selector);
-                            }
+                            action = $(button.html)
+                                .appendTo(actions)
+                                .addClass(button.selector);
                         }
                         if (button.condition) {
                             action.removeClass(settings.prefix + '-action-disabled');
@@ -369,17 +354,11 @@
             if (settings.allow_add) {
                 var rescueAdd = collection.find('.' + settings.prefix + '-rescue-add').css('display', '');
                 var adds = collection.find('.' + settings.prefix + '-add');
-                if (settings.add_container) {
-                    $(settings.add_container).css('display', '');
-                }
-                if (!settings.add_at_the_end && adds.length > 0 || settings.add_container && $(settings.add_container).html() !== '' || settings.custom_add_location) {
+                if (!settings.add_at_the_end && adds.length > 0 || settings.custom_add_location) {
                     rescueAdd.css('display', 'none');
                 }
                 if (elements.length >= settings.max) {
                     collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').css('display', 'none');
-                    if (settings.add_container) {
-                        $(settings.add_container).css('display', 'none');
-                    }
                 }
             }
 
