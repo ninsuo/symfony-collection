@@ -331,6 +331,7 @@
                 element.fadeOut(function () {
                     $(this).remove();
                     dumpCollectionActions(collection, settings, false);
+                    setOrderValues(collection, settings);
                 });
                 settings.after_remove(collection, clone);
             }
