@@ -274,12 +274,15 @@
                 if (element.length) { // add after or duplicate element
                     if (isDuplicate) {
                         code = element.clone();
-                        // TODO: replace index
+                        // replace indexes
+                        $(':input', code).each(function(i, input) {
+                            $(input).attr('id', $(input).attr('id').replace(/_\d+_/, '_' + index + '_'));
+                            $(input).attr('name', $(input).attr('name').replace(/\[\d+\]/, '[' + index + ']'));
+                        });
                     }
                     code.hide();
                     element.after(code);
                     code.fadeIn();
-                    // TODO: handle timing issue (needs callback)
                 } else { // add element to end of collection
                     code.hide();
                     collection.append(code);
@@ -309,6 +312,7 @@
                 var clone = element.clone();
                 element.fadeOut(function () {
                     $(this).remove();
+                    dumpCollectionActions(collection, settings, false);
                 });
                 settings.after_remove(collection, clone);
             }
