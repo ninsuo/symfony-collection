@@ -71,6 +71,7 @@
             max: 100,
             add_at_the_end: false,
             prefix: 'collection',
+            prototype: null,
             prototype_name: '__name__',
             name_prefix: null,
             elements_selector: '> div',
@@ -490,12 +491,16 @@
                 collection = elem;
             }
 
-            settings.before_init(collection);
-
-            if (collection.data('prototype') === null) {
-                console.log("jquery.collection.js: given collection field has no prototype, check that your field has the prototype option set to true.");
-                return true;
+            if (!settings.prototype) {
+                if (collection.data('prototype') !== undefined) {
+                    settings.prototype = collection.data('prototype');
+                 } else {
+                    console.log("jquery.collection.js: given collection field has no prototype, check that your field has the prototype option set to true (in symfony form builder) or provide the prototype option yourself.");
+                    return true;
+                 }
             }
+
+            settings.before_init(collection);
 
             if (collection.data('prototype-name') !== undefined) {
                 settings.prototype_name = collection.data('prototype-name');
