@@ -92,7 +92,8 @@
             drag_drop_update: function (event, ui) {
                 return true;
             },
-            custom_add_location: false
+            custom_add_location: false,
+            order_field_selector: null
         };
 
         /**
@@ -223,6 +224,23 @@
                     }
                 });
             });
+        };
+
+        /**
+         * Sets the order values in the order fields if order_field_selector is set.
+         *
+         * @param collection
+         * @param settings
+         */
+        var setOrderValues = function (collection, settings) {
+            if (settings.order_field_selector) {
+                var orderValue = 1,
+                    elements = collection.find(settings.elements_selector);
+                elements.each(function (i, element) {
+                    $(element).find(settings.order_field_selector).val(orderValue);
+                    orderValue++;
+                });
+            }
         };
 
         /**
@@ -455,6 +473,7 @@
                             return;
                         }
                         dumpCollectionActions(collection, settings, false);
+                        setOrderValues(collection, settings);
                         newPosition - oldPosition < 0 ? trueOrUndefined(settings.after_up(collection, element)) : trueOrUndefined(settings.after_down(collection, element));
                     }
                 }, settings.drag_drop_options));
@@ -500,6 +519,7 @@
                 }
 
                 dumpCollectionActions(collection, settings, false);
+                setOrderValues(collection, settings);
                 e.preventDefault();
             });
 
