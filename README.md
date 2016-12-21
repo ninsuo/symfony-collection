@@ -1,7 +1,7 @@
 # symfony-collection
-A jQuery plugin that manages adding, deleting and moving elements from a Symfony collection
+A jQuery plugin that manages adding, deleting and moving elements in a Symfony collection
 
-It is not really difficult to manage your collections using the `data-prototype` Symfony provides. But
+It is not really difficult to manage your collections using the `data-prototype` attribute Symfony provides. But
 after using collections several times, it appeared useful to me to create a jQuery plugin to do this job.
 
 This is even more true when you need your elements to be moved up and down or added at a specific position.
@@ -20,15 +20,17 @@ Your collection type should contain `prototype`, `allow_add`, `allow_remove` opt
 you require of course) and a class that will be used as a selector to run the collection plugin (if you don't want to use the id symfony generates).
 
 ```php
-->add('myCollection', 'collection', [
+$builder
     // ...
-    'allow_add' => true,
-    'allow_remove' => true,
-    'prototype' => true, // default, can be omitted
-    'attr' => [
-        'class' => 'my-selector',
-    ],
-])
+    ->add('myCollection', 'collection', [
+        // ...
+        'allow_add' => true,
+        'allow_remove' => true,
+        'prototype' => true, // default, can be omitted
+        'attr' => [
+            'class' => 'my-collection',
+        ],
+    ])
 ```
 
 Then, render your form after applying the given custom theme:
@@ -45,7 +47,7 @@ Finally, put the following code at the bottom of your page.
 <script src="{{ asset('bundles/acmedemo/js/jquery.collection.js') }}"></script>
 
 <script type="text/javascript">
-    $('.my-selector').collection();
+    $('.my-collection').collection();
 </script>
 ```
 
@@ -72,7 +74,7 @@ You can customize displayed links by setting `up`, `down`, `add`, `remove`and `d
 Default values are:
 
 ```js
-$('.collection').collection({
+$('.my-collection').collection({
     up: '<a href="#">&#x25B2;</a>',
     down: '<a href="#">&#x25BC;</a>',
     add: '<a href="#">[ + ]</a>',
@@ -89,7 +91,7 @@ and `allow_duplicate` options. By default, all buttons except `duplicate` are en
 For example, if you do not want your elements to be moved up and down, use:
 
 ```js
-$('.collection').collection({
+$('.my-collection').collection({
     allow_up: false,
     allow_down: false
 });
@@ -103,7 +105,7 @@ set following your form type configuration.
 You can set the minimum of elements allowed in the collection by using the `min` option. By default, it is disabled (set to 0).
 
 ```js
-$('.collection').collection({
+$('.my-collection').collection({
     min: 0
 });
 ```
@@ -111,7 +113,7 @@ $('.collection').collection({
 You can set the maximum of elements allowed in the collection by using the `max` option. By default, it is set to 100.
 
 ```js
-$('.collection').collection({
+$('.my-collection').collection({
     max: 100
 });
 ```
@@ -119,7 +121,7 @@ $('.collection').collection({
 You can initialize your collection with a minimum of elements created (even if they do not exist on the data object).
 
 ```js
-$('.collection').collection({
+$('.my-collection').collection({
     init_with_n_elements: 3
 });
 ```
@@ -129,7 +131,7 @@ $('.collection').collection({
 If you prefer having only one `add` button at the bottom of the collection instead of one add button per collection element, use the `add_at_the_end` option:
 
 ```js
-$('.collection').collection({
+$('.my-collection').collection({
     add_at_the_end: true
 });
 ```
@@ -141,7 +143,7 @@ you can use the `custom_add_location` option.
 
 JS:
 ```js
-$('.collection').collection({
+$('.my-collection').collection({
     custom_add_location: true
 });
 ```
@@ -161,7 +163,7 @@ By default, `move up/down` buttons are hidden on the first/last item. You can ma
 anyway by setting `hide_useless_buttons` to `false`. This can be useful if you want to style them yourself using CSS.
 
 ```js
-$('.collection').collection({
+$('.my-collection').collection({
     hide_useless_buttons: true
 });
 ```
@@ -190,7 +192,7 @@ $builder
 
 And the according plugin configuration:
 ```js
-$('.collection').collection({
+$('.my-collection').collection({
     // ...
     order_field_selector: '.order'
 });
@@ -223,7 +225,7 @@ Callback functions receive 2 arguments:
 - `element` is the element in the collection that has been added/moved/deleted.
 
 ```js
-$('.collection').collection({
+$('.my-collection').collection({
     before_add: function(collection, element) {
         if (myCondition) {
             return false;
@@ -240,7 +242,7 @@ when you are dealing with collections of form collections. But you can still do 
 following equivalents:
 
 ```js
-$('.my-selector').collection({
+$('.my-collection').collection({
     prototype_name: '{{ myForm.myCollection.vars.prototype.vars.name }}',
     allow_add: false,
     allow_remove: false,
@@ -261,7 +263,7 @@ If required, you can customize `sortable` by overriding options given to `jQuery
 By default, your collection is initialized with the following options:
 
 ```js
-$('.collection').collection({
+$('.my-collection').collection({
     drag_drop: true,
     drag_drop_options: {
         placeholder: 'ui-state-highlight'
@@ -331,7 +333,7 @@ you should not overload the `start` and `update` options in `drag_drop_options`,
 `drag_drop_start` and `drag_drop_update` options instead:
 
 ```js
-$('.collection').collection({
+$('.my-collection').collection({
     drag_drop_start: function (event, ui, elements, element) {
         // ...
     },
@@ -393,12 +395,13 @@ In the plugin options:
 - define children's selector in the `selector` attribute of `children` option (must select the root node of your children collections)
 
 ```js
-$('.parent-collection').collection({
+$('.my-collection').collection({
     prefix: 'parent',
     children: [{
         selector: '.child-collection',
         prefix: 'child',
-        ...
-    }]
+        // ...
+    }],
+    // ...
 });
 ```
