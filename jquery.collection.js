@@ -294,8 +294,12 @@
                         code = element.clone();
                         // replace indexes
                         $(':input', code).each(function(i, input) {
-                            $(input).attr('id', $(input).attr('id').replace(/_\d+_/, '_' + index + '_'));
-                            $(input).attr('name', $(input).attr('name').replace(/\[\d+\]/, '[' + index + ']'));
+                            if ($(input).attr('id')) {
+                                $(input).attr('id', $(input).attr('id').replace(/_\d+_/, '_' + index + '_'));
+                            }
+                            if ($(input).attr('name')) {
+                                $(input).attr('name', $(input).attr('name').replace(/\[\d+\]/, '[' + index + ']'));
+                            }
                         });
                     }
                     code.hide();
@@ -386,148 +390,152 @@
             return false;
         }
 
-        var collection = $(this);
+        var collections = $(this);
 
-        settings.before_init(collection);
+        collections.each(function (i, collection) {
+            collection = $(collection);
 
-        // merge data-attributes into settings
-        if (!settings.prototype) {
-            if (collection.data('prototype') !== undefined) {
-                settings.prototype = collection.data('prototype');
-            } else {
-                console.log("jquery.collection.js: given collection field has no prototype, check that your field has the prototype option set to true (in symfony form builder) or provide the prototype option yourself.");
+            settings.before_init(collection);
+
+            // merge data-attributes into settings
+            if (!settings.prototype) {
+                if (collection.data('prototype') !== undefined) {
+                    settings.prototype = collection.data('prototype');
+                } else {
+                    console.log("jquery.collection.js: given collection field has no prototype, check that your field has the prototype option set to true (in symfony form builder) or provide the prototype option yourself.");
+                    return true;
+                }
+            }
+            if (collection.data('prototype-name') !== undefined) {
+                settings.prototype_name = collection.data('prototype-name');
+            }
+            if (collection.data('allow-add') !== undefined) {
+                settings.allow_add = collection.data('allow-add');
+                settings.allow_duplicate = settings.allow_add ? settings.allow_duplicate : false;
+            }
+            if (collection.data('allow-remove') !== undefined) {
+                settings.allow_remove = collection.data('allow-remove');
+            }
+            if (collection.data('name-prefix') !== undefined) {
+                settings.name_prefix = collection.data('name-prefix');
+            }
+            if (!settings.name_prefix) {
+                console.log("jquery.collection.js: the prefix used in descendant field names is mandatory, you can set it using 2 ways:");
+                console.log("jquery.collection.js: - use the form theme given with this plugin source");
+                console.log("jquery.collection.js: - set name_prefix option to  '{{ formView.myCollectionField.vars.full_name }}'");
                 return true;
             }
-        }
-        if (collection.data('prototype-name') !== undefined) {
-            settings.prototype_name = collection.data('prototype-name');
-        }
-        if (collection.data('allow-add') !== undefined) {
-            settings.allow_add = collection.data('allow-add');
-            settings.allow_duplicate = settings.allow_add ? settings.allow_duplicate : false;
-        }
-        if (collection.data('allow-remove') !== undefined) {
-            settings.allow_remove = collection.data('allow-remove');
-        }
-        if (collection.data('name-prefix') !== undefined) {
-            settings.name_prefix = collection.data('name-prefix');
-        }
-        if (!settings.name_prefix) {
-            console.log("jquery.collection.js: the prefix used in descendant field names is mandatory, you can set it using 2 ways:");
-            console.log("jquery.collection.js: - use the form theme given with this plugin source");
-            console.log("jquery.collection.js: - set name_prefix option to  '{{ formView.myCollectionField.vars.full_name }}'");
-            return true;
-        }
 
-        // make sure init_with_n_elements is in the min/max range if provided
-        if (settings.init_with_n_elements < settings.min) {
-            settings.init_with_n_elements = settings.min;
-        }
-        if (settings.init_with_n_elements > settings.max) {
-            settings.init_with_n_elements = settings.max;
-        }
-
-        // save processed settings to data attribute
-        collection.data('collection-settings', settings);
-
-        // add element class to all elements if not exists
-        collection.find('> div').each(function (i, element) {
-            $(element).addClass(settings.elements_selector.replace('.', ''));
-        });
-
-        // add initial elements (defined by init_with_n_elements)
-        var elements = collection.find(settings.elements_selector);
-        while (elements.length < settings.init_with_n_elements) {
-            elements = doAdd($(settings.container), button, collection, settings, elements, null, false);
-        }
-
-        // calc index
-        collection.data('index', elements.length);
-
-        // handle drag/drop support from jquery ui and trigger events
-        if (settings.drag_drop && settings.allow_up && settings.allow_down) {
-            var oldPosition;
-            var newPosition;
-            if (typeof jQuery.ui === 'undefined' || typeof jQuery.ui.sortable === 'undefined') {
-                settings.drag_drop = false;
-            } else {
-                collection.sortable($.extend(true, {}, {
-                    start: function (event, ui) {
-                        var elements = collection.find(settings.elements_selector);
-                        var element = ui.item;
-                        var that = $(this);
-                        if (!trueOrUndefined(settings.drag_drop_start(event, ui, elements, element))) {
-                            that.sortable("cancel");
-                            return;
-                        }
-                        ui.placeholder.height(ui.item.height());
-                        ui.placeholder.width(ui.item.width());
-                        oldPosition = elements.index(element);
-                    },
-                    update: function (event, ui) {
-                        var elements = collection.find(settings.elements_selector);
-                        var element = ui.item;
-                        var that = $(this);
-                        newPosition = elements.index(element);
-                        if (false === settings.drag_drop_update(event, ui, elements, element) || !(newPosition - oldPosition < 0 ? trueOrUndefined(settings.before_up(collection, element)) : trueOrUndefined(settings.before_down(collection, element)))) {
-                            that.sortable("cancel");
-                            return;
-                        }
-                        dumpCollectionActions(collection, settings, false);
-                        setOrderValues(collection, settings);
-                        newPosition - oldPosition < 0 ? trueOrUndefined(settings.after_up(collection, element)) : trueOrUndefined(settings.after_down(collection, element));
-                    }
-                }, settings.drag_drop_options));
+            // make sure init_with_n_elements is in the min/max range if provided
+            if (settings.init_with_n_elements < settings.min) {
+                settings.init_with_n_elements = settings.min;
             }
-        }
+            if (settings.init_with_n_elements > settings.max) {
+                settings.init_with_n_elements = settings.max;
+            }
 
-        // add events to action buttons
-        var container = $(settings.container);
-        container
-            .off('click', '.' + settings.prefix + '-action')
-            .on('click', '.' + settings.prefix + '-action', function (e) {
+            // save processed settings to data attribute
+            collection.data('collection-settings', settings);
 
-                var that = $(this);
-
-                var collection = $('#' + that.data('collection')),
-                    settings = collection.data('collection-settings'),
-                    elements = collection.find(settings.elements_selector);
-
-                var element = that.parents(settings.elements_selector);
-
-                if (that.is('.' + settings.prefix + '-duplicate') && settings.allow_add && settings.allow_duplicate) {
-                    doAdd(container, that, collection, settings, elements, element, true);
-                }
-
-                if (that.is('.' + settings.prefix + '-rescue-add') && settings.allow_add) {
-                    doAdd(container, that, collection, settings, elements, element, false);
-                }
-
-                if (that.is('.' + settings.prefix + '-add') && settings.allow_add) {
-                    doAdd(container, that, collection, settings, elements, element, false);
-                }
-
-                if (that.is('.' + settings.prefix + '-remove') && settings.allow_remove) {
-                    doDelete(collection, settings, elements, element);
-                }
-
-                if (that.is('.' + settings.prefix + '-up') && settings.allow_up) {
-                    doUp(collection, settings, elements, element);
-                }
-
-                if (that.is('.' + settings.prefix + '-down') && settings.allow_down) {
-                    doDown(collection, settings, elements, element);
-                }
-
-                dumpCollectionActions(collection, settings, false);
-                setOrderValues(collection, settings);
-                e.preventDefault();
+            // add element class to all elements if not exists
+            collection.find('> div').each(function (i, element) {
+                $(element).addClass(settings.elements_selector.replace('.', ''));
             });
 
-        dumpCollectionActions(collection, settings, true);
-        enableChildrenCollections(collection, null, settings);
+            // add initial elements (defined by init_with_n_elements)
+            var elements = collection.find(settings.elements_selector);
+            while (elements.length < settings.init_with_n_elements) {
+                elements = doAdd($(settings.container), button, collection, settings, elements, null, false);
+            }
 
-        settings.after_init(collection);
+            // calc index
+            collection.data('index', elements.length);
+
+            // handle drag/drop support from jquery ui and trigger events
+            if (settings.drag_drop && settings.allow_up && settings.allow_down) {
+                var oldPosition;
+                var newPosition;
+                if (typeof jQuery.ui === 'undefined' || typeof jQuery.ui.sortable === 'undefined') {
+                    settings.drag_drop = false;
+                } else {
+                    collection.sortable($.extend(true, {}, {
+                        start: function (event, ui) {
+                            var elements = collection.find(settings.elements_selector);
+                            var element = ui.item;
+                            var that = $(this);
+                            if (!trueOrUndefined(settings.drag_drop_start(event, ui, elements, element))) {
+                                that.sortable("cancel");
+                                return;
+                            }
+                            ui.placeholder.height(ui.item.height());
+                            ui.placeholder.width(ui.item.width());
+                            oldPosition = elements.index(element);
+                        },
+                        update: function (event, ui) {
+                            var elements = collection.find(settings.elements_selector);
+                            var element = ui.item;
+                            var that = $(this);
+                            newPosition = elements.index(element);
+                            if (false === settings.drag_drop_update(event, ui, elements, element) || !(newPosition - oldPosition < 0 ? trueOrUndefined(settings.before_up(collection, element)) : trueOrUndefined(settings.before_down(collection, element)))) {
+                                that.sortable("cancel");
+                                return;
+                            }
+                            dumpCollectionActions(collection, settings, false);
+                            setOrderValues(collection, settings);
+                            newPosition - oldPosition < 0 ? trueOrUndefined(settings.after_up(collection, element)) : trueOrUndefined(settings.after_down(collection, element));
+                        }
+                    }, settings.drag_drop_options));
+                }
+            }
+
+            // add events to action buttons
+            var container = $(settings.container);
+            container
+                .off('click', '.' + settings.prefix + '-action')
+                .on('click', '.' + settings.prefix + '-action', function (e) {
+
+                    var that = $(this);
+
+                    var collection = $('#' + that.data('collection')),
+                        settings = collection.data('collection-settings'),
+                        elements = collection.find(settings.elements_selector);
+
+                    var element = that.parents(settings.elements_selector);
+
+                    if (that.is('.' + settings.prefix + '-duplicate') && settings.allow_add && settings.allow_duplicate) {
+                        doAdd(container, that, collection, settings, elements, element, true);
+                    }
+
+                    if (that.is('.' + settings.prefix + '-rescue-add') && settings.allow_add) {
+                        doAdd(container, that, collection, settings, elements, element, false);
+                    }
+
+                    if (that.is('.' + settings.prefix + '-add') && settings.allow_add) {
+                        doAdd(container, that, collection, settings, elements, element, false);
+                    }
+
+                    if (that.is('.' + settings.prefix + '-remove') && settings.allow_remove) {
+                        doDelete(collection, settings, elements, element);
+                    }
+
+                    if (that.is('.' + settings.prefix + '-up') && settings.allow_up) {
+                        doUp(collection, settings, elements, element);
+                    }
+
+                    if (that.is('.' + settings.prefix + '-down') && settings.allow_down) {
+                        doDown(collection, settings, elements, element);
+                    }
+
+                    dumpCollectionActions(collection, settings, false);
+                    setOrderValues(collection, settings);
+                    e.preventDefault();
+                });
+
+            dumpCollectionActions(collection, settings, true);
+            enableChildrenCollections(collection, null, settings);
+
+            settings.after_init(collection);
+        });
 
         return true;
     };
