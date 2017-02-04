@@ -71,7 +71,6 @@
             max: 100,
             add_at_the_end: false,
             prefix: 'collection',
-            prototype: null,
             prototype_name: '__name__',
             name_prefix: null,
             elements_selector: '> div',
@@ -358,7 +357,7 @@
                 if (!settings.add_at_the_end && adds.length > 0 || settings.custom_add_location) {
                     rescueAdd.css('display', 'none');
                 }
-                if (elements.length >= settings.max) {
+                if (elements.length >= settings.max && settings.hide_useless_buttons) {
                     collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').css('display', 'none');
                 }
             }
@@ -491,16 +490,12 @@
                 collection = elem;
             }
 
-            if (!settings.prototype) {
-                if (collection.data('prototype') !== undefined) {
-                    settings.prototype = collection.data('prototype');
-                 } else {
-                    console.log("jquery.collection.js: given collection field has no prototype, check that your field has the prototype option set to true (in symfony form builder) or provide the prototype option yourself.");
-                    return true;
-                 }
-            }
-
             settings.before_init(collection);
+
+            if (collection.data('prototype') === null) {
+                console.log("jquery.collection.js: given collection field has no prototype, check that your field has the prototype option set to true.");
+                return true;
+            }
 
             if (collection.data('prototype-name') !== undefined) {
                 settings.prototype_name = collection.data('prototype-name');
@@ -585,46 +580,46 @@
             var container = $(settings.container);
 
             container
-                    .off('click', '.' + settings.prefix + '-action')
-                    .on('click', '.' + settings.prefix + '-action', function (e) {
+                .off('click', '.' + settings.prefix + '-action')
+                .on('click', '.' + settings.prefix + '-action', function (e) {
 
-                        var that = $(this);
+                    var that = $(this);
 
-                        var collection = $('#' + that.data('collection'));
+                    var collection = $('#' + that.data('collection'));
+                    var settings = collection.data('collection-settings');
+
+                    if (undefined === settings) {
+                        var collection = $('#' + that.data('collection')).find('.' + that.data('collection') + '-collection');
                         var settings = collection.data('collection-settings');
-
                         if (undefined === settings) {
-                            var collection = $('#' + that.data('collection')).find('.' + that.data('collection') + '-collection');
-                            var settings = collection.data('collection-settings');
-                            if (undefined === settings) {
-                                throw "Can't find collection: " + that.data('collection');
-                            }
+                            throw "Can't find collection: " + that.data('collection');
                         }
+                    }
 
-                        var elements = collection.find(settings.elements_selector);
-                        var element = that.data(settings.prefix + '-element') ? $('#' + that.data(settings.prefix + '-element')) : undefined;
-                        var index = element && element.length ? elements.index(element) : -1;
+                    var elements = collection.find(settings.elements_selector);
+                    var element = that.data(settings.prefix + '-element') ? $('#' + that.data(settings.prefix + '-element')) : undefined;
+                    var index = element && element.length ? elements.index(element) : -1;
 
-                        var isDuplicate = that.is('.' + settings.prefix + '-duplicate');
-                        if ((that.is('.' + settings.prefix + '-add') || that.is('.' + settings.prefix + '-rescue-add') || isDuplicate) && settings.allow_add) {
-                            elements = doAdd(container, that, collection, settings, elements, element, index, isDuplicate);
-                        }
+                    var isDuplicate = that.is('.' + settings.prefix + '-duplicate');
+                    if ((that.is('.' + settings.prefix + '-add') || that.is('.' + settings.prefix + '-rescue-add') || isDuplicate) && settings.allow_add) {
+                        elements = doAdd(container, that, collection, settings, elements, element, index, isDuplicate);
+                    }
 
-                        if (that.is('.' + settings.prefix + '-remove') && settings.allow_remove) {
-                            elements = doDelete(collection, settings, elements, element, index);
-                        }
+                    if (that.is('.' + settings.prefix + '-remove') && settings.allow_remove) {
+                        elements = doDelete(collection, settings, elements, element, index);
+                    }
 
-                        if (that.is('.' + settings.prefix + '-up') && settings.allow_up) {
-                            elements = doUp(collection, settings, elements, element, index);
-                        }
+                    if (that.is('.' + settings.prefix + '-up') && settings.allow_up) {
+                        elements = doUp(collection, settings, elements, element, index);
+                    }
 
-                        if (that.is('.' + settings.prefix + '-down') && settings.allow_down) {
-                            elements = doDown(collection, settings, elements, element, index);
-                        }
+                    if (that.is('.' + settings.prefix + '-down') && settings.allow_down) {
+                        elements = doDown(collection, settings, elements, element, index);
+                    }
 
-                        dumpCollectionActions(collection, settings, false);
-                        e.preventDefault();
-                    });
+                    dumpCollectionActions(collection, settings, false);
+                    e.preventDefault();
+                });
 
             dumpCollectionActions(collection, settings, true);
             enableChildrenCollections(collection, null, settings);

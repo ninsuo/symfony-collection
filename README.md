@@ -151,8 +151,8 @@ JS:
 
 HTML:
 ```html
-        <button 
-            data-collection="collectionA" 
+        <button
+            data-collection="collectionA"
             class="collection-action collection-add btn btn-success"
         >Add element to collection</button>
 ```
