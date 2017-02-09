@@ -66,6 +66,22 @@ If you want to use the form theme, but already use one, you can use both with:
      %}
 ```
 
+# Common pitfall with Form Themes
+
+Most of the time, you will need to create a [form theme](https://symfony.com/doc/current/form/form_customization.html)
+that will help you render your collection and its children in a fancy way.
+
+You need to consider two things to avoid problems:
+
+1) in your form type(s), overwrite the `getBlockPrefix()` method and return a good name (ex: `AddressType` for an address).
+
+2) in your form theme, you will just need to use the same name (`{% block AddressType_XXX %}`). Replace `XXX` by `widget`,
+`error` or `row` according to what you want to do (read the [Symfony doc](https://symfony.com/doc/current/form/form_customization.html)
+for more details).
+
+There are many examples using form themes in the Advanced menu of the [demo website](http://symfony-collection.fuz.org/),
+don't hesitate to look at them.
+
 # Options
 
 **Customize rendered links**
