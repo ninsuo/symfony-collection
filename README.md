@@ -16,6 +16,12 @@ Demo of this plugin is available live at: http://symfony-collection.fuz.org
 
 Demo source code is here: https://github.com/ninsuo/symfony-collection-demo
 
+# Installation
+
+```sh
+composer require ninsuo/symfony-collection
+```
+
 # Basic usage
 
 Your collection type should contain `prototype`, `allow_add`, `allow_remove` options (depending on which buttons
