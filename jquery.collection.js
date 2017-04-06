@@ -87,7 +87,9 @@
             drag_drop_update: function (event, ui) {
                 return true;
             },
-            custom_add_location: false
+            custom_add_location: false,
+            fade_in: true,
+            fade_out: true
         };
 
         var randomNumber = function () {
@@ -394,8 +396,14 @@
                     var oldHtml = $("<div/>").append(elements.eq(index).clone()).html();
                     var newHtml = changeHtmlIndex(collection, settings, oldHtml, index, freeIndex);
                     code = $('<div/>').html(newHtml).contents();
+                    if (settings.fade_in) {
+                        code.hide();
+                    }
                     tmp.before(code).find(settings.prefix + '-actions').remove();
                 } else {
+                    if (settings.fade_in) {
+                        code.hide();
+                    }
                     tmp.before(code);
                 }
 
@@ -422,19 +430,32 @@
                 }
             }
 
+            if (settings.fade_in) {
+                code.fadeIn('fast');
+            }
+
             return elements;
         };
 
         var doDelete = function (collection, settings, elements, element, index) {
             if (elements.length > settings.min && trueOrUndefined(settings.before_remove(collection, element))) {
-                elements = shiftElementsUp(collection, elements, settings, index);
-                var toDelete = elements.last();
-                var backup = toDelete.clone({withDataAndEvents: true});
-                toDelete.remove();
-                if (!trueOrUndefined(settings.after_remove(collection, backup))) {
-                    collection.find('> .' + settings.prefix + '-tmp').before(backup);
-                    elements = collection.find(settings.elements_selector);
-                    elements = shiftElementsDown(collection, elements, settings, index - 1);
+                var deletion = function () {
+                    elements = shiftElementsUp(collection, elements, settings, index);
+                    var toDelete = elements.last();
+                    var backup = toDelete.clone({withDataAndEvents: true}).show();
+                    toDelete.remove();
+                    if (!trueOrUndefined(settings.after_remove(collection, backup))) {
+                        collection.find('> .' + settings.prefix + '-tmp').before(backup);
+                        elements = collection.find(settings.elements_selector);
+                        elements = shiftElementsDown(collection, elements, settings, index - 1);
+                    }
+                };
+                if (settings.fade_out) {
+                    element.fadeOut('fast', function () {
+                        deletion();
+                    });
+                } else {
+                    deletion();
                 }
             }
 

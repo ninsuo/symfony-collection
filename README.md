@@ -236,6 +236,18 @@ following equivalents:
 
 Note that only `name_prefix` option is mandatory, all other ones have default values.
 
+**Fade in & Fade out support**
+
+By defaut, when adding or removing an element, `fade` animation will make element movements smoother.
+You can still disable this option by using `fade_in` and `fade_out` options.
+
+```js
+    $('.my-selector').collection({
+        fade_in: true,
+        fade_out: true
+    });
+```
+
 **Drag & drop support**
 
 If you are using Jquery UI and have the `sortable` component available in your application, the `drag_drop` option is
