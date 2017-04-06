@@ -90,7 +90,7 @@ don't hesitate to look at them.
 
 # Options
 
-**Customize rendered links**
+**Customize rendered links** ([demo](http://symfony-collection.fuz.org/symfony3/options/customButtons))
 
 You can customize displayed links by setting `up`, `down`, `add`, `remove`and `duplicate` options.
 
@@ -106,7 +106,7 @@ Default values are:
      });
 ```
 
-**Disable links**
+**Disable links** ([demo](http://symfony-collection.fuz.org/symfony3/options/enableButtons))
 
 You can disable some buttons by using `allow_up`, `allow_down`, `allow_add`, `allow_remove`
 and `allow_duplicate` options. By default, all buttons except `duplicate` are enabled.
@@ -123,7 +123,7 @@ For example, if you do not want your elements to be moved up and down, use:
 If you are using the given form theme, `allow_add`, `allow_remove` and `allow_duplicate` are automatically
 set following your form type configuration.
 
-**Set minimum and maximum of elements in the collection**
+**Set minimum and maximum of elements in the collection** ([demo](http://symfony-collection.fuz.org/symfony3/options/numberCollectionElements))
 
 You can set the minimum of elements allowed in the collection by using the `min` option. By default, it is disabled (set to 0).
 
@@ -141,7 +141,7 @@ You can set the maximum of elements allowed in the collection by using the `max`
      });
 ```
 
-You can initialize your collection with a minimum of elements created (even if they do not exist on the data object).
+You can initialize your collection with a minimum of elements created (even if they do not exist on the data object) ([demo](http://symfony-collection.fuz.org/symfony3/options/givenMinimumElements)).
 
 ```js
      $('.collection').collection({
@@ -149,7 +149,7 @@ You can initialize your collection with a minimum of elements created (even if t
      });
 ```
 
-**Only one add button at the bottom**
+**Only one add button at the bottom** ([demo](http://symfony-collection.fuz.org/symfony3/options/addButtonAtTheBottom))
 
 If you prefer having only one `add` button at the bottom of the collection instead of one add button per collection element, use the `add_at_the_end` option:
 
@@ -159,7 +159,7 @@ If you prefer having only one `add` button at the bottom of the collection inste
      });
 ```
 
-**Customise add button location**
+**Customise add button location** ([demo](http://symfony-collection.fuz.org/symfony3/options/buttons-custom-location))
 
 If you want to set a specific location for your add button (not close to each collection element, nor at the bottom of the collection),
 you can use the `custom_add_location` option.
@@ -179,7 +179,7 @@ HTML:
         >Add element to collection</button>
 ```
 
-**Hide useless buttons**
+**Hide useless buttons** ([demo](http://symfony-collection.fuz.org/symfony3/options/hideMoveUpDown))
 
 By default, `move up` button is hidden on the first item, and `move down` button on the last one. You can make them appear
 anyway by setting `hide_useless_buttons` to `false`. This can be useful if you want to beautify them using CSS, for example.
@@ -190,7 +190,7 @@ anyway by setting `hide_useless_buttons` to `false`. This can be useful if you w
      });
 ```
 
-**Events**
+**Events** ([demo](http://symfony-collection.fuz.org/symfony3/options/eventCallbacks))
 
 There are `before_*` and `after_*` options that let you put callbacks before and after adding, deleting or moving
 elements in the collection.
@@ -219,7 +219,7 @@ Callback functions receive 2 arguments:
      });
 ```
 
-**Using the plugin without form theme**
+**Using the plugin without form theme** ([demo](http://symfony-collection.fuz.org/symfony3/options/withoutFormTheme))
 
 The form theme aims to reduce the number of options required when activating the plugin. This is really useful
 when you are dealing with collections of form collections. But you can still do it manually if you want, using the
@@ -236,7 +236,7 @@ following equivalents:
 
 Note that only `name_prefix` option is mandatory, all other ones have default values.
 
-**Fade in & Fade out support**
+**Fade in & Fade out support** ([demo](http://symfony-collection.fuz.org/symfony3/options/fadeInFadeOut))
 
 By defaut, when adding or removing an element, `fade` animation will make element movements smoother.
 You can still disable this option by using `fade_in` and `fade_out` options.
@@ -248,7 +248,7 @@ You can still disable this option by using `fade_in` and `fade_out` options.
     });
 ```
 
-**Drag & drop support**
+**Drag & drop support** ([demo](http://symfony-collection.fuz.org/symfony3/options/dragAndDrop))
 
 If you are using Jquery UI and have the `sortable` component available in your application, the `drag_drop` option is
 automatically enabled and let you change your element positions using drag & drop. You can disable this behavior by explicitely
@@ -272,7 +272,7 @@ Note that you should not overload `start` and `update` callbacks as they are use
 
 # Advanced usage
 
-**Changing action's positions**
+**Changing action's positions** ([demo](http://symfony-collection.fuz.org/symfony3/advanced/customFormTheme))
 
 By default :
 - `add`, `move up`, `move down` and `remove`are located in this order below each collection's element
@@ -322,7 +322,7 @@ the plugin will generate an `add` button based on the plugin's configuraiton.
 *Tip*: when `add` buttons are put inside collection's elements, new element is created next to the clicked
 element instead of at the end of the collection.
 
-**Advanced drag & drop support**
+**Advanced drag & drop support** ([demo](http://symfony-collection.fuz.org/symfony3/options/dragAndDrop))
 
 If you need to listen for `start` and/or `update` events from `jQuery.ui.sortable` in your collection,
 you should not overload the `start` and `update` options in `drag_drop_options`, but use the built-in
@@ -346,7 +346,7 @@ Notes:
 - `element` is the moved element in the collection
 - If your callback return false, the position change will be cancelled/reverted.
 
-**Collection of collections**
+**Collection of collections** ([demo](http://symfony-collection.fuz.org/symfony3/advanced/collectionOfCollections))
 
 This plugin has the ability to manage collection of form collections, but to avoid collisions, you should:
 
