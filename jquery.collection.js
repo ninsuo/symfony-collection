@@ -89,7 +89,8 @@
             },
             custom_add_location: false,
             fade_in: true,
-            fade_out: true
+            fade_out: true,
+            position_field_selector: null
         };
 
         var randomNumber = function () {
