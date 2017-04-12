@@ -106,6 +106,21 @@ Default values are:
      });
 ```
 
+You can also use used classes:
+
+- `collection-add` for an add button
+- `collection-remove` for a remove button
+- `collection-up` for a move up button
+- `collection-down` for a move down button
+- `collection-duplicate` for a duplicate button
+
+And:
+
+- `collection-action` for any of the above action
+- `collection-action-disabled` same, but when button is disabled (no "up" at the top, etc)
+
+Note that `collection` prefix can be changed using the `prefix` option.
+
 **Disable links** ([demo](http://symfony-collection.fuz.org/symfony3/options/enableButtons))
 
 You can disable some buttons by using `allow_up`, `allow_down`, `allow_add`, `allow_remove`
