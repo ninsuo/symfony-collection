@@ -354,13 +354,16 @@
             });
 
             if (settings.allow_add) {
-                var rescueAdd = collection.find('.' + settings.prefix + '-rescue-add').css('display', '');
+                var rescueAdd = collection.find('.' + settings.prefix + '-rescue-add').css('display', '').removeClass(settings.prefix + '-action-disabled');
                 var adds = collection.find('.' + settings.prefix + '-add');
                 if (!settings.add_at_the_end && adds.length > 0 || settings.custom_add_location) {
                     rescueAdd.css('display', 'none');
                 }
-                if (elements.length >= settings.max && settings.hide_useless_buttons) {
-                    collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').css('display', 'none');
+                if (elements.length >= settings.max) {
+                    rescueAdd.addClass(settings.prefix + '-action-disabled');
+                    if (settings.hide_useless_buttons) {
+                        collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').css('display', 'none');
+                    }
                 }
             }
 
