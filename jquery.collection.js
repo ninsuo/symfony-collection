@@ -93,6 +93,7 @@
             position_field_selector: null
         };
 
+        // used to generate random id attributes when required and missing
         var randomNumber = function () {
             var rand = '' + Math.random() * 1000 * new Date().getTime();
             return rand.replace('.', '').split('').sort(function () {
@@ -100,6 +101,7 @@
             }).join('');
         };
 
+        // return an element's id, after generating one when missing
         var getOrCreateId = function (prefix, obj) {
             if (!obj.attr('id')) {
                 var generated_id;
@@ -111,6 +113,7 @@
             return obj.attr('id');
         };
 
+        // return a field value whatever the field type
         var getFieldValue = function (selector) {
             try {
                 var jqElem = $(selector);
@@ -130,6 +133,7 @@
             }
         };
 
+        // set a field value in accordance to the field type
         var putFieldValue = function (selector, value, physical) {
             try {
                 var jqElem = $(selector);
@@ -155,14 +159,20 @@
             }
         };
 
+        // a callback set in an event will be considered failed if it
+        // returns false, null, or 0.
         var trueOrUndefined = function (value) {
             return undefined === value || value;
         };
 
+        // used to change element indexes in arbitary id attributes
         var pregQuote = function (string) {
             return (string + '').replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
         };
 
+        // if we need to change CollectionType_field_42_value to CollectionType_field_84_value, this method
+        // will change it in id="CollectionType_field_42_value", but also data-id="CollectionType_field_42_value"
+        // or anywhere else just in case it could be used otherwise.
         var replaceAttrData = function (elements, index, toReplace, replaceWith) {
 
             var replaceAttrDataNode = function (node) {
@@ -186,6 +196,9 @@
             });
         };
 
+        // replace element names and indexes in the collection, in Symfony, names are always in format
+        // CollectionType[field][42][value] and ids are in format CollectionType_field_42_value;
+        // so we need to change both.
         var changeElementIndex = function (collection, elements, settings, index, oldIndex, newIndex) {
             var toReplace = new RegExp(pregQuote(settings.name_prefix + '[' + oldIndex + ']'), 'g');
             var replaceWith = settings.name_prefix + '[' + newIndex + ']';
@@ -196,6 +209,8 @@
             replaceAttrData(elements, index, toReplace, replaceWith);
         };
 
+        // same as above, but will replace element names and indexes in an html string instead
+        // of in a dom element
         var changeHtmlIndex = function (collection, settings, html, oldIndex, newIndex) {
             var toReplace = new RegExp(pregQuote(settings.name_prefix + '[' + oldIndex + ']'), 'g');
             var replaceWith = settings.name_prefix + '[' + newIndex + ']';
@@ -208,12 +223,20 @@
             return html;
         };
 
+        // sometimes, setting a value will only be made in memory and not
+        // physically in the dom; and we need the full dom when we want
+        // to duplicate a field.
         var putFieldValuesInDom = function (element) {
             $(element).find(':input').each(function (index, inputObj) {
                 putFieldValue(inputObj, getFieldValue(inputObj), true);
             });
         };
 
+        // this method does the whole magic: in a collection, if we want to
+        // move elements and keep element positions in the backend, we should
+        // either move element names or element contents, but not both! thus,
+        // if you just move elements in the dom, you keep field names and data
+        // attached and nothing will change in the backend.
         var swapElements = function (collection, elements, oldIndex, newIndex) {
 
             var settings = collection.data('collection-settings');
@@ -232,6 +255,9 @@
             return collection.find(settings.elements_selector);
         };
 
+        // moving an element down of 3 rows means increasing its index of 3, and
+        // decreasing the 2 ones between of 1. Example: 0-A 1-B 2-C 3-D:
+        // moving B to 3 becomes 0-A 1-C 2-D 3-B
         var swapElementsUp = function (collection, elements, settings, oldIndex, newIndex) {
             for (var i = oldIndex + 1; (i <= newIndex); i++) {
                 elements = swapElements(collection, elements, i, i - 1);
@@ -239,6 +265,9 @@
             return collection.find(settings.elements_selector);
         };
 
+        // moving an element up of 3 rows means decreasing its index of 3, and
+        // increasing the 2 ones between of 1. Example: 0-A 1-B 2-C 3-D:
+        // moving D to 1 becomes 0-A 1-D 2-B 3-C
         var swapElementsDown = function (collection, elements, settings, oldIndex, newIndex) {
             for (var i = oldIndex - 1; (i >= newIndex); i--) {
                 elements = swapElements(collection, elements, i, i + 1);
@@ -246,6 +275,9 @@
             return collection.find(settings.elements_selector);
         };
 
+        // if we create an element at position 2, all element indexes from 2 to N
+        // should be increased. for example, in 0-A 1-B 2-C 3-D, adding X at position
+        // 1 will create 0-A 1-X 2-B 3-C 4-D
         var shiftElementsUp = function (collection, elements, settings, index) {
             for (var i = index + 1; i < elements.length; i++) {
                 elements = swapElements(collection, elements, i - 1, i);
@@ -253,6 +285,9 @@
             return collection.find(settings.elements_selector);
         };
 
+        // if we remove an element at position 3, all element indexes from 3 to N
+        // should be decreased. for example, in 0-A 1-B 2-C 3-D, removing B will create
+        // 0-A 1-C 2-D
         var shiftElementsDown = function (collection, elements, settings, index) {
             for (var i = elements.length - 2; i > index; i--) {
                 elements = swapElements(collection, elements, i + 1, i);
@@ -260,10 +295,14 @@
             return collection.find(settings.elements_selector);
         };
 
+        // this method creates buttons for each action, according to all options set
+        // (buttons enabled, minimum/maximum of elements not yet reached, rescue
+        // button creation when no more elements are remaining...)
         var dumpCollectionActions = function (collection, settings, isInitialization) {
             var init = collection.find('.' + settings.prefix + '-tmp').length === 0;
             var elements = collection.find(settings.elements_selector);
 
+            // add a rescue button that will appear only if collection is emptied
             if (settings.allow_add) {
                 if (init) {
                     collection.append('<span class="' + settings.prefix + '-tmp"></span>');
@@ -277,6 +316,8 @@
                 }
             }
 
+            // initializes the collection with a minimal number of elements
+            // @TODO move this somewehre else
             if (isInitialization) {
                 var container = $(settings.container);
                 var button = collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').first();
@@ -287,6 +328,9 @@
                 }
             }
 
+            // make buttons appear/disappear in each elements of the collection according to options
+            // (enabled, min/max...) and logic (for example, do not put a move up button on the first
+            // element of the collection)
             elements.each(function (index) {
                 var element = $(this);
 
@@ -352,8 +396,11 @@
                         element.find('.' + button.selector).css('display', 'none');
                     }
                 });
-            });
 
+            }); // elements.each
+
+            // make the rescue button appear / disappear according to options (add_at_the_end) and
+            // logic (no more elements on the collection)
             if (settings.allow_add) {
                 var rescueAdd = collection.find('.' + settings.prefix + '-rescue-add').css('display', '').removeClass(settings.prefix + '-action-disabled');
                 var adds = collection.find('.' + settings.prefix + '-add');
@@ -368,8 +415,11 @@
                 }
             }
 
-        };
+        }; // dumpCollectionActions
 
+        // this plugin supports nested collections, and this method enables them when the
+        // parent collection is initialized. see
+        // http://symfony-collection.fuz.org/symfony3/advanced/collectionOfCollections
         var enableChildrenCollections = function (collection, element, settings) {
             if (settings.children) {
                 $.each(settings.children, function (index, childrenSettings) {
@@ -386,6 +436,10 @@
             }
         };
 
+        // this method handles a click on "add" buttons, it increases all following element indexes of
+        // 1 position and insert a new one in the index that becomes free. if click has been made on a
+        // "duplicate" button, all element values are then inserted. finally, callbacks let user cancel
+        // those actions if needed.
         var doAdd = function (container, that, collection, settings, elements, element, index, isDuplicate) {
             if (elements.length < settings.max && (isDuplicate && trueOrUndefined(settings.before_duplicate(collection, element)) || trueOrUndefined(settings.before_add(collection, element)))) {
                 var prototype = collection.data('prototype');
@@ -441,6 +495,8 @@
             return elements;
         };
 
+        // removes the current element when clicking on a "delete" button and decrease all following
+        // indexes from 1 position.
         var doDelete = function (collection, settings, elements, element, index) {
             if (elements.length > settings.min && trueOrUndefined(settings.before_remove(collection, element))) {
                 var deletion = function () {
@@ -466,6 +522,8 @@
             return elements;
         };
 
+        // reverse the current element index and the previous one, then graphically
+        // reverse them in the dom
         var doUp = function (collection, settings, elements, element, index) {
             if (index !== 0 && trueOrUndefined(settings.before_up(collection, element))) {
                 elements = swapElements(collection, elements, index, index - 1);
@@ -477,6 +535,8 @@
             return elements;
         };
 
+        // reverse the current element index and the next one, then graphically
+        // reverse them in the dom
         var doDown = function (collection, settings, elements, element, index) {
             if (index !== (elements.length - 1) && trueOrUndefined(settings.before_down(collection, element))) {
                 elements = swapElements(collection, elements, index, index + 1);
@@ -488,8 +548,10 @@
             return elements;
         };
 
+        // we're in a $.fn., so in $('.collection').collection(), $(this) equals $('.collection')
         var elems = $(this);
 
+        // at least one, but why not several collections should be raised
         if (elems.length === 0) {
             console.log("jquery.collection.js: given collection selector does not exist.");
             return false;
@@ -499,11 +561,15 @@
 
             var settings = $.extend(true, {}, defaults, options);
 
+            // usage of $.fn.on events using a static container just in case there would be some
+            // ajax interactions inside the collection
             if ($(settings.container).length === 0) {
                 console.log("jquery.collection.js: a container should exist to handle events (basically, a <body> tag).");
                 return false;
             }
 
+            // it is possible to use this plugin with a selector that will contain the collection id
+            // in a data attribute
             var elem = $(this);
             if (elem.data('collection') !== undefined) {
                 var collection = $('#' + elem.data('collection'));
@@ -515,13 +581,17 @@
                 collection = elem;
             }
 
+            // user callback
             settings.before_init(collection);
 
+            // prototype required to create new elements in the collection
             if (collection.data('prototype') === null) {
                 console.log("jquery.collection.js: given collection field has no prototype, check that your field has the prototype option set to true.");
                 return true;
             }
 
+            // all the following data attributes are automatically available thanks to
+            // jquery.collection.html.twig form theme
             if (collection.data('prototype-name') !== undefined) {
                 settings.prototype_name = collection.data('prototype-name');
             }
@@ -536,6 +606,8 @@
                 settings.name_prefix = collection.data('name-prefix');
             }
 
+            // prototype-name required for nested collections, where collection id prefix
+            // isn't guessable (see https://github.com/symfony/symfony/issues/13837)
             if (!settings.name_prefix) {
                 console.log("jquery.collection.js: the prefix used in descendant field names is mandatory, you can set it using 2 ways:");
                 console.log("jquery.collection.js: - use the form theme given with this plugin source");
@@ -547,6 +619,9 @@
                 settings.init_with_n_elements = settings.min;
             }
 
+            // drag & drop support: this is a bit more complex than pressing "up" or
+            // "down" buttons because we can move elements more than one place ahead
+            // or below...
             if (settings.drag_drop && settings.allow_up && settings.allow_down) {
                 var oldPosition;
                 var newPosition;
@@ -602,8 +677,9 @@
 
             collection.data('collection-settings', settings);
 
+            // events on buttons using a "static" container so even newly
+            // created/ajax downloaded buttons doesn't need further initialization
             var container = $(settings.container);
-
             container
                 .off('click', '.' + settings.prefix + '-action')
                 .on('click', '.' + settings.prefix + '-action', function (e) {
@@ -644,15 +720,16 @@
 
                     dumpCollectionActions(collection, settings, false);
                     e.preventDefault();
-                });
+                }); // .on
 
             dumpCollectionActions(collection, settings, true);
             enableChildrenCollections(collection, null, settings);
 
             settings.after_init(collection);
-        });
+
+        }); // elem.each
 
         return true;
-    };
+    }; // $.fn.collection
 
 })(jQuery);
