@@ -1,7 +1,7 @@
 /*
  * jquery.collection.js
  *
- * Copyright (c) 2015 alain tiemblo <alain at fuz dot org>
+ * Copyright (c) 2042 alain tiemblo <alain at fuz dot org>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish,
@@ -241,9 +241,14 @@
 
             var settings = collection.data('collection-settings');
 
-            changeElementIndex(collection, elements, settings, oldIndex, oldIndex, '__swap__');
-            changeElementIndex(collection, elements, settings, newIndex, newIndex, oldIndex);
-            changeElementIndex(collection, elements, settings, oldIndex, '__swap__', newIndex);
+            if (settings.position_field_selector) {
+                putFieldValue(elements.eq(newIndex).find(settings.position_field_selector), oldIndex);
+                putFieldValue(elements.eq(oldIndex).find(settings.position_field_selector), newIndex);
+            } else {
+                changeElementIndex(collection, elements, settings, oldIndex, oldIndex, '__swap__');
+                changeElementIndex(collection, elements, settings, newIndex, newIndex, oldIndex);
+                changeElementIndex(collection, elements, settings, oldIndex, '__swap__', newIndex);
+            }
 
             elements.eq(oldIndex).insertBefore(elements.eq(newIndex));
             if (newIndex > oldIndex) {
@@ -317,7 +322,6 @@
             }
 
             // initializes the collection with a minimal number of elements
-            // @TODO move this somewehre else
             if (isInitialization) {
                 var container = $(settings.container);
                 var button = collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').first();
@@ -465,17 +469,20 @@
                     tmp.before(code);
                 }
 
+                if (settings.position_field_selector) {
+                    putFieldValue(code.find(settings.position_field_selector), freeIndex);
+                }
+
                 elements = collection.find(settings.elements_selector);
                 var action = code.find('.' + settings.prefix + '-add, .' + settings.prefix + '-duplicate');
                 if (action.length > 0) {
                     action.addClass(settings.prefix + '-action').data('collection', collection.attr('id'));
                 }
 
-                if (that.data(settings.prefix + '-element') !== undefined) {
-                    var index = elements.index($('#' + that.data(settings.prefix + '-element')));
-                    if (index !== -1) {
-                        elements = shiftElementsDown(collection, elements, settings, index);
-                    }
+                if (index + 1 !== freeIndex) {
+                    elements = doMove(collection, settings, elements, code, freeIndex, index + 1);
+                } else {
+                    dumpCollectionActions(collection, settings, false);
                 }
 
                 enableChildrenCollections(collection, code, settings);
@@ -488,7 +495,7 @@
                 }
             }
 
-            if (settings.fade_in) {
+            if (code !== undefined && settings.fade_in) {
                 code.fadeIn('fast');
             }
 
@@ -522,8 +529,8 @@
             return elements;
         };
 
-        // reverse the current element index and the previous one, then graphically
-        // reverse them in the dom
+        // reverse current element and the previous one (so the current element
+        // appears one place higher)
         var doUp = function (collection, settings, elements, element, index) {
             if (index !== 0 && trueOrUndefined(settings.before_up(collection, element))) {
                 elements = swapElements(collection, elements, index, index - 1);
@@ -535,8 +542,8 @@
             return elements;
         };
 
-        // reverse the current element index and the next one, then graphically
-        // reverse them in the dom
+        // reverse the current element and the next one (so the current element
+        // appears one place lower)
         var doDown = function (collection, settings, elements, element, index) {
             if (index !== (elements.length - 1) && trueOrUndefined(settings.before_down(collection, element))) {
                 elements = swapElements(collection, elements, index, index + 1);
@@ -544,6 +551,31 @@
                     elements = swapElements(collection, elements, index + 1, index);
                 }
             }
+
+            return elements;
+        };
+
+        // move an element from a position to an arbitrary new position
+        var doMove = function (collection, settings, elements, element, oldIndex, newIndex) {
+            if (1 === Math.abs(newIndex - oldIndex)) {
+                elements = swapElements(collection, elements, oldIndex, newIndex);
+                if (!(newIndex - oldIndex > 0 ? trueOrUndefined(settings.after_up(collection, element)) : trueOrUndefined(settings.after_down(collection, element)))) {
+                    elements = swapElements(collection, elements, newIndex, oldIndex);
+                }
+            } else {
+                if (oldIndex < newIndex) {
+                    elements = swapElementsUp(collection, elements, settings, oldIndex, newIndex);
+                    if (!(newIndex - oldIndex > 0 ? trueOrUndefined(settings.after_up(collection, element)) : trueOrUndefined(settings.after_down(collection, element)))) {
+                        elements = swapElementsDown(collection, elements, settings, newIndex, oldIndex);
+                    }
+                } else {
+                    elements = swapElementsDown(collection, elements, settings, oldIndex, newIndex);
+                    if (!(newIndex - oldIndex > 0 ? trueOrUndefined(settings.after_up(collection, element)) : trueOrUndefined(settings.after_down(collection, element)))) {
+                        elements = swapElementsUp(collection, elements, settings, newIndex, oldIndex);
+                    }
+                }
+            }
+            dumpCollectionActions(collection, settings, false);
 
             return elements;
         };
@@ -651,25 +683,7 @@
                             }
                             newPosition = elements.index(element);
                             elements = collection.find(settings.elements_selector);
-                            if (1 === Math.abs(newPosition - oldPosition)) {
-                                elements = swapElements(collection, elements, oldPosition, newPosition);
-                                if (!(newPosition - oldPosition > 0 ? trueOrUndefined(settings.after_up(collection, element)) : trueOrUndefined(settings.after_down(collection, element)))) {
-                                    elements = swapElements(collection, elements, newPosition, oldPosition);
-                                }
-                            } else {
-                                if (oldPosition < newPosition) {
-                                    elements = swapElementsUp(collection, elements, settings, oldPosition, newPosition);
-                                    if (!(newPosition - oldPosition > 0 ? trueOrUndefined(settings.after_up(collection, element)) : trueOrUndefined(settings.after_down(collection, element)))) {
-                                        elements = swapElementsDown(collection, elements, settings, newPosition, oldPosition);
-                                    }
-                                } else {
-                                    elements = swapElementsDown(collection, elements, settings, oldPosition, newPosition);
-                                    if (!(newPosition - oldPosition > 0 ? trueOrUndefined(settings.after_up(collection, element)) : trueOrUndefined(settings.after_down(collection, element)))) {
-                                        elements = swapElementsUp(collection, elements, settings, newPosition, oldPosition);
-                                    }
-                                }
-                            }
-                            dumpCollectionActions(collection, settings, false);
+                            doMove(collection, settings, elements, element, oldPosition, newPosition);
                         }
                     }, settings.drag_drop_options));
                 }
@@ -724,6 +738,40 @@
 
             dumpCollectionActions(collection, settings, true);
             enableChildrenCollections(collection, null, settings);
+
+            // if collection elements are given in the wrong order, plugin
+            // must reorder them graphically
+            if (settings.position_field_selector) {
+                var array = [];
+                var elements = collection.find(settings.elements_selector);
+                elements.each(function (index) {
+                    var that = $(this);
+                    array.push({
+                        position: getFieldValue(that.find(settings.position_field_selector)),
+                        element: that
+                    });
+                });
+
+                var sorter = function (a, b) {
+                    return (a.position < b.position ? -1 : (a.position > b.position ? 1 : 0));
+                };
+                array.sort(sorter);
+
+                $.each(array, function(newIndex, object) {
+                    var ids = [];
+                    $(elements).each(function(index) {
+                        ids.push($(this).attr('id'));
+                    });
+
+                    var element = object.element;
+                    var oldIndex = $.inArray(element.attr('id'), ids);
+
+                    if (newIndex !== oldIndex) {
+                        elements = doMove(collection, settings, elements, element, oldIndex, newIndex);
+                        putFieldValue(element.find(settings.position_field_selector), newIndex);
+                    }
+                });
+            } // if (settings.position_field_selector) {
 
             settings.after_init(collection);
 
