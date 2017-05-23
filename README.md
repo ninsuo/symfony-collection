@@ -72,7 +72,9 @@ If you want to use the form theme, but already use one, you can use both with:
      %}
 ```
 
-# Common pitfall with Form Themes
+# Common pitfalls
+
+## Form themes
 
 Most of the time, you will need to create a [form theme](https://symfony.com/doc/current/form/form_customization.html)
 that will help you render your collection and its children in a fancy way.
@@ -87,6 +89,61 @@ for more details).
 
 There are many examples using form themes in the Advanced menu of the [demo website](http://symfony-collection.fuz.org/),
 don't hesitate to look at them.
+
+## Position explicitely stored in a field
+
+A collection is no more than an array of objects, so by default, this plugin move element positions
+in this array. For example, if you have A, B and C in your collection and move B up, it will contain
+B, A, C.
+
+But when Doctrine will persist your collection, it will keep existing entities, and
+simply update their content. For example, if you have a collection containing A, B, C
+with ids 1, 2 and 3, you will end up with a collection containing B, A, C, but still
+ids 1, 2 and 3.
+
+In most cases, that's not a problem. But, if you have other relations attached to each of your
+collection elements, you should never unlink id and value. You'll use a position field on your
+database table, and it will manage position.
+
+Something like:
+
+```php
+    /**
+     * @ORM\Column(name="position", type="integer")
+     */
+    private $position;
+```
+
+This plugin supports this case, you need to create a `position` field in your form (with hidden type),
+mapped to your entity, and give it a class that will serve as a selector:
+
+```php
+        $builder->add('position', HiddenType::class, [
+            'attr' => [
+                'class' => 'my-position',
+            ],
+        ]);
+```
+
+Then, use the `position_field_selector` option to provide it to the plugin:
+
+```js
+    $('.my-selector').collection({
+        position_field_selector: '.my-position'
+    });
+```
+
+*Tip*: to get your entities in the right order, you can use OrderBy annotation.
+
+```php
+/**
+ * @var ArrayCollection[Action]
+ *
+ * @ORM\OneToMany(targetEntity="Action", mappedBy="cron", cascade={"all"}, orphanRemoval=true)
+ * @ORM\OrderBy({"position" = "ASC"})
+ */
+protected $actions;
+```
 
 # Options
 
@@ -106,7 +163,7 @@ Default values are:
      });
 ```
 
-You can also use used classes:
+You can also use following classes:
 
 - `collection-add` for an add button
 - `collection-remove` for a remove button
