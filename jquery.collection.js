@@ -303,7 +303,7 @@
         // this method creates buttons for each action, according to all options set
         // (buttons enabled, minimum/maximum of elements not yet reached, rescue
         // button creation when no more elements are remaining...)
-        var dumpCollectionActions = function (collection, settings, isInitialization) {
+        var dumpCollectionActions = function (collection, settings, isInitialization, event) {
             var init = collection.find('.' + settings.prefix + '-tmp').length === 0;
             var elements = collection.find(settings.elements_selector);
 
@@ -406,10 +406,19 @@
             // make the rescue button appear / disappear according to options (add_at_the_end) and
             // logic (no more elements on the collection)
             if (settings.allow_add) {
+
+                var index = 0;
+                if (event === 'remove' && settings.fade_out) {
+                    index = 1;
+                }
+
                 var rescueAdd = collection.find('.' + settings.prefix + '-rescue-add').css('display', '').removeClass(settings.prefix + '-action-disabled');
                 var adds = collection.find('.' + settings.prefix + '-add');
-                if (!settings.add_at_the_end && adds.length > 0 || settings.custom_add_location) {
+                if (!settings.add_at_the_end && adds.length > index || settings.custom_add_location) {
                     rescueAdd.css('display', 'none');
+                } else if (event === 'remove' && settings.fade_out) {
+                    rescueAdd.css('display', 'none');
+                    rescueAdd.fadeIn('fast');
                 }
                 if (elements.length >= settings.max) {
                     rescueAdd.addClass(settings.prefix + '-action-disabled');
@@ -714,25 +723,30 @@
                     var elements = collection.find(settings.elements_selector);
                     var element = that.data(settings.prefix + '-element') ? $('#' + that.data(settings.prefix + '-element')) : undefined;
                     var index = element && element.length ? elements.index(element) : -1;
+                    var event = null;
 
                     var isDuplicate = that.is('.' + settings.prefix + '-duplicate');
                     if ((that.is('.' + settings.prefix + '-add') || that.is('.' + settings.prefix + '-rescue-add') || isDuplicate) && settings.allow_add) {
+                        event = 'add';
                         elements = doAdd(container, that, collection, settings, elements, element, index, isDuplicate);
                     }
 
                     if (that.is('.' + settings.prefix + '-remove') && settings.allow_remove) {
+                        event = 'remove';
                         elements = doDelete(collection, settings, elements, element, index);
                     }
 
                     if (that.is('.' + settings.prefix + '-up') && settings.allow_up) {
+                        event = 'up';
                         elements = doUp(collection, settings, elements, element, index);
                     }
 
                     if (that.is('.' + settings.prefix + '-down') && settings.allow_down) {
+                        event = 'down';
                         elements = doDown(collection, settings, elements, element, index);
                     }
 
-                    dumpCollectionActions(collection, settings, false);
+                    dumpCollectionActions(collection, settings, false, event);
                     e.preventDefault();
                 }); // .on
 
