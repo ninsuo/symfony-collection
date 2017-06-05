@@ -327,7 +327,7 @@
                 var button = collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').first();
                 while (elements.length < settings.init_with_n_elements) {
                     var element = elements.length > 0 ? elements.last() : undefined;
-                    var index = elements.length + 1;
+                    var index = elements.length - 1;
                     elements = doAdd(container, button, collection, settings, elements, element, index, false);
                 }
             }
