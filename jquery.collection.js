@@ -344,6 +344,11 @@
                     element.append(actions);
                 }
 
+                var delta = 0;
+                if (event === 'remove' && settings.fade_out) {
+                    delta = 1;
+                }
+
                 var buttons = [
                     {
                         'enabled': settings.allow_remove,
@@ -364,12 +369,12 @@
                         'enabled': settings.allow_add && !settings.add_at_the_end && !settings.custom_add_location,
                         'selector': settings.prefix + '-add',
                         'html': settings.add,
-                        'condition': elements.length < settings.max
+                        'condition': elements.length - delta < settings.max
                     }, {
                         'enabled': settings.allow_duplicate,
                         'selector': settings.prefix + '-duplicate',
                         'html': settings.duplicate,
-                        'condition': elements.length < settings.max
+                        'condition': elements.length - delta < settings.max
                     }
                 ];
 
@@ -407,20 +412,20 @@
             // logic (no more elements on the collection)
             if (settings.allow_add) {
 
-                var index = 0;
+                var delta = 0;
                 if (event === 'remove' && settings.fade_out) {
-                    index = 1;
+                    delta = 1;
                 }
 
                 var rescueAdd = collection.find('.' + settings.prefix + '-rescue-add').css('display', '').removeClass(settings.prefix + '-action-disabled');
                 var adds = collection.find('.' + settings.prefix + '-add');
-                if (!settings.add_at_the_end && adds.length > index || settings.custom_add_location) {
+                if (!settings.add_at_the_end && adds.length > delta || settings.custom_add_location) {
                     rescueAdd.css('display', 'none');
                 } else if (event === 'remove' && settings.fade_out) {
                     rescueAdd.css('display', 'none');
                     rescueAdd.fadeIn('fast');
                 }
-                if (elements.length >= settings.max) {
+                if (elements.length - delta >= settings.max) {
                     rescueAdd.addClass(settings.prefix + '-action-disabled');
                     if (settings.hide_useless_buttons) {
                         collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').css('display', 'none');
