@@ -8,5 +8,14 @@
             "email": "ninsuo@gmail.com"
         }
     ],
-    "require": {}
+    "require": {},
+    "scripts": {
+        "post-install-cmd": "Fuz\\Symfony\\Collection\\ScriptHandler::postInstall",
+        "post-update-cmd": "Fuz\\Symfony\\Collection\\ScriptHandler::postUpdate"
+    },
+    "autoload": {
+        "classmap": [
+            "ScriptHandler.php"
+        ]
+    }
 }
