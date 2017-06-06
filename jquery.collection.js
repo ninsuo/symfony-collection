@@ -462,6 +462,9 @@
             if (elements.length < settings.max && (isDuplicate && trueOrUndefined(settings.before_duplicate(collection, element)) || trueOrUndefined(settings.before_add(collection, element)))) {
                 var prototype = collection.data('prototype');
                 var freeIndex = elements.length;
+                if (index === -1) {
+                    index = elements.length - 1;
+                }
                 var regexp = new RegExp(pregQuote(settings.prototype_name), 'g');
                 var code = $(prototype.replace(regexp, freeIndex));
                 var tmp = collection.find('> .' + settings.prefix + '-tmp');
