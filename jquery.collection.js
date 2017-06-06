@@ -354,17 +354,17 @@
                         'enabled': settings.allow_remove,
                         'selector': settings.prefix + '-remove',
                         'html': settings.remove,
-                        'condition': elements.length > settings.min
+                        'condition': elements.length - delta > settings.min
                     }, {
                         'enabled': settings.allow_up,
                         'selector': settings.prefix + '-up',
                         'html': settings.up,
-                        'condition': elements.index(element) !== 0
+                        'condition': elements.length - delta > 1 && elements.index(element) !== 0
                     }, {
                         'enabled': settings.allow_down,
                         'selector': settings.prefix + '-down',
                         'html': settings.down,
-                        'condition': elements.index(element) !== elements.length - 1
+                        'condition': elements.length - delta > 1 && elements.index(element) !== elements.length - 1
                     }, {
                         'enabled': settings.allow_add && !settings.add_at_the_end && !settings.custom_add_location,
                         'selector': settings.prefix + '-add',
