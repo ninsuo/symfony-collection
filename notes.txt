@@ -6,5 +6,5 @@
 git push origin master
 git tag -a '2.1.5' -m 'tag'
 git push origin 2.1.5
-npm publish
 
+npm publish
