@@ -18,9 +18,49 @@ Demo source code is here: https://github.com/ninsuo/symfony-collection-demo
 
 # Installation
 
+This plugin is a set of 2 files:
+
+- the jquery plugin itself, it should be located with your assets
+
+- a twig form theme that will ease use of it, it should be located in your views
+
+If you're not using Composer and the given script handlers, you'll have to move both file manually.
+
+## Using Composer
+
+To automate the plugin download and installation, edit composer.json and add:
+
+```json
+    "require": {
+        ...
+        "ninsuo/symfony-collection": "dev-master"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            ...
+            "Fuz\\Symfony\\Collection\\ScriptHandler::postInstall"
+        ],
+        "post-update-cmd": [
+            ...
+            "Fuz\\Symfony\\Collection\\ScriptHandler::postUpdate"
+        ]
+    }
+```
+
+Replace `dev-master` by the current stable version.
+
+- symfony-collection form theme will be installed in `app/Resources/views`
+
+- symfony-collection jquery plugin will be installed in `web/js`.
+
+If you prefer to install the plugin manually, you should use:
+
 ```sh
 composer require ninsuo/symfony-collection
 ```
+
+You'll have to move `vendor/ninsuo/symfony-collection/jquery.collection.js` in your assets, and
+`vendor/ninsuo/symfony-collection/jquery.collection.html.twig` wherever you want in your views.
 
 # Basic usage
 
@@ -35,7 +75,7 @@ you require of course). And a class that will be used as a selector to run the c
         'allow_remove' => true,
         'prototype' => true,
         'attr' => array(
-                'class' => 'my-selector',
+            'class' => 'my-selector',
         ),
 ))
 ```
@@ -43,7 +83,7 @@ you require of course). And a class that will be used as a selector to run the c
 Then, render your form after applying the given custom theme:
 
 ```jinja
-     {% form_theme myForm 'AcmeDemoBundle::jquery.collection.html.twig' %}
+     {% form_theme myForm 'jquery.collection.html.twig' %}
      {{ form(myForm) }}
 ```
 

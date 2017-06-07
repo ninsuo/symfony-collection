@@ -10,8 +10,12 @@
     ],
     "require": {},
     "scripts": {
-        "post-install-cmd": "Fuz\\Symfony\\Collection\\ScriptHandler::postInstall",
-        "post-update-cmd": "Fuz\\Symfony\\Collection\\ScriptHandler::postUpdate"
+        "post-install-cmd": [
+            "Fuz\\Symfony\\Collection\\ScriptHandler::postInstall"
+        ],
+        "post-update-cmd": [
+            "Fuz\\Symfony\\Collection\\ScriptHandler::postUpdate"
+        ]
     },
     "autoload": {
         "classmap": [
