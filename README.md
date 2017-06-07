@@ -64,7 +64,7 @@ You'll have to move `vendor/ninsuo/symfony-collection/jquery.collection.js` in y
 
 ## Using npm
 
-``sh
+```sh
 npm install ninsuo/symfony-collection
 ```
 
@@ -75,7 +75,7 @@ You'll have to move:
 
 ## Using Bower
 
-``sh
+```sh
 bower install ninsuo/symfony-collection
 ```
 
@@ -131,7 +131,7 @@ If you want to use the form theme, but already use one, you can use both with:
 ```jinja
      {%
         form_theme myForm
-            'AcmeDemoBundle::jquery.collection.html.twig'
+            'jquery.collection.html.twig'
             'AcmeDemoBundle::my-own-form-theme.html.twig'
      %}
 ```
@@ -237,19 +237,6 @@ Then, use the `position_field_selector` option to provide it to the plugin:
         position_field_selector: '.my-position'
     });
 ```
-
-*Tip*: to get your entities in the right order, you can use OrderBy annotation.
-
-```php
-/**
- * @var ArrayCollection[Action]
- *
- * @ORM\OneToMany(targetEntity="Action", mappedBy="cron", cascade={"all"}, orphanRemoval=true)
- * @ORM\OrderBy({"position" = "ASC"})
- */
-protected $actions;
-```
-
 # Options
 
 **Customize rendered links** ([demo](http://symfony-collection.fuz.org/symfony3/options/customButtons))
