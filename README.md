@@ -18,11 +18,75 @@ Demo source code is here: https://github.com/ninsuo/symfony-collection-demo
 
 # Installation
 
+This plugin is a set of 2 files:
+
+- the jquery plugin itself, it should be located with your assets
+
+- a twig form theme that will ease use of it, it should be located in your views
+
+If you're not using Composer and the given script handlers, you'll have to move both file manually.
+
+## Using Composer
+
+To automate the plugin download and installation, edit composer.json and add:
+
+```json
+    "require": {
+        ...
+        "ninsuo/symfony-collection": "dev-master"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            ...
+            "Fuz\\Symfony\\Collection\\ScriptHandler::postInstall"
+        ],
+        "post-update-cmd": [
+            ...
+            "Fuz\\Symfony\\Collection\\ScriptHandler::postUpdate"
+        ]
+    }
+```
+
+Replace `dev-master` by the current stable version.
+
+- symfony-collection form theme will be installed in `app/Resources/views`
+
+- symfony-collection jquery plugin will be installed in `web/js`.
+
+If you prefer to install the plugin manually, you should use:
+
 ```sh
 composer require ninsuo/symfony-collection
 ```
 
+You'll have to move `vendor/ninsuo/symfony-collection/jquery.collection.js` in your assets, and
+`vendor/ninsuo/symfony-collection/jquery.collection.html.twig` wherever you want in your views.
+
+## Using npm
+
+``sh
+npm install ninsuo/symfony-collection
+```
+
+You'll have to move:
+
+- `node_modules/symfony-collection/jquery.collection.js` in your assets (for example in `web/js`).
+- `node_modules/symfony-collection/jquery.collection.html.twig` wherever you want in your views (for example in `app/Resources/views`)
+
+## Using Bower
+
+``sh
+bower install ninsuo/symfony-collection
+```
+
+You'll have to move:
+
+- `bower_components/symfony-collection/jquery.collection.js` in your assets (for example in `web/js`)
+- `bower_components/symfony-collection/jquery.collection.html.twig` in your views (for example in `app/Resources/views`)
+
 # Basic usage
+
+## A simple collection
 
 Your collection type should contain `prototype`, `allow_add`, `allow_remove` options (depending on which buttons
 you require of course). And a class that will be used as a selector to run the collection plugin.
@@ -35,7 +99,7 @@ you require of course). And a class that will be used as a selector to run the c
         'allow_remove' => true,
         'prototype' => true,
         'attr' => array(
-                'class' => 'my-selector',
+            'class' => 'my-selector',
         ),
 ))
 ```
@@ -43,7 +107,7 @@ you require of course). And a class that will be used as a selector to run the c
 Then, render your form after applying the given custom theme:
 
 ```jinja
-     {% form_theme myForm 'AcmeDemoBundle::jquery.collection.html.twig' %}
+     {% form_theme myForm 'jquery.collection.html.twig' %}
      {{ form(myForm) }}
 ```
 
@@ -51,7 +115,7 @@ Finally, put the following code at the bottom of your page.
 
 ```html
     <script src="{{ asset('js/jquery.js') }}"></script>
-    <script src="{{ asset('bundles/acmedemo/js/jquery.collection.js') }}"></script>
+    <script src="{{ asset('js/jquery.collection.js') }}"></script>
 
     <script type="text/javascript">
         $('.my-selector').collection();
@@ -72,25 +136,66 @@ If you want to use the form theme, but already use one, you can use both with:
      %}
 ```
 
-# Common pitfalls
-
-## Form themes
+## Using a form theme
 
 Most of the time, you will need to create a [form theme](https://symfony.com/doc/current/form/form_customization.html)
 that will help you render your collection and its children in a fancy way.
 
-You need to consider two things to avoid problems:
+- in your form type(s), overwrite the `getBlockPrefix()` method and return a good name.
 
-1) in your form type(s), overwrite the `getBlockPrefix()` method and return a good name (ex: `AddressType` for an address).
+```php
+// Fuz/AppBundle/Form/AddressType.php
 
-2) in your form theme, you will just need to use the same name (`{% block AddressType_XXX %}`). Replace `XXX` by `widget`,
+<?php
+
+namespace Fuz\AppBundle\Form;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class AddressType extends AbstractType
+{
+    // ...
+
+    public function getBlockPrefix()
+    {
+        return 'AddressType';
+    }
+}
+```
+
+- in your form theme, you will just need to use the same name (`{% block AddressType_XXX %}`). Replace `XXX` by `widget`,
 `error` or `row` according to what you want to do (read the [Symfony doc](https://symfony.com/doc/current/form/form_customization.html)
 for more details).
+
+```jinja
+{# FuzAppBundle:Advanced:addresses-theme.html.twig #}
+
+{% block AddressType_row %}
+<div class="col-md-3">
+  {{ form_label(form) }}
+  {{ form_errors(form) }}
+  {{ form_widget(form) }}
+</div>
+{% endblock %}
+
+{% block AddressType_widget %}
+    {{ form_widget(form) }}
+    <br/>
+    <p class="text-center">
+        <a href="#" class="collection-up btn btn-default">&lt;</a>
+        <a href="#" class="collection-remove btn btn-default">-</a>
+        <a href="#" class="collection-add btn btn-default">+</a>
+        <a href="#" class="collection-down btn btn-default">&gt;</a>
+    </p>
+{% endblock %}
+```
 
 There are many examples using form themes in the Advanced menu of the [demo website](http://symfony-collection.fuz.org/),
 don't hesitate to look at them.
 
-## Position explicitely stored in a field
+## Using Doctrine, and a position explicitely stored in a field
 
 A collection is no more than an array of objects, so by default, this plugin move element positions
 in this array. For example, if you have A, B and C in your collection and move B up, it will contain
@@ -471,4 +576,3 @@ In the plugin options:
          }]
      });
 ```
-
