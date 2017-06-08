@@ -1,14 +1,14 @@
 # symfony-collection
 A jQuery plugin that manages adding, deleting and moving elements from a Symfony collection
 
+![sample](http://ocarina.fr/medias/duplicate.png)
+
 This is not really difficult to manage your collections using the `data-prototype` Symfony provides. But
 after using several times collections, it appeared useful to me to create a jQuery plugin to do this job.
 
 This is even more true when you need your elements to be moved up and down or added at a specific position: as the
 form will be proceeded using field names, we should swap field contents or field names instead of moving fields themselves to get the job done. That's
 not really friendly in javascript, so this plugin also aims to deal with that.
-
-![sample](http://ocarina.fr/medias/duplicate.png)
 
 # Live demo
 
@@ -24,9 +24,7 @@ This plugin is a set of 2 files:
 
 - a twig form theme that will ease use of it, it should be located in your views
 
-If you're not using Composer and the given script handlers, you'll have to move both file manually.
-
-## Using Composer
+## Installation using Composer
 
 To automate the plugin download and installation, edit composer.json and add:
 
@@ -59,10 +57,13 @@ If you prefer to install the plugin manually, you should use:
 composer require ninsuo/symfony-collection
 ```
 
-You'll have to move `vendor/ninsuo/symfony-collection/jquery.collection.js` in your assets, and
-`vendor/ninsuo/symfony-collection/jquery.collection.html.twig` wherever you want in your views.
+You'll have to move:
 
-## Using npm
+- `vendor/ninsuo/symfony-collection/jquery.collection.js` in your assets (for example in `web/js`)
+
+- `vendor/ninsuo/symfony-collection/jquery.collection.html.twig` in your views (for example in `app/Resources/views`)
+
+## Installation using npm
 
 ```sh
 npm install ninsuo/symfony-collection
@@ -73,7 +74,7 @@ You'll have to move:
 - `node_modules/symfony-collection/jquery.collection.js` in your assets (for example in `web/js`).
 - `node_modules/symfony-collection/jquery.collection.html.twig` wherever you want in your views (for example in `app/Resources/views`)
 
-## Using Bower
+## Installation using Bower
 
 ```sh
 bower install ninsuo/symfony-collection
@@ -120,20 +121,6 @@ Finally, put the following code at the bottom of your page.
     <script type="text/javascript">
         $('.my-selector').collection();
     </script>
-```
-
-**Notes**
-
-If you don't want to use the form theme, you should set the `name_prefix` option manually (see below).
-
-If you want to use the form theme, but already use one, you can use both with:
-
-```jinja
-     {%
-        form_theme myForm
-            'jquery.collection.html.twig'
-            'AcmeDemoBundle::my-own-form-theme.html.twig'
-     %}
 ```
 
 ## Using a form theme
@@ -190,6 +177,16 @@ for more details).
         <a href="#" class="collection-down btn btn-default">&gt;</a>
     </p>
 {% endblock %}
+```
+
+Then, use both form themes using:
+
+```jinja
+     {%
+        form_theme myForm
+            'jquery.collection.html.twig'
+            'FuzAppBundle:Advanced:addresses-theme.html.twig'
+     %}
 ```
 
 There are many examples using form themes in the Advanced menu of the [demo website](http://symfony-collection.fuz.org/),

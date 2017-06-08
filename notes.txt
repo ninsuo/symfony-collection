@@ -1,9 +1,10 @@
 
 -- don't forget to set the right tag name in package.json
 
+-- only once: bower register symfony-collection git://github.com/ninsuo/symfony-collection.git
+
 git push origin master
-git tag -a '2.1.4' -m 'tag'
-git push origin 2.1.4
-bower register symfony-collection git://github.com/ninsuo/symfony-collection.git
+git tag -a '2.1.5' -m 'tag'
+git push origin 2.1.5
 npm publish
 
