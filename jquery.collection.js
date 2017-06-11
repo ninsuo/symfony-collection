@@ -630,6 +630,18 @@
                 collection = elem;
             }
 
+            // enforcing logic between options
+            if (!settings.allow_add) {
+                settings.allow_duplicate = false;
+                settings.add_at_the_end = false;
+            }
+            if (settings.init_with_n_elements > settings.max) {
+                settings.init_with_n_elements = settings.max;
+            }
+            if (settings.min && (!settings.init_with_n_elements || settings.init_with_n_elements < settings.min)) {
+                settings.init_with_n_elements = settings.min;
+            }
+
             // user callback
             settings.before_init(collection);
 
@@ -662,10 +674,6 @@
                 console.log("jquery.collection.js: - use the form theme given with this plugin source");
                 console.log("jquery.collection.js: - set name_prefix option to  '{{ formView.myCollectionField.vars.full_name }}'");
                 return true;
-            }
-
-            if (settings.init_with_n_elements < settings.min) {
-                settings.init_with_n_elements = settings.min;
             }
 
             // drag & drop support: this is a bit more complex than pressing "up" or
