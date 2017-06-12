@@ -1,7 +1,7 @@
 # symfony-collection
 A jQuery plugin that manages adding, deleting and moving elements from a Symfony collection
 
-![sample](http://ocarina.fr/medias/duplicate.png)
+![sample](http://ocarina.fr/medias/collection.png)
 
 This is not really difficult to manage your collections using the `data-prototype` Symfony provides. But
 after using several times collections, it appeared useful to me to create a jQuery plugin to do this job.
