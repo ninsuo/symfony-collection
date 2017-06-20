@@ -184,13 +184,15 @@ Then, use both form themes using:
 ```jinja
      {%
         form_theme myForm
-            'jquery.collection.html.twig'
             'FuzAppBundle:Advanced:addresses-theme.html.twig'
+            'jquery.collection.html.twig'
      %}
 ```
 
 There are many examples using form themes in the Advanced menu of the [demo website](http://symfony-collection.fuz.org/),
 don't hesitate to look at them.
+
+Always put `jquery.collection.html.twig` form theme below the other you use, to avoid that settings gets overwritten.
 
 ## Using Doctrine, and a position explicitely stored in a field
 
