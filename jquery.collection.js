@@ -772,36 +772,10 @@
             // if collection elements are given in the wrong order, plugin
             // must reorder them graphically
             if (settings.position_field_selector) {
-                var array = [];
-                var elements = collection.find(settings.elements_selector);
-                elements.each(function (index) {
-                    var that = $(this);
-                    array.push({
-                        position: getFieldValue(that.find(settings.position_field_selector)),
-                        element: that
-                    });
-                });
-
-                var sorter = function (a, b) {
-                    return (a.position < b.position ? -1 : (a.position > b.position ? 1 : 0));
-                };
-                array.sort(sorter);
-
-                $.each(array, function(newIndex, object) {
-                    var ids = [];
-                    $(elements).each(function(index) {
-                        ids.push($(this).attr('id'));
-                    });
-
-                    var element = object.element;
-                    var oldIndex = $.inArray(element.attr('id'), ids);
-
-                    if (newIndex !== oldIndex) {
-                        elements = doMove(collection, settings, elements, element, oldIndex, newIndex);
-                        putFieldValue(element.find(settings.position_field_selector), newIndex);
-                    }
-                });
-            } // if (settings.position_field_selector) {
+                collection.find(settings.elements_selector).sort(function(a, b){
+                    return parseFloat(getFieldValue($(a).find(settings.position_field_selector))) - parseFloat(getFieldValue($(b).find(settings.position_field_selector)));
+                }).appendTo(collection);
+            } 
 
             settings.after_init(collection);
 
