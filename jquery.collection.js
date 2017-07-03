@@ -772,9 +772,12 @@
             // if collection elements are given in the wrong order, plugin
             // must reorder them graphically
             if (settings.position_field_selector) {
-                collection.find(settings.elements_selector).sort(function(a, b){
+                var elements = collection.find(settings.elements_selector);
+                var sortedCollection = elements.sort(function(a, b){
                     return parseFloat(getFieldValue($(a).find(settings.position_field_selector))) - parseFloat(getFieldValue($(b).find(settings.position_field_selector)));
-                }).appendTo(collection);
+                }).each(function(newIndex, element){
+                    elements = doMove(collection, settings, elements, $(this), collection.index($(this)), newIndex);
+                });
             } 
 
             settings.after_init(collection);
