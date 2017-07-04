@@ -4,7 +4,7 @@
 -- only once: bower register symfony-collection git://github.com/ninsuo/symfony-collection.git
 
 git push origin master
-git tag -a '2.1.6' -m 'tag'
-git push origin 2.1.6
+git tag -a '2.1.7' -m 'tag'
+git push origin 2.1.7
 
 npm publish

@@ -44,14 +44,21 @@ To automate the plugin download and installation, edit composer.json and add:
         ]
     }
 ```
-
-Replace `dev-master` by the current stable version.
+Files will be automatically installed at:
 
 - symfony-collection form theme will be installed in `app/Resources/views`
 
 - symfony-collection jquery plugin will be installed in `web/js`.
 
-If you prefer to install the plugin manually, you should use:
+Tips:
+
+- Replace `dev-master` by the current stable version.
+
+- Put script handlers before Symfony's installAssets if you wish to benefit from your assets optimizations.
+
+- Add `app/Resources/views/jquery.collection.html.twig` and `web/js/jquery.collection.js` to your `.gitignore`
+
+If you prefer to install the plugin manually, you can use:
 
 ```sh
 composer require ninsuo/symfony-collection

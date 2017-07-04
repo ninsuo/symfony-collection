@@ -27,7 +27,7 @@ class ScriptHandler
     {
         $collectionDir = $vendorDir.'/ninsuo/symfony-collection';
 
-        echo "*** Symfony Collection: Installing Twig form theme... \t";
+        echo "*** ninsuo/symfony-collection: Installing Twig form theme... \t";
 
         $viewsDir = realpath($vendorDir.'/../app/Resources/views');
 
@@ -52,7 +52,7 @@ class ScriptHandler
     {
         $collectionDir = $vendorDir.'/ninsuo/symfony-collection';
 
-        echo "*** Symfony Collection: Installing jQuery plugin... \t";
+        echo "*** ninsuo/symfony-collection: Installing jQuery plugin... \t";
 
         $webDir = realpath($vendorDir.'/../web/');
         if (!is_dir($webDir)) {
