@@ -777,7 +777,7 @@
                 elements.each(function (index) {
                     var that = $(this);
                     array.push({
-                        position: getFieldValue(that.find(settings.position_field_selector)),
+                        position: parseFloat(getFieldValue(that.find(settings.position_field_selector))),
                         element: that
                     });
                 });
