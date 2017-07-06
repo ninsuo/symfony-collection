@@ -202,6 +202,16 @@
         var changeElementIndex = function (collection, elements, settings, index, oldIndex, newIndex) {
             var toReplace = new RegExp(pregQuote(settings.name_prefix + '[' + oldIndex + ']'), 'g');
             var replaceWith = settings.name_prefix + '[' + newIndex + ']';
+
+            if (settings.children) {
+                $.each(settings.children, function(key, child) {
+                    var childCollection = collection.find(child.selector);
+                    var childSettings = childCollection.data('collection-settings');
+                    childSettings.name_prefix = childSettings.name_prefix.replace(toReplace, replaceWith);
+                    childCollection.data('collection-settings', childSettings);
+                });
+            }
+
             replaceAttrData(elements, index, toReplace, replaceWith);
 
             toReplace = new RegExp(pregQuote(collection.attr('id') + '_' + oldIndex), 'g');
@@ -210,7 +220,7 @@
         };
 
         // same as above, but will replace element names and indexes in an html string instead
-        // of in a dom element
+        // of in a dom element.
         var changeHtmlIndex = function (collection, settings, html, oldIndex, newIndex) {
             var toReplace = new RegExp(pregQuote(settings.name_prefix + '[' + oldIndex + ']'), 'g');
             var replaceWith = settings.name_prefix + '[' + newIndex + ']';
