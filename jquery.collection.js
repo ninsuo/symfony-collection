@@ -205,7 +205,7 @@
 
             if (settings.children) {
                 $.each(settings.children, function(key, child) {
-                    var childCollection = collection.find(child.selector);
+                    var childCollection = collection.find(child.selector).eq(index);
                     var childSettings = childCollection.data('collection-settings');
                     childSettings.name_prefix = childSettings.name_prefix.replace(toReplace, replaceWith);
                     childCollection.data('collection-settings', childSettings);
