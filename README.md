@@ -440,6 +440,21 @@ By default, your collection is initialized with the following options:
 Note that you should not overload `start` and `update` callbacks as they are used by this plugin, see
 `drag_drop_start` and `drag_drop_update` options in advanced usage below for more details.
 
+**Change the children selector**
+
+By default, Symfony writes each element of a collection in a div below the collection itself. So
+this plugin considers `> div` as a default value to get collection elements. But, you may need
+to display each element of your collection in a table, so you can change this value.
+
+```js
+     $('.collection').collection({
+        elements_selector: '> div'
+     });
+```
+
+You may use `> tr`, or more specifically `> tr.child` or just `.child` if you set `class="child"` at the top of your
+form theme. The goal is to reference each item in the collection whatever the markup.
+
 # Advanced usage
 
 **Changing action's positions** ([demo](http://symfony-collection.fuz.org/symfony3/advanced/customFormTheme))
