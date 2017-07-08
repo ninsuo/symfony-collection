@@ -452,8 +452,8 @@ to display each element of your collection in a table, so you can change this va
      });
 ```
 
-You may use `> tr`, or more specifically `> tr.child` or just `.child` if you set `class="child"` at the top of your
-form theme. The goal is to reference each item in the collection whatever the markup.
+You may use `> tr`, `thead > tr` or more specifically `tr.item` or just `.item` if you set `class="item"` at the top
+of your item's form theme. The goal is to reference each item in the collection whatever the markup.
 
 # Advanced usage
 
