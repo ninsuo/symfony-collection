@@ -455,6 +455,57 @@ to display each element of your collection in a table, so you can change this va
 You may use `> tr`, `thead > tr` or more specifically `tr.item` or just `.item` if you set `class="item"` at the top
 of your item's form theme. The goal is to reference each item in the collection whatever the markup.
 
+**Change the parent selector**
+
+To be able to add elements to the collection, this plugin should be aware of the dom object that will contain them.
+
+By default, your collection elements will be located just below your collection, for example:
+
+```html
+    <div id="collection">
+       <div id="child_0">(...)</div>
+       <div id="child_1">(...)</div>
+       <div id="child_2">(...)</div>
+    </div>
+```
+
+But you may need to put elements deeper in the dom, for example when you put elements in a table:
+
+```html
+    <table id="collection">
+        <tbody>
+            <tr id="child_0">(...)</tr>
+            <tr id="child_1">(...)</tr>
+            <tr id="child_2">(...)</tr>
+        </tbody>
+    </table>
+```
+
+In that example, parent selector should be `table.collection tbody`.
+
+Note that you can use `%id%` inside `elements_parent_selector`, it will be automatically replaced by the
+collection's id. This is particularly useful when you're dealing with nested collections.
+
+Example:
+
+```js
+     $('.collection').collection({
+        // ...
+        children: [{
+            // ...
+            elements_parent_selector: '%id% tbody'
+        }]
+     });
+```
+
+Default value:
+
+```js
+     $('.collection').collection({
+        elements_parent_selector: '%id%' // will be the collection itself
+     });
+```
+
 # Advanced usage
 
 **Changing action's positions** ([demo](http://symfony-collection.fuz.org/symfony3/advanced/customFormTheme))
@@ -579,8 +630,8 @@ In the plugin options:
          prefix: 'parent',
          children: [{
              selector: '.child-collection',
-             prefix: 'child',
-             ...
+             prefix: 'child'
+             // ...
          }]
      });
 ```

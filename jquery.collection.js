@@ -74,6 +74,7 @@
             prototype_name: '__name__',
             name_prefix: null,
             elements_selector: '> div',
+            elements_parent_selector: '%id%',
             children: null,
             init_with_n_elements: 0,
             hide_useless_buttons: true,
@@ -207,8 +208,10 @@
                 $.each(settings.children, function(key, child) {
                     var childCollection = collection.find(child.selector).eq(index);
                     var childSettings = childCollection.data('collection-settings');
-                    childSettings.name_prefix = childSettings.name_prefix.replace(toReplace, replaceWith);
-                    childCollection.data('collection-settings', childSettings);
+                    if (childSettings) {
+                        childSettings.name_prefix = childSettings.name_prefix.replace(toReplace, replaceWith);
+                        childCollection.data('collection-settings', childSettings);
+                    }
                 });
             }
 
@@ -314,13 +317,14 @@
         // (buttons enabled, minimum/maximum of elements not yet reached, rescue
         // button creation when no more elements are remaining...)
         var dumpCollectionActions = function (collection, settings, isInitialization, event) {
-            var init = collection.find('.' + settings.prefix + '-tmp').length === 0;
+            var elementsParent = $(settings.elements_parent_selector);
+            var init = elementsParent.find('.' + settings.prefix + '-tmp').length === 0;
             var elements = collection.find(settings.elements_selector);
 
             // add a rescue button that will appear only if collection is emptied
             if (settings.allow_add) {
                 if (init) {
-                    collection.append('<span class="' + settings.prefix + '-tmp"></span>');
+                    elementsParent.append('<span class="' + settings.prefix + '-tmp"></span>');
                     if (settings.add) {
                         collection.append(
                             $(settings.add)
@@ -477,7 +481,8 @@
                 }
                 var regexp = new RegExp(pregQuote(settings.prototype_name), 'g');
                 var code = $(prototype.replace(regexp, freeIndex));
-                var tmp = collection.find('> .' + settings.prefix + '-tmp');
+                var elementsParent = $(settings.elements_parent_selector);
+                var tmp = elementsParent.find('> .' + settings.prefix + '-tmp');
                 var id = $(code).find('[id]').first().attr('id');
 
                 if (isDuplicate) {
@@ -539,7 +544,8 @@
                     var backup = toDelete.clone({withDataAndEvents: true}).show();
                     toDelete.remove();
                     if (!trueOrUndefined(settings.after_remove(collection, backup))) {
-                        collection.find('> .' + settings.prefix + '-tmp').before(backup);
+                        var elementsParent = $(settings.elements_parent_selector);
+                        elementsParent.find('> .' + settings.prefix + '-tmp').before(backup);
                         elements = collection.find(settings.elements_selector);
                         elements = shiftElementsDown(collection, elements, settings, index - 1);
                     }
@@ -638,6 +644,16 @@
                 }
             } else {
                 collection = elem;
+            }
+
+            // when adding elements to a collection, we should be aware of the node that will contain them
+            settings.elements_parent_selector = settings.elements_parent_selector.replace('%id%', '#' + getOrCreateId('', collection));
+            if (!settings.elements_parent_selector) {
+                settings.elements_parent_selector = '#' + getOrCreateId('', collection);
+                if ($(settings.elements_parent_selector).length === 0) {
+                    console.log("jquery.collection.js: given elements parent selector does not return any object.");
+                    return true;
+                }
             }
 
             // enforcing logic between options
