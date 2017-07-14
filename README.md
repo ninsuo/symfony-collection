@@ -481,13 +481,28 @@ But you may need to put elements deeper in the dom, for example when you put ele
     </table>
 ```
 
-In that case, parent selector should be `table.collection tbody`.
+In that example, parent selector should be `table.collection tbody`.
+
+Note that you can use `%id%` inside `elements_parent_selector`, it will be automatically replaced by the
+collection's id. This is particularly useful when you're dealing with nested collections.
+
+Example:
+
+```js
+     $('.collection').collection({
+        // ...
+        children: [{
+            // ...
+            elements_parent_selector: '%id% tbody'
+        }]
+     });
+```
 
 Default value:
 
 ```js
      $('.collection').collection({
-        elements_parent_selector: null // will be the collection itself
+        elements_parent_selector: '%id%' // will be the collection itself
      });
 ```
 
