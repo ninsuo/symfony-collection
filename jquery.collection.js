@@ -483,7 +483,8 @@
                 }
                 var regexp_label = new RegExp(pregQuote(settings.prototype_label), 'g');
                 var regexp_name = new RegExp(pregQuote(settings.prototype_name), 'g');
-                prototype = prototype.replace(regexp_label, settings.label_prefix + ' ' + freeIndex);
+                var item_label = settings.label_prefix + ' ' + freeIndex;
+                prototype = prototype.replace(regexp_label, item_label);
                 var code = $(prototype.replace(regexp_name, freeIndex));
                 var elementsParent = $(settings.elements_parent_selector);
                 var tmp = elementsParent.find('> .' + settings.prefix + '-tmp');
