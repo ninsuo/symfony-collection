@@ -243,6 +243,35 @@ Then, use the `position_field_selector` option to provide it to the plugin:
         position_field_selector: '.my-position'
     });
 ```
+
+## Several collections on the same page
+
+If you wish to create several collections on the same page, you'll need to change the collection prefix
+in order for the plugin to trigger the right actions for the right collection.
+ 
+For example:
+
+```js
+     $('.collectionA').collection({
+        'prefix': 'first-collection'
+     });
+
+     $('.collectionB').collection({
+        'prefix': 'second-collection'
+     });
+```
+
+Then if you want to edit those collections form theme, you'll need to replace
+`collection-add` by `first-collection-add` on your add buttons for exmaple.
+
+```html
+   <a href="#" class="first-collection-add btn btn-default">
+       <span class="glyphicon glyphicon-plus-sign"></span>
+   </a>
+```
+
+See [this sample](https://symfony-collection.fuz.org/symfony3/form-with-several-collections) for a working example.
+
 # Options
 
 **Customize rendered links** ([demo](http://symfony-collection.fuz.org/symfony3/options/customButtons))
