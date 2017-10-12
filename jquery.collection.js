@@ -72,7 +72,9 @@
             add_at_the_end: false,
             prefix: 'collection',
             prototype_name: '__name__',
+            prototype_label: '__name__label__',
             name_prefix: null,
+            label_prefix: 'item',
             elements_selector: '> div',
             elements_parent_selector: '%id%',
             children: null,
@@ -479,8 +481,11 @@
                 if (index === -1) {
                     index = elements.length - 1;
                 }
-                var regexp = new RegExp(pregQuote(settings.prototype_name), 'g');
-                var code = $(prototype.replace(regexp, freeIndex));
+                var regexp_label = new RegExp(pregQuote(settings.prototype_label), 'g');
+                var regexp_name = new RegExp(pregQuote(settings.prototype_name), 'g');
+                var item_label = settings.label_prefix + ' ' + freeIndex;
+                prototype = prototype.replace(regexp_label, item_label);
+                var code = $(prototype.replace(regexp_name, freeIndex));
                 var elementsParent = $(settings.elements_parent_selector);
                 var tmp = elementsParent.find('> .' + settings.prefix + '-tmp');
                 var id = $(code).find('[id]').first().attr('id');
