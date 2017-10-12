@@ -1,27 +1,31 @@
 {
-    "name": "symfony-collection",
-    "version": "2.1.11",
-    "homepage": "http://symfony-collection.fuz.org",
-    "description": "A jQuery plugin that manages adding, deleting and moving elements from a Symfony2 collection",
-    "keywords": [
-        "jquery",
-        "symfony",
-        "collection",
-        "plugin",
-        "javascript"
-    ],
-    "author": {
-        "name": "Alain Tiemblo"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/ninsuo/symfony-collection.git"
-    },
-    "bugs": "https://github.com/ninsuo/symfony-collection/issues",
-    "license": "MIT",
-    "ignore": ["*", "!jquery.collection.js", "!jquery.collection.html.twig"],
-    "dependencies": {
-        "jquery": ">=1.7",
-        "jquery-ui": ">=1.0"
-    }
+  "name": "symfony-collection",
+  "version": "2.1.12",
+  "homepage": "http://symfony-collection.fuz.org",
+  "description": "A jQuery plugin that manages adding, deleting and moving elements from a Symfony2 collection",
+  "keywords": [
+    "jquery",
+    "symfony",
+    "collection",
+    "plugin",
+    "javascript"
+  ],
+  "author": {
+    "name": "Alain Tiemblo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ninsuo/symfony-collection.git"
+  },
+  "bugs": "https://github.com/ninsuo/symfony-collection/issues",
+  "license": "MIT",
+  "ignore": [
+    "*",
+    "!jquery.collection.js",
+    "!jquery.collection.html.twig"
+  ],
+  "dependencies": {
+    "jquery": ">=1.7",
+    "jquery-ui": ">=1.0"
+  }
 }
