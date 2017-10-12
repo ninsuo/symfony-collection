@@ -373,7 +373,7 @@
                         'enabled': settings.allow_up,
                         'selector': settings.prefix + '-up',
                         'html': settings.up,
-                        'condition': elements.length - delta > 1 && elements.index(element) !== 0
+                        'condition': elements.length - delta > 1 && elements.index(element) - delta > 0
                     }, {
                         'enabled': settings.allow_down,
                         'selector': settings.prefix + '-down',
