@@ -254,10 +254,7 @@
 
             var settings = collection.data('collection-settings');
 
-            if (settings.position_field_selector) {
-                putFieldValue(elements.eq(newIndex).find(settings.position_field_selector), oldIndex);
-                putFieldValue(elements.eq(oldIndex).find(settings.position_field_selector), newIndex);
-            } else {
+            if (!settings.position_field_selector) {
                 changeElementIndex(collection, elements, settings, oldIndex, oldIndex, '__swap__');
                 changeElementIndex(collection, elements, settings, newIndex, newIndex, oldIndex);
                 changeElementIndex(collection, elements, settings, oldIndex, '__swap__', newIndex);
@@ -517,11 +514,8 @@
                     tmp.before(code);
                 }
 
-                if (settings.position_field_selector) {
-                    putFieldValue(code.find(settings.position_field_selector), freeIndex);
-                }
-
                 elements = collection.find(settings.elements_selector);
+
                 var action = code.find('.' + settings.prefix + '-add, .' + settings.prefix + '-duplicate');
                 if (action.length > 0) {
                     action.addClass(settings.prefix + '-action').data('collection', collection.attr('id'));
@@ -544,7 +538,15 @@
             }
 
             if (code !== undefined && settings.fade_in) {
-                code.fadeIn('fast');
+                code.fadeIn('fast', function () {
+                    if (settings.position_field_selector) {
+                        doRewritePositions(settings, elements);
+                    }
+                });
+            } else {
+                if (settings.position_field_selector) {
+                    return doRewritePositions(settings, elements);
+                }
             }
 
             return elements;
@@ -564,6 +566,9 @@
                         elementsParent.find('> .' + settings.prefix + '-tmp').before(backup);
                         elements = collection.find(settings.elements_selector);
                         elements = shiftElementsDown(collection, elements, settings, index - 1);
+                    }
+                    if (settings.position_field_selector) {
+                        doRewritePositions(settings, elements);
                     }
                 };
                 if (settings.fade_out) {
@@ -588,6 +593,10 @@
                 }
             }
 
+            if (settings.position_field_selector) {
+                return doRewritePositions(settings, elements);
+            }
+
             return elements;
         };
 
@@ -599,6 +608,10 @@
                 if (!trueOrUndefined(settings.after_down(collection, elements))) {
                     elements = swapElements(collection, elements, index + 1, index);
                 }
+            }
+
+            if (settings.position_field_selector) {
+                return doRewritePositions(settings, elements);
             }
 
             return elements;
@@ -626,8 +639,21 @@
             }
             dumpCollectionActions(collection, settings, false);
 
+            if (settings.position_field_selector) {
+                return doRewritePositions(settings, elements);
+            }
+
             return elements;
         };
+
+        var doRewritePositions = function (settings, elements) {
+            $(elements).each(function () {
+                var element = $(this);
+                putFieldValue(element.find(settings.position_field_selector), elements.index(element));
+            });
+
+            return elements;
+        }
 
         // we're in a $.fn., so in $('.collection').collection(), $(this) equals $('.collection')
         var elems = $(this);
@@ -840,7 +866,7 @@
 
                     if (newIndex !== oldIndex) {
                         elements = doMove(collection, settings, elements, element, oldIndex, newIndex);
-                        putFieldValue(element.find(settings.position_field_selector), newIndex);
+                        putFieldValue(element.find(settings.position_field_selector), elements.index(element));
                     }
                 });
             } // if (settings.position_field_selector) {
