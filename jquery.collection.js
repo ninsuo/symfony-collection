@@ -205,7 +205,7 @@
             var replaceWith = settings.name_prefix + '[' + newIndex + ']';
 
             if (settings.children) {
-                $.each(settings.children, function(key, child) {
+                $.each(settings.children, function (key, child) {
                     var childCollection = collection.find(child.selector).eq(index);
                     var childSettings = childCollection.data('collection-settings');
                     if (childSettings) {
@@ -352,6 +352,10 @@
             elements.each(function (index) {
                 var element = $(this);
 
+                if (isInitialization) {
+                    element.data('index', index);
+                }
+
                 var actions = element.find('.' + settings.prefix + '-actions').addBack().filter('.' + settings.prefix + '-actions');
                 if (actions.length === 0) {
                     actions = $('<div class="' + settings.prefix + '-actions"></div>');
@@ -475,12 +479,24 @@
         var doAdd = function (container, that, collection, settings, elements, element, index, isDuplicate) {
             if (elements.length < settings.max && (isDuplicate && trueOrUndefined(settings.before_duplicate(collection, element)) || trueOrUndefined(settings.before_add(collection, element)))) {
                 var prototype = collection.data('prototype');
+
                 var freeIndex = elements.length;
+                if (settings.position_field_selector) {
+                    var maxIndex = -1;
+                    elements.each(function () {
+                        var currentIndex = $(this).data('index');
+                        if (currentIndex > maxIndex) {
+                            maxIndex = currentIndex;
+                        }
+                    });
+                    freeIndex = maxIndex + 1;
+                }
+
                 if (index === -1) {
                     index = elements.length - 1;
                 }
                 var regexp = new RegExp(pregQuote(settings.prototype_name), 'g');
-                var code = $(prototype.replace(regexp, freeIndex));
+                var code = $(prototype.replace(regexp, freeIndex)).data('index', freeIndex);
                 var elementsParent = $(settings.elements_parent_selector);
                 var tmp = elementsParent.find('> .' + settings.prefix + '-tmp');
                 var id = $(code).find('[id]').first().attr('id');
@@ -813,9 +829,9 @@
                 };
                 array.sort(sorter);
 
-                $.each(array, function(newIndex, object) {
+                $.each(array, function (newIndex, object) {
                     var ids = [];
-                    $(elements).each(function(index) {
+                    $(elements).each(function (index) {
                         ids.push($(this).attr('id'));
                     });
 
