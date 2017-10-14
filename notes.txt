@@ -3,10 +3,12 @@
 
 -- only once: bower register symfony-collection git://github.com/ninsuo/symfony-collection.git
 
-git commit -a -m 'Prepare for 2.1.15 release'
+git checkout master
+git pull
+git commit -a -m 'Prepare for 2.1.16 release'
 git push origin master
-git tag -a '2.1.15' -m 'tag'
-git push origin 2.1.15
+git tag -a '2.1.16' -m 'tag'
+git push origin 2.1.16
 
 npm publish
 
