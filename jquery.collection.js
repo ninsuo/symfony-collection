@@ -539,7 +539,7 @@
                     action.addClass(settings.prefix + '-action').data('collection', collection.attr('id'));
                 }
 
-                if (index + 1 !== freeIndex) {
+                if (!settings.add_at_the_end && index + 1 !== freeIndex) {
                     elements = doMove(collection, settings, elements, code, freeIndex, index + 1);
                 } else {
                     dumpCollectionActions(collection, settings, false);
@@ -725,6 +725,7 @@
             } else {
                 collection = elem;
             }
+            collection = $(collection);
 
             // when adding elements to a collection, we should be aware of the node that will contain them
             settings.elements_parent_selector = settings.elements_parent_selector.replace('%id%', '#' + getOrCreateId('', collection));
@@ -782,14 +783,28 @@
                 return true;
             }
 
+            // if preserve_names option is set, we should enforce many options to avoid
+            // having inconsistencies between the UI and the Symfony result
+            if (settings.preserve_names) {
+                settings.allow_up = false;
+                settings.allow_down = false;
+                settings.drag_drop = false;
+                settings.add_at_the_end = true;
+            }
+
             // drag & drop support: this is a bit more complex than pressing "up" or
             // "down" buttons because we can move elements more than one place ahead
             // or below...
+            if ((typeof jQuery.ui !== 'undefined' || typeof jQuery.ui.sortable !== 'undefined')
+                && collection.hasClass('ui-sortable')) {
+                collection.sortable('disable');
+            }
             if (settings.drag_drop && settings.allow_up && settings.allow_down) {
                 var oldPosition;
                 var newPosition;
                 if (typeof jQuery.ui === 'undefined' || typeof jQuery.ui.sortable === 'undefined') {
                     settings.drag_drop = false;
+                    collection.sortable('disable');
                 } else {
                     collection.sortable($.extend(true, {}, {
                         start: function (event, ui) {

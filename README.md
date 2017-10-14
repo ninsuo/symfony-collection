@@ -535,6 +535,30 @@ Default value:
      });
 ```
 
+**Do not change field names**
+
+Symfony use field names to order the collection, not the position of each elements on the dom. 
+So by default, if you delete an element in the middle, all following elements will have their
+index decreased of 1 (`field[3]` will become `field[2]` and so on) and if you add some elements 
+in the middle, all subsequent elements will see their index increase to leave the space for the
+new one.
+
+With this implementation, you're sure to keep the right positions when clicking "move up" and 
+"move down" for exmaple. But in some situations, you may not want to overwrite indexes, 
+most probably to maintain Doctrine relationships.
+
+Set the `preserve_names` option to `true` to never touch field names. But be aware that this
+option will disable `allow_up`, `allow_down`, `drag_drop` options and will enforce 
+`add_at_the_end` to true.
+
+Default value:
+
+```js
+     $('.collection').collection({
+        preserve_names: false
+     });
+```
+
 # Advanced usage
 
 **Changing action's positions** ([demo](http://symfony-collection.fuz.org/symfony3/advanced/customFormTheme))
