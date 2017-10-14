@@ -91,7 +91,8 @@
             custom_add_location: false,
             fade_in: true,
             fade_out: true,
-            position_field_selector: null
+            position_field_selector: null,
+            preserve_names: false
         };
 
         // used to generate random id attributes when required and missing
@@ -224,9 +225,9 @@
 
         // same as above, but will replace element names and indexes in an html string instead
         // of in a dom element.
-        var changeHtmlIndex = function (collection, settings, html, oldIndex, newIndex) {
-            var toReplace = new RegExp(pregQuote(settings.name_prefix + '[' + oldIndex + ']'), 'g');
-            var replaceWith = settings.name_prefix + '[' + newIndex + ']';
+        var changeHtmlIndex = function (collection, settings, html, oldIndex, newIndex, oldKey, newKey) {
+            var toReplace = new RegExp(pregQuote(settings.name_prefix + '[' + oldKey + ']'), 'g');
+            var replaceWith = settings.name_prefix + '[' + newKey + ']';
             html = html.replace(toReplace, replaceWith);
 
             toReplace = new RegExp(pregQuote(collection.attr('id') + '_' + oldIndex), 'g');
@@ -254,7 +255,7 @@
 
             var settings = collection.data('collection-settings');
 
-            if (!settings.position_field_selector) {
+            if (!settings.position_field_selector && !settings.preserve_names) {
                 changeElementIndex(collection, elements, settings, oldIndex, oldIndex, '__swap__');
                 changeElementIndex(collection, elements, settings, newIndex, newIndex, oldIndex);
                 changeElementIndex(collection, elements, settings, oldIndex, '__swap__', newIndex);
@@ -493,16 +494,33 @@
                     index = elements.length - 1;
                 }
                 var regexp = new RegExp(pregQuote(settings.prototype_name), 'g');
-                var code = $(prototype.replace(regexp, freeIndex)).data('index', freeIndex);
+                var freeKey = freeIndex;
+
+                if (settings.preserve_names) {
+                    freeKey = collection.data('collection-free-key');
+
+                    if (freeKey === undefined) {
+                        freeKey = findFreeNumericKey(settings, elements);
+                    }
+
+                    collection.data('collection-free-key', freeKey + 1);
+                }
+
+                var code = $(prototype.replace(regexp, freeKey)).data('index', freeIndex);
+
                 var elementsParent = $(settings.elements_parent_selector);
                 var tmp = elementsParent.find('> .' + settings.prefix + '-tmp');
                 var id = $(code).find('[id]').first().attr('id');
 
                 if (isDuplicate) {
-                    putFieldValuesInDom(elements.eq(index));
-                    var oldHtml = $("<div/>").append(elements.eq(index).clone()).html();
-                    var newHtml = changeHtmlIndex(collection, settings, oldHtml, index, freeIndex);
-                    code = $('<div/>').html(newHtml).contents();
+                    var oldElement = elements.eq(index);
+                    putFieldValuesInDom(oldElement);
+                    var oldHtml = $("<div/>").append(oldElement.clone()).html();
+                    var oldIndex = settings.preserve_names || settings.position_field_selector ? oldElement.data('index') : index;
+                    var oldKey = settings.preserve_names ? getElementKey(settings, oldElement) : oldIndex;
+                    var newHtml = changeHtmlIndex(collection, settings, oldHtml, oldIndex, freeIndex, oldKey, freeKey);
+
+                    code = $('<div/>').html(newHtml).contents().data('index', freeIndex);
                     if (settings.fade_in) {
                         code.hide();
                     }
@@ -654,6 +672,26 @@
 
             return elements;
         }
+
+        var getElementKey = function (settings, element) {
+            var name = element.find(':input[name^="' + settings.name_prefix + '["]').attr('name');
+
+            return name.slice(settings.name_prefix.length + 1).split(']', 1)[0];
+        };
+
+        var findFreeNumericKey = function (settings, elements) {
+            var freeKey = 0;
+
+            elements.each(function () {
+                var key = getElementKey(settings, $(this));
+
+                if (/^0|[1-9]\d*$/.test(key) && key >= freeKey) {
+                    freeKey = Number(key) + 1;
+                }
+            });
+
+            return freeKey;
+        };
 
         // we're in a $.fn., so in $('.collection').collection(), $(this) equals $('.collection')
         var elems = $(this);
