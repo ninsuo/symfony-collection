@@ -789,7 +789,7 @@
             // drag & drop support: this is a bit more complex than pressing "up" or
             // "down" buttons because we can move elements more than one place ahead
             // or below...
-            if ((typeof jQuery.ui !== 'undefined' || typeof jQuery.ui.sortable !== 'undefined')
+            if ((typeof jQuery.ui !== 'undefined' && typeof jQuery.ui.sortable !== 'undefined')
                 && collection.hasClass('ui-sortable')) {
                 collection.sortable('disable');
             }
@@ -798,7 +798,6 @@
                 var newPosition;
                 if (typeof jQuery.ui === 'undefined' || typeof jQuery.ui.sortable === 'undefined') {
                     settings.drag_drop = false;
-                    collection.sortable('disable');
                 } else {
                     collection.sortable($.extend(true, {}, {
                         start: function (event, ui) {
