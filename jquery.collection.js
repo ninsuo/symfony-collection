@@ -794,7 +794,7 @@
             // "down" buttons because we can move elements more than one place ahead
             // or below...
             if ((typeof jQuery.ui !== 'undefined' && typeof jQuery.ui.sortable !== 'undefined')
-                && collection.hasClass('ui-sortable')) {
+                && collection.data('sortable')) {
                 collection.sortable('disable');
             }
             if (settings.drag_drop && settings.allow_up && settings.allow_down) {
