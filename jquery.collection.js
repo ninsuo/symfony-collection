@@ -179,16 +179,20 @@
 
             var replaceAttrDataNode = function (node) {
                 var jqNode = $(node);
-                $.each(node.attributes, function (i, attrib) {
-                    if ($.type(attrib.value) === 'string') {
-                        jqNode.attr(attrib.name.replace(toReplace, replaceWith), attrib.value.replace(toReplace, replaceWith));
-                    }
-                });
-                $.each(jqNode.data(), function (name, value) {
-                    if ($.type(value) === 'string') {
-                        jqNode.data(name.replace(toReplace, replaceWith), value.replace(toReplace, replaceWith));
-                    }
-                });
+                if (typeof node === 'object' && 'attributes' in node) {
+                    $.each(node.attributes, function (i, attrib) {
+                        if ($.type(attrib.value) === 'string') {
+                            jqNode.attr(attrib.name.replace(toReplace, replaceWith), attrib.value.replace(toReplace, replaceWith));
+                        }
+                    });
+                }
+                if (jqNode.length > 0) {
+                    $.each(jqNode.data(), function (name, value) {
+                        if ($.type(value) === 'string') {
+                            jqNode.data(name.replace(toReplace, replaceWith), value.replace(toReplace, replaceWith));
+                        }
+                    });
+                }
             };
 
             var element = elements.eq(index);
@@ -790,7 +794,7 @@
             // "down" buttons because we can move elements more than one place ahead
             // or below...
             if ((typeof jQuery.ui !== 'undefined' && typeof jQuery.ui.sortable !== 'undefined')
-                && collection.hasClass('ui-sortable')) {
+                && collection.data('sortable')) {
                 collection.sortable('disable');
             }
             if (settings.drag_drop && settings.allow_up && settings.allow_down) {
@@ -924,4 +928,5 @@
         return true;
     }; // $.fn.collection
 
-})(jQuery);
+})
+(jQuery);
