@@ -339,6 +339,8 @@
 
             // initializes the collection with a minimal number of elements
             if (isInitialization) {
+                collection.data('collection-offset', 0);
+
                 var container = $(settings.container);
                 var button = collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').first();
                 while (elements.length < settings.init_with_n_elements) {
@@ -347,7 +349,6 @@
                     elements = doAdd(container, button, collection, settings, elements, element, index, false);
                 }
 
-                // Track last index
                 collection.data('collection-offset', elements.length);
             }
 
