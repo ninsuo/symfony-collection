@@ -5,10 +5,10 @@
 
 git checkout master
 git pull
-git commit -a -m 'Prepare for 2.1.22 release'
+git commit -a -m 'Prepare for 2.1.23 release'
 git push origin master
-git tag -a '2.1.22' -m 'tag'
-git push origin 2.1.22
+git tag -a '2.1.23' -m 'tag'
+git push origin 2.1.23
 
 npm publish
 

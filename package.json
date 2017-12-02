@@ -1,6 +1,6 @@
 {
   "name": "symfony-collection",
-  "version": "2.1.22",
+  "version": "2.1.23",
   "homepage": "http://symfony-collection.fuz.org",
   "description": "A jQuery plugin that manages adding, deleting and moving elements from a Symfony2 collection",
   "keywords": [
