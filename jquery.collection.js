@@ -485,9 +485,9 @@
         var doAdd = function (container, that, collection, settings, elements, element, index, isDuplicate) {
             if (elements.length < settings.max && (isDuplicate && trueOrUndefined(settings.before_duplicate(collection, element)) || trueOrUndefined(settings.before_add(collection, element)))) {
                 var prototype = collection.data('prototype');
-                var freeIndex = collection.data('collection-offset') + 1;
+                var freeIndex = collection.data('collection-offset');
 
-                collection.data('collection-offset', freeIndex);
+                collection.data('collection-offset', freeIndex + 1);
 
                 if (index === -1) {
                     index = elements.length - 1;
