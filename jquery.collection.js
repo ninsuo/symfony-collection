@@ -600,7 +600,7 @@
                         elements = collection.find(settings.elements_selector);
                         elements = shiftElementsDown(collection, elements, settings, index - 1);
                     }
-                    if (settings.position_field_selector) {
+                    if (settings.position_field_selector  && !settings.preserve_names) {
                         doRewritePositions(settings, elements);
                     }
                 };
