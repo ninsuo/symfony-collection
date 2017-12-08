@@ -590,8 +590,11 @@
         var doDelete = function (collection, settings, elements, element, index) {
             if (elements.length > settings.min && trueOrUndefined(settings.before_remove(collection, element))) {
                 var deletion = function () {
-                    elements = shiftElementsUp(collection, elements, settings, index);
-                    var toDelete = elements.last();
+                    var toDelete = element;
+                    if (!settings.preserve_names) {
+                        elements = shiftElementsUp(collection, elements, settings, index);
+                        toDelete = elements.last();
+                    }
                     var backup = toDelete.clone({withDataAndEvents: true}).show();
                     toDelete.remove();
                     if (!trueOrUndefined(settings.after_remove(collection, backup))) {
@@ -686,7 +689,7 @@
             });
 
             return elements;
-        }
+        };
 
         var getElementKey = function (settings, element) {
             var name = element.find(':input[name^="' + settings.name_prefix + '["]').attr('name');
@@ -719,7 +722,7 @@
                 '-remove',
                 '-rescue-add',
                 '-tmp',
-                '-up',
+                '-up'
             ];
 
             $.each(suffixes, function () {
