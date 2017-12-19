@@ -353,7 +353,7 @@
 
             // initializes the collection with a minimal number of elements
             if (isInitialization) {
-                collection.data('collection-offset', 0);
+                collection.data('collection-offset', elements.length);
 
                 var container = $(settings.container);
                 var button = collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').first();
