@@ -364,7 +364,7 @@
                     var index = elements.length - 1;
                     elements = doAdd(container, button, collection, settings, elements, element, index, false);
                     if(secure > settings.init_with_n_elements) {
-                        console.error('Infinite loop, element selector (' + settings.elements_selector + ') not found !!')
+                        console.error('Infinite loop, element selector (' + settings.elements_selector + ') not found !');
                         break;
                     }
                 }
