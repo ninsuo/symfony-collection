@@ -357,10 +357,16 @@
 
                 var container = $(settings.container);
                 var button = collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').first();
+                var secure = 0;
                 while (elements.length < settings.init_with_n_elements) {
+                    secure++;
                     var element = elements.length > 0 ? elements.last() : undefined;
                     var index = elements.length - 1;
                     elements = doAdd(container, button, collection, settings, elements, element, index, false);
+                    if(secure > settings.init_with_n_elements) {
+                        console.error('Infinite loop, element selector (' + settings.elements_selector + ') not found !');
+                        break;
+                    }
                 }
 
                 collection.data('collection-offset', elements.length);
