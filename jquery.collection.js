@@ -73,7 +73,7 @@
             prefix: 'collection',
             prototype_name: '__name__',
             name_prefix: null,
-            elements_selector: '> div',
+            elements_selector: '> div, > fieldset',
             elements_parent_selector: '%id%',
             children: null,
             init_with_n_elements: 0,
