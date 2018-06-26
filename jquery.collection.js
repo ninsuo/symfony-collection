@@ -812,6 +812,11 @@
                 settings.init_with_n_elements = settings.min;
             }
 
+            if (!settings.action_container_tag) {
+                console.log("jquery.collection.js: action_container_tag needs to be set.");
+                return true;
+            }
+
             // user callback
             settings.before_init(collection);
 
