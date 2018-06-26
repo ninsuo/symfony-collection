@@ -89,6 +89,7 @@
                 return true;
             },
             custom_add_location: false,
+            action_container_tag: 'div',
             fade_in: true,
             fade_out: true,
             position_field_selector: null,
@@ -384,7 +385,8 @@
 
                 var actions = element.find('.' + settings.prefix + '-actions').addBack().filter('.' + settings.prefix + '-actions');
                 if (actions.length === 0) {
-                    actions = $('<div class="' + settings.prefix + '-actions"></div>');
+                    actions = $('<'+ settings.action_container_tag +' class="' + settings.prefix + '-actions"></'+ settings.action_container_tag +'>');
+
                     element.append(actions);
                 }
 
