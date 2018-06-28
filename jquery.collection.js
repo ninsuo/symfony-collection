@@ -89,8 +89,6 @@
                 return true;
             },
             custom_add_location: false,
-            fade_in: true,
-            fade_out: true,
             position_field_selector: null,
             preserve_names: false
         };
@@ -388,37 +386,32 @@
                     element.append(actions);
                 }
 
-                var delta = 0;
-                if (event === 'remove' && settings.fade_out) {
-                    delta = 1;
-                }
-
                 var buttons = [
                     {
                         'enabled': settings.allow_remove,
                         'selector': settings.prefix + '-remove',
                         'html': settings.remove,
-                        'condition': elements.length - delta > settings.min
+                        'condition': elements.length > settings.min
                     }, {
                         'enabled': settings.allow_up,
                         'selector': settings.prefix + '-up',
                         'html': settings.up,
-                        'condition': elements.length - delta > 1 && elements.index(element) - delta > 0
+                        'condition': elements.length > 1 && elements.index(element) > 0
                     }, {
                         'enabled': settings.allow_down,
                         'selector': settings.prefix + '-down',
                         'html': settings.down,
-                        'condition': elements.length - delta > 1 && elements.index(element) !== elements.length - 1
+                        'condition': elements.length > 1 && elements.index(element) !== elements.length - 1
                     }, {
                         'enabled': settings.allow_add && !settings.add_at_the_end && !settings.custom_add_location,
                         'selector': settings.prefix + '-add',
                         'html': settings.add,
-                        'condition': elements.length - delta < settings.max
+                        'condition': elements.length < settings.max
                     }, {
                         'enabled': settings.allow_duplicate,
                         'selector': settings.prefix + '-duplicate',
                         'html': settings.duplicate,
-                        'condition': elements.length - delta < settings.max
+                        'condition': elements.length < settings.max
                     }
                 ];
 
@@ -455,21 +448,12 @@
             // make the rescue button appear / disappear according to options (add_at_the_end) and
             // logic (no more elements on the collection)
             if (settings.allow_add) {
-
-                var delta = 0;
-                if (event === 'remove' && settings.fade_out) {
-                    delta = 1;
-                }
-
                 var rescueAdd = collection.find('.' + settings.prefix + '-rescue-add').css('display', '').removeClass(settings.prefix + '-action-disabled');
                 var adds = collection.find('.' + settings.prefix + '-add');
-                if (!settings.add_at_the_end && adds.length > delta || settings.custom_add_location) {
+                if (!settings.add_at_the_end && adds.length > 0 || settings.custom_add_location) {
                     rescueAdd.css('display', 'none');
-                } else if (event === 'remove' && settings.fade_out) {
-                    rescueAdd.css('display', 'none');
-                    rescueAdd.fadeIn('fast');
                 }
-                if (elements.length - delta >= settings.max) {
+                if (elements.length >= settings.max) {
                     rescueAdd.addClass(settings.prefix + '-action-disabled');
                     if (settings.hide_useless_buttons) {
                         collection.find('.' + settings.prefix + '-add, .' + settings.prefix + '-rescue-add, .' + settings.prefix + '-duplicate').css('display', 'none');
@@ -541,15 +525,8 @@
                     var newHtml = changeHtmlIndex(collection, settings, oldHtml, oldIndex, freeIndex, oldKey, freeKey);
 
                     code = $('<div/>').html(newHtml).contents().data('index', freeIndex);
-                    if (settings.fade_in) {
-                        code.hide();
-                    }
                     tmp.before(code).find(settings.prefix + '-actions').remove();
                 } else {
-                    if (settings.fade_in) {
-                        code.hide();
-                    }
-
                     tmp.before(code);
                 }
 
@@ -576,16 +553,8 @@
                 }
             }
 
-            if (code !== undefined && settings.fade_in) {
-                code.fadeIn('fast', function () {
-                    if (settings.position_field_selector) {
-                        doRewritePositions(settings, elements);
-                    }
-                });
-            } else {
-                if (settings.position_field_selector) {
-                    return doRewritePositions(settings, elements);
-                }
+            if (settings.position_field_selector) {
+                return doRewritePositions(settings, elements);
             }
 
             return elements;
@@ -613,13 +582,7 @@
                         doRewritePositions(settings, elements);
                     }
                 };
-                if (settings.fade_out) {
-                    element.fadeOut('fast', function () {
-                        deletion();
-                    });
-                } else {
-                    deletion();
-                }
+                deletion();
             }
 
             return elements;

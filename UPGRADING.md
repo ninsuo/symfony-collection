@@ -1,3 +1,8 @@
+# 3.0.0
+
+`fade_in` and `fade_out` options have been removed because they added
+too much complexity in the code.
+
 # 2.0.0
 
 `delete` is a reserved name and can't be used as a class property (fixed in #32), the following changes have been made:
