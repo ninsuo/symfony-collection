@@ -559,6 +559,20 @@ Default value:
      });
 ```
 
+**Changing the action container tag**
+
+By default, without form theme, all actions are put inside a `<div>`. You
+can overwrite this by setting the `action_container_tag` option, for
+example if you want to put actions in a `<td>` instead.
+
+Default value:
+
+```js
+     $('.collection').collection({
+        action_container_tag: 'div'
+     });
+```
+
 # Advanced usage
 
 **Changing action's positions** ([demo](http://symfony-collection.fuz.org/symfony3/advanced/customFormTheme))
