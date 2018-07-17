@@ -104,7 +104,7 @@ you require of course). And a class that will be used as a selector to run the c
    array (
         // ...
         'allow_add' => true,
-        'allow_remove' => true,
+        'allow_delete' => true,
         'prototype' => true,
         'attr' => array(
             'class' => 'my-selector',
