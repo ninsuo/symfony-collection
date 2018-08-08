@@ -841,6 +841,12 @@
             if (collection.data('name-prefix') !== undefined) {
                 settings.name_prefix = collection.data('name-prefix');
             }
+            if (collection.data('allow-min') !== undefined) {
+                settings.min = collection.data('allow-min');
+            }
+            if (collection.data('allow-max') !== undefined) {
+                settings.max = collection.data('allow-max');
+            }
 
             // prototype-name required for nested collections, where collection id prefix
             // isn't guessable (see https://github.com/symfony/symfony/issues/13837)
