@@ -405,12 +405,12 @@
                         'enabled': settings.allow_up,
                         'selector': settings.prefix + '-up',
                         'html': settings.up,
-                        'condition': elements.length - delta > 1 && elements.index(element) - delta > 0
+                        'condition': elements.length - delta > 1 && elements.index(element) > 0
                     }, {
                         'enabled': settings.allow_down,
                         'selector': settings.prefix + '-down',
                         'html': settings.down,
-                        'condition': elements.length - delta > 1 && elements.index(element) !== elements.length - 1
+                        'condition': elements.length - delta > 1 && elements.index(element) !== elements.length - 1 - delta
                     }, {
                         'enabled': settings.allow_add && !settings.add_at_the_end && !settings.custom_add_location,
                         'selector': settings.prefix + '-add',
