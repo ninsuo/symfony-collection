@@ -93,7 +93,8 @@
             fade_in: true,
             fade_out: true,
             position_field_selector: null,
-            preserve_names: false
+            preserve_names: false,
+            position_field_first_value: 0
         };
 
         // used to generate random id attributes when required and missing
@@ -693,7 +694,7 @@
         var doRewritePositions = function (settings, elements) {
             $(elements).each(function () {
                 var element = $(this);
-                putFieldValue(element.find(settings.position_field_selector), elements.index(element));
+                putFieldValue(element.find(settings.position_field_selector), elements.index(element) + settings.position_field_first_value);
             });
 
             return elements;
