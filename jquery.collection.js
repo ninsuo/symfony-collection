@@ -363,7 +363,8 @@
                     secure++;
                     var element = elements.length > 0 ? elements.last() : undefined;
                     var index = elements.length - 1;
-                    elements = doAdd(container, button, collection, settings, elements, element, index, false);
+                    var result = doAdd(container, button, collection, settings, elements, element, index, false);
+                    elements = result.elements;
                     if (secure > settings.init_with_n_elements) {
                         console.error('Infinite loop, element selector (' + settings.elements_selector + ') not found !');
                         break;
@@ -505,6 +506,8 @@
         // "duplicate" button, all element values are then inserted. finally, callbacks let user cancel
         // those actions if needed.
         var doAdd = function (container, that, collection, settings, elements, element, index, isDuplicate) {
+            var canceled = false;
+
             if (elements.length < settings.max && (isDuplicate && trueOrUndefined(settings.before_duplicate(collection, element)) || trueOrUndefined(settings.before_add(collection, element)))) {
                 var prototype = collection.data('prototype');
                 var freeIndex = collection.data('collection-offset');
@@ -576,6 +579,8 @@
                     }
                     code.remove();
                 }
+            } else {
+                canceled = true
             }
 
             if (code !== undefined && settings.fade_in) {
@@ -586,16 +591,24 @@
                 });
             } else {
                 if (settings.position_field_selector) {
-                    return doRewritePositions(settings, elements);
+                    return {
+                        canceled: canceled,
+                        elements: doRewritePositions(settings, elements)
+                    };
                 }
             }
 
-            return elements;
+            return {
+                canceled: canceled,
+                elements: elements
+            };
         };
 
         // removes the current element when clicking on a "delete" button and decrease all following
         // indexes from 1 position.
         var doDelete = function (collection, settings, elements, element, index) {
+            var canceled = false;
+
             if (elements.length > settings.min && trueOrUndefined(settings.before_remove(collection, element))) {
                 var deletion = function () {
                     var toDelete = element;
@@ -622,43 +635,68 @@
                 } else {
                     deletion();
                 }
+            } else {
+                canceled = true;
             }
 
-            return elements;
+            return {
+                canceled: canceled,
+                elements: elements
+            };
         };
 
         // reverse current element and the previous one (so the current element
         // appears one place higher)
         var doUp = function (collection, settings, elements, element, index) {
+            var canceled = false;
+
             if (index !== 0 && trueOrUndefined(settings.before_up(collection, element))) {
                 elements = swapElements(collection, elements, index, index - 1);
                 if (!trueOrUndefined(settings.after_up(collection, element))) {
                     elements = swapElements(collection, elements, index - 1, index);
                 }
+            } else {
+                canceled = true;
             }
 
             if (settings.position_field_selector) {
-                return doRewritePositions(settings, elements);
+                return {
+                    canceled: canceled,
+                    elements: doRewritePositions(settings, elements)
+                };
             }
 
-            return elements;
+            return {
+                canceled: canceled,
+                elements: elements
+            };
         };
 
         // reverse the current element and the next one (so the current element
         // appears one place lower)
         var doDown = function (collection, settings, elements, element, index) {
+            var canceled = false;
+
             if (index !== (elements.length - 1) && trueOrUndefined(settings.before_down(collection, element))) {
                 elements = swapElements(collection, elements, index, index + 1);
                 if (!trueOrUndefined(settings.after_down(collection, elements))) {
                     elements = swapElements(collection, elements, index + 1, index);
                 }
+            } else {
+                canceled = true;
             }
 
             if (settings.position_field_selector) {
-                return doRewritePositions(settings, elements);
+                return {
+                    canceled: canceled,
+                    elements: doRewritePositions(settings, elements)
+                };
             }
 
-            return elements;
+            return {
+                canceled: canceled,
+                elements: elements
+            };
         };
 
         // move an element from a position to an arbitrary new position
@@ -934,26 +972,35 @@
                     var element = that.data('element') ? $('#' + that.data('element')) : undefined;
                     var index = element && element.length ? elements.index(element) : -1;
                     var event = null;
+                    var result = null;
 
                     var isDuplicate = that.is('.' + settings.prefix + '-duplicate');
                     if ((that.is('.' + settings.prefix + '-add') || that.is('.' + settings.prefix + '-rescue-add') || isDuplicate) && settings.allow_add) {
                         event = 'add';
-                        elements = doAdd(container, that, collection, settings, elements, element, index, isDuplicate);
+                        result = doAdd(container, that, collection, settings, elements, element, index, isDuplicate);
+                        elements = result.elements;
                     }
 
                     if (that.is('.' + settings.prefix + '-remove') && settings.allow_remove) {
                         event = 'remove';
-                        elements = doDelete(collection, settings, elements, element, index);
+                        result = doDelete(collection, settings, elements, element, index);
+                        elements = result.elements;
                     }
 
                     if (that.is('.' + settings.prefix + '-up') && settings.allow_up) {
                         event = 'up';
-                        elements = doUp(collection, settings, elements, element, index);
+                        result = doUp(collection, settings, elements, element, index);
+                        elements = result.elements;
                     }
 
                     if (that.is('.' + settings.prefix + '-down') && settings.allow_down) {
                         event = 'down';
-                        elements = doDown(collection, settings, elements, element, index);
+                        result = doDown(collection, settings, elements, element, index);
+                        elements = result.elements;
+                    }
+
+                    if (result.canceled) {
+                        event = null;
                     }
 
                     dumpCollectionActions(collection, settings, false, event);
