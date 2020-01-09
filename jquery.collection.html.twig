@@ -29,5 +29,5 @@
         {% set attr = attr|merge({'data-allow-remove': allow_delete ? 1 : 0 }) %}
         {% set attr = attr|merge({'data-name-prefix': full_name}) %}
         {{ block('form_widget') }}
-    {% endspaceless %}
+    {% endapply %}
 {% endblock collection_widget %}
