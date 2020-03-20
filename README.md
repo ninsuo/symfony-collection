@@ -199,22 +199,22 @@ Then, use both form themes using:
 There are many examples using form themes in the Advanced menu of the [demo website](http://symfony-collection.fuz.org/),
 don't hesitate to look at them.
 
-Always put `jquery.collection.html.twig` form theme below the other you use, to avoid that settings gets overwritten.
+Always put `jquery.collection.html.twig` form theme below the other you use, to avoid the settings getting overwritten.
 
-## Using Doctrine, and a position explicitely stored in a field
+## Using Doctrine, and a position explicitly stored in a field
 
 A collection is no more than an array of objects, so by default, this plugin move element positions
 in this array. For example, if you have A, B and C in your collection and move B up, it will contain
 B, A, C.
 
-But when Doctrine will persist your collection, it will keep existing entities, and
+But when Doctrine persists your collection, it will keep existing entities, and
 simply update their content. For example, if you have a collection containing A, B, C
 with ids 1, 2 and 3, you will end up with a collection containing B, A, C, but still
 ids 1, 2 and 3.
 
 In most cases, that's not a problem. But, if you have other relations attached to each of your
 collection elements, you should never unlink id and value. You'll use a position field on your
-database table, and it will manage position.
+database table, and it will manage the position.
 
 Something like:
 
@@ -225,7 +225,7 @@ Something like:
     private $position;
 ```
 
-This plugin supports this case, you need to create a `position` field in your form (with hidden type),
+This plugin supports this case; you need to create a `position` field in your form (with hidden type),
 mapped to your entity, and give it a class that will serve as a selector:
 
 ```php
@@ -262,7 +262,7 @@ For example:
 ```
 
 Then if you want to edit those collections form theme, you'll need to replace
-`collection-add` by `first-collection-add` on your add buttons for exmaple.
+`collection-add` by `first-collection-add` on your add buttons for example.
 
 ```html
    <a href="#" class="first-collection-add btn btn-default">
@@ -276,7 +276,7 @@ See [this sample](https://symfony-collection.fuz.org/symfony3/form-with-several-
 
 **Customize rendered links** ([demo](http://symfony-collection.fuz.org/symfony3/options/customButtons))
 
-You can customize displayed links by setting `up`, `down`, `add`, `remove`and `duplicate` options.
+You can customize displayed links by setting `up`, `down`, `add`, `remove` and `duplicate` options.
 
 Default values are:
 
@@ -290,7 +290,7 @@ Default values are:
      });
 ```
 
-You can also use following classes:
+You can also use the following classes:
 
 - `collection-add` for an add button
 - `collection-remove` for a remove button
@@ -301,7 +301,7 @@ You can also use following classes:
 And:
 
 - `collection-action` for any of the above action
-- `collection-action-disabled` same, but when button is disabled (no "up" at the top, etc)
+- `collection-action-disabled` same, but when a button is disabled (no "up" at the top, etc.)
 
 Note that `collection` prefix can be changed using the `prefix` option.
 
@@ -395,15 +395,15 @@ There are `before_*` and `after_*` options that let you put callbacks before and
 elements in the collection.
 
 - `before_up`, `before_down`, `before_add` and `before_remove` are called before modifying the collection.
-The modification will be cancelled if the callback you given returned `false`, and will proceed if it returned `true`
+The modification will be cancelled if the callback you gave returned `false`, and will proceed if it returned `true`
 or `undefined`.
 
 - `after_up`, `after_down`, `after_add` and `after_remove` are called after modifying the collection.
-The modification will be reverted if the callback you given returned `false`.
+The modification will be reverted if the callback you gave returned `false`.
 
-- `before_init` and `after_init` are called when a collection is initialized. No return value are expected.
+- `before_init` and `after_init` are called when a collection is initialized. No return value is expected.
 
-Callback functions receive 2 arguments:
+Callback functions receive two arguments:
 
 - `collection` references the div that contains your whole collection (the symfony2 field)
 
@@ -437,7 +437,7 @@ Note that only `name_prefix` option is mandatory, all other ones have default va
 
 **Fade in & Fade out support** ([demo](http://symfony-collection.fuz.org/symfony3/options/fadeInFadeOut))
 
-By defaut, when adding or removing an element, `fade` animation will make element movements smoother.
+By default, when adding or removing an element, `fade` animation will make element movements smoother.
 You can still disable this option by using `fade_in` and `fade_out` options.
 
 ```js
@@ -450,7 +450,7 @@ You can still disable this option by using `fade_in` and `fade_out` options.
 **Drag & drop support** ([demo](http://symfony-collection.fuz.org/symfony3/options/dragAndDrop))
 
 If you are using Jquery UI and have the `sortable` component available in your application, the `drag_drop` option is
-automatically enabled and let you change your element positions using drag & drop. You can disable this behavior by explicitely
+automatically enabled and let you change your element positions using drag & drop. You can disable this behaviour by explicitly
 setting `drag_drop` option to false.
 
 If required, you can customize `sortable` by overloading options given to `jQuery.ui.sortable` using the `drag_drop_options` option.
@@ -510,7 +510,7 @@ But you may need to put elements deeper in the dom, for example when you put ele
     </table>
 ```
 
-In that example, parent selector should be `table.collection tbody`.
+In that example, a parent selector should be `table.collection tbody`.
 
 Note that you can use `%id%` inside `elements_parent_selector`, it will be automatically replaced by the
 collection's id. This is particularly useful when you're dealing with nested collections.
@@ -537,14 +537,14 @@ Default value:
 
 **Do not change field names**
 
-Symfony use field names to order the collection, not the position of each elements on the dom. 
+Symfony uses field names to order the collection, not the position of each element on the dom. 
 So by default, if you delete an element in the middle, all following elements will have their
 index decreased of 1 (`field[3]` will become `field[2]` and so on) and if you add some elements 
 in the middle, all subsequent elements will see their index increase to leave the space for the
 new one.
 
 With this implementation, you're sure to keep the right positions when clicking "move up" and 
-"move down" for exmaple. But in some situations, you may not want to overwrite indexes, 
+"move down" for example. But in some situations, you may not want to overwrite indexes, 
 most probably to maintain Doctrine relationships.
 
 Set the `preserve_names` option to `true` to never touch field names. But be aware that this
@@ -578,7 +578,7 @@ Default value:
 **Changing action's positions** ([demo](http://symfony-collection.fuz.org/symfony3/advanced/customFormTheme))
 
 By default :
-- `add`, `move up`, `move down` and `remove`are located in this order below each collection's element
+- `add`, `move up`, `move down` and `remove` are located in this order below each collection's element
 - `add` button can be located at the bottom of the collection using `add_at_the_bottom` option
 
 You can change those button's positions by creating them manually anywhere in your form theme.
@@ -620,9 +620,9 @@ we will use something like this:
 ```
 
 *Note* : do not forget to set the `add` option when enabling the plugin, because if your collection is emptied,
-the plugin will generate an `add` button based on the plugin's configuraiton.
+the plugin will generate an `add` button based on the plugin's configuration.
 
-*Tip*: when `add` buttons are put inside collection's elements, new element is created next to the clicked
+*Tip*: when `add` buttons are put inside the collection's elements, a new element is created next to the clicked
 element instead of at the end of the collection.
 
 **Advanced drag & drop support** ([demo](http://symfony-collection.fuz.org/symfony3/options/dragAndDrop))
@@ -647,11 +647,11 @@ Notes:
 - `event` and `ui` come from `jQuery.ui.sortable` `start` callback.
 - `elements` contains all elements from the impacted collection
 - `element` is the moved element in the collection
-- If your callback return false, the position change will be cancelled/reverted.
+- If your callback returns false, the position change will be cancelled/reverted.
 
 **Collection of collections** ([demo](http://symfony-collection.fuz.org/symfony3/advanced/collectionOfCollections))
 
-This plugin has the ability to manage collection of form collections, but to avoid collisions, you should:
+This plugin has the ability to manage a collection of form collections, but to avoid collisions, you should:
 
 In your form type:
 
