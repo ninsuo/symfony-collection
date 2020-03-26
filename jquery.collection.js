@@ -847,6 +847,16 @@
             if (collection.data('allow-max') !== undefined) {
                 settings.max = collection.data('allow-max');
             }
+            if (collection.data('allow-up') !== undefined) {
+                settings.allow_up = collection.data('allow-up');
+            }
+            if (collection.data('allow-down') !== undefined) {
+                settings.allow_up = collection.data('allow-down');
+            }
+            if (collection.data('allow-sort') !== undefined) {
+                // Yes, "allow-sort" override up & down
+                settings.allow_up = settings.allow_down = collection.data('allow-sort');
+            }
 
             // prototype-name required for nested collections, where collection id prefix
             // isn't guessable (see https://github.com/symfony/symfony/issues/13837)
