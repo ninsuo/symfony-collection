@@ -740,11 +740,9 @@
                     if (that.hasClass(settings.user_prefix + suffix)) {
                         that.addClass(settings.prefix + suffix);
                     }
-                    that.find('*').each(function () {
+                    that.find('.' + settings.user_prefix + suffix).each(function () {
                         var here = $(this);
-                        if (here.hasClass(settings.user_prefix + suffix)) {
-                            here.addClass(settings.prefix + suffix);
-                        }
+                        here.addClass(settings.prefix + suffix);
                     });
                 });
             });
